@@ -15,7 +15,6 @@
       "expo-router",
       "expo-font",
       "expo-apple-authentication",
-      "expo-crypto",
       [
         "@react-native-google-signin/google-signin",
         {
