@@ -10,6 +10,7 @@ import Icon from '@/components/Icon';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAuth } from '@/app/contexts/AuthContext';
 import { ActivityIndicator } from 'react-native';
+import { router } from 'expo-router';
 
 export default function WelcomeScreen() {
   const colors = useThemeColors();
@@ -52,17 +53,22 @@ export default function WelcomeScreen() {
         </View>
 
         <View className="flex flex-col items-start w-full justify-center gap-2 flex-1 px-global pb-20">
+          {/* Logo / Brand */}
           <View className="mb-8">
+            <View className="w-16 h-16 rounded-2xl bg-highlight items-center justify-center mb-4">
+              <Icon name="Trophy" size={32} strokeWidth={1.8} className="text-white" />
+            </View>
             <ThemedText className="text-4xl font-bold">HDC Sports</ThemedText>
-            <ThemedText className="text-base text-light-subtext dark:text-dark-subtext">
+            <ThemedText className="text-base text-light-subtext dark:text-dark-subtext mt-1">
               Book sports facilities across Hulhumalé
             </ThemedText>
           </View>
 
+          {/* Google Sign-In */}
           <Pressable
             onPress={handleGoogleSignIn}
             disabled={isLoading}
-            className={`w-full border border-black dark:border-white rounded-2xl flex flex-row items-center justify-center py-4 ${isLoading ? 'opacity-50' : ''}`}>
+            className={`w-full border border-light-subtext/30 dark:border-dark-subtext/30 rounded-2xl flex flex-row items-center justify-center py-4 ${isLoading ? 'opacity-50' : ''}`}>
             <View className="absolute left-4 top-4.5">
               {loadingProvider === 'google' ? (
                 <ActivityIndicator size="small" color={colors.text} />
@@ -75,11 +81,12 @@ export default function WelcomeScreen() {
             </ThemedText>
           </Pressable>
 
+          {/* Apple Sign-In (iOS only) */}
           {Platform.OS === 'ios' && (
             <Pressable
               onPress={handleAppleSignIn}
               disabled={isLoading}
-              className={`w-full border border-black dark:border-white rounded-2xl flex flex-row items-center justify-center py-4 ${isLoading ? 'opacity-50' : ''}`}>
+              className={`w-full border border-light-subtext/30 dark:border-dark-subtext/30 rounded-2xl flex flex-row items-center justify-center py-4 ${isLoading ? 'opacity-50' : ''}`}>
               <View className="absolute left-4 top-4.5">
                 {loadingProvider === 'apple' ? (
                   <ActivityIndicator size="small" color={colors.text} />
@@ -93,7 +100,17 @@ export default function WelcomeScreen() {
             </Pressable>
           )}
 
-          <View className="mt-6 px-2">
+          {/* Skip for now (dev bypass) */}
+          <Pressable
+            onPress={() => router.replace('/(tabs)/(home)')}
+            className="w-full mt-2 py-3 items-center"
+          >
+            <ThemedText className="text-sm font-medium text-highlight">
+              Continue as guest
+            </ThemedText>
+          </Pressable>
+
+          <View className="mt-4 px-2">
             <ThemedText className="text-xs text-center text-light-subtext dark:text-dark-subtext">
               By continuing, you agree to HDC's Terms of Service and Privacy Policy.
               Only registered sports teams can book facilities.

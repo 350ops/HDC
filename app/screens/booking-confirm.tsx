@@ -89,7 +89,7 @@ const BookingConfirmScreen = () => {
         [
           {
             text: 'OK',
-            onPress: () => router.replace('/(tabs)/bookings' as any),
+            onPress: () => router.replace('/(tabs)/trips' as any),
           },
         ]
       );

@@ -144,7 +144,7 @@ const BookingsScreen = () => {
                             </ThemedText>
                             <Pressable
                                 onPress={() => router.push('/(tabs)')}
-                                className="bg-blue-600 dark:bg-blue-500 px-6 py-3 rounded-xl active:opacity-80"
+                                className="bg-highlight px-6 py-3 rounded-xl active:opacity-80"
                             >
                                 <ThemedText className="text-white font-semibold text-sm">
                                     Browse Facilities

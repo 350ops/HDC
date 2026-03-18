@@ -31,7 +31,7 @@ const SearchBar = (props: any) => {
                         style={{ elevation: 10, height: 50, shadowColor: '#000', shadowOpacity: 0.3, shadowRadius: 8.84, shadowOffset: { width: 0, height: 0 } }}
                         className='bg-light-primary flex-row justify-center relative z-50 py-4 px-10 mt-3 mb-4  dark:bg-white/20 rounded-full'>
                         <Icon name="Search" size={16} strokeWidth={3} />
-                        <ThemedText className='text-black dark:text-white font-medium ml-2 mr-4'>Find a facility</ThemedText>
+                        <ThemedText className='font-medium ml-2 mr-4'>Find a facility</ThemedText>
                         
                     </Animated.View>
                 </Pressable>
