@@ -34,7 +34,7 @@ export default function Layout() {
           asChild
           style={{ display: isBusinessMode ? 'flex' : 'none' }}
         >
-          <TabButton labelAnimated={false} icon="Home">Home</TabButton>
+          <TabButton labelAnimated={false} icon="Home">Dashboard</TabButton>
         </TabTrigger>
         <TabTrigger
           name="calendar"
@@ -50,7 +50,7 @@ export default function Layout() {
           asChild
           style={{ display: isBusinessMode ? 'flex' : 'none' }}
         >
-          <TabButton labelAnimated={false} icon="File">Listings</TabButton>
+          <TabButton labelAnimated={false} icon="Building2">Facilities</TabButton>
         </TabTrigger>
 
 
@@ -61,16 +61,7 @@ export default function Layout() {
           asChild
           style={{ display: isBusinessMode ? 'none' : 'flex' }}
         >
-          <TabButton labelAnimated={false} icon="Search">Home</TabButton>
-        </TabTrigger>
-
-        <TabTrigger
-          name="favorites"
-          href="/favorites"
-          asChild
-          style={{ display: isBusinessMode ? 'none' : 'flex' }}
-        >
-          <TabButton labelAnimated={false} icon="Heart">Favorites</TabButton>
+          <TabButton labelAnimated={false} icon="Search">Explore</TabButton>
         </TabTrigger>
 
         <TabTrigger
@@ -79,7 +70,7 @@ export default function Layout() {
           asChild
           style={{ display: isBusinessMode ? 'none' : 'flex' }}
         >
-          <TabButton labelAnimated={false} icon="Plane">Trips</TabButton>
+          <TabButton labelAnimated={false} icon="CalendarCheck">Bookings</TabButton>
         </TabTrigger>
 
         <TabTrigger
