@@ -16,8 +16,8 @@ module.exports = {
         global: '24px'
       },
       colors: {
-        highlight: '#0EA5E9',
-        accent: '#10B981',
+        highlight: '#39A845',
+        accent: '#2D8E38',
         light: {
           primary: '#ffffff',
           secondary: '#F1F5F9',

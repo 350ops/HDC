@@ -5,9 +5,11 @@ import { shadowPresets } from '@/utils/useShadow';
 import ThemeScroller from '@/components/ThemeScroller';
 import AnimatedView from '@/components/AnimatedView';
 import Header from '@/components/Header';
+import SkeletonLoader from '@/components/SkeletonLoader';
 import { useCollapsibleTitle } from '@/app/hooks/useCollapsibleTitle';
 import { useMyBookings } from '@/lib/hooks';
 import { router } from 'expo-router';
+import Icon from '@/components/Icon';
 import { Booking, Facility } from '@/lib/types';
 
 type BookingWithFacility = Booking & { facility?: Facility };
@@ -106,21 +108,6 @@ const BookingsScreen = () => {
         return result;
     }, [bookings]);
 
-    if (loading) {
-        return (
-            <View className="flex-1 bg-light-primary dark:bg-dark-primary">
-                <Header
-                    title="My Bookings"
-                    variant="collapsibleTitle"
-                    scrollY={scrollY}
-                />
-                <View className="flex-1 items-center justify-center">
-                    <ActivityIndicator size="large" />
-                </View>
-            </View>
-        );
-    }
-
     return (
         <View className="flex-1 bg-light-primary dark:bg-dark-primary">
             <Header
@@ -134,8 +121,13 @@ const BookingsScreen = () => {
                     onScroll={scrollHandler}
                     scrollEventThrottle={scrollEventThrottle}
                 >
-                    {(!bookings || bookings.length === 0) ? (
+                    {loading ? (
+                        <View className="px-4 pt-4">
+                            <SkeletonLoader variant="list" count={4} />
+                        </View>
+                    ) : (!bookings || bookings.length === 0) ? (
                         <View className="flex-1 items-center justify-center px-6 pt-32">
+                            <Icon name="CalendarCheck" size={48} strokeWidth={1} className="mb-4 opacity-30" />
                             <ThemedText className="text-lg font-bold mb-2">
                                 No bookings yet
                             </ThemedText>

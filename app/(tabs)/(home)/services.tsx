@@ -1,7 +1,6 @@
-import Header, { HeaderIcon } from '@/components/Header';
 import ThemeScroller from '@/components/ThemeScroller';
-import React, { useRef, useEffect, useContext } from 'react';
-import { View, Text, Pressable, Image, Animated } from 'react-native';
+import React, { useContext } from 'react';
+import { View, Animated } from 'react-native';
 import Section from '@/components/layout/Section';
 import { CardScroller } from '@/components/CardScroller';
 import Card from '@/components/Card';
@@ -12,8 +11,6 @@ const ServicesScreen = () => {
     const scrollY = useContext(ScrollContext);
 
     return (
-
-
         <ThemeScroller
             onScroll={Animated.event(
                 [{ nativeEvent: { contentOffset: { y: scrollY } } }],
@@ -24,179 +21,151 @@ const ServicesScreen = () => {
             <AnimatedView animation="scaleIn" className='flex-1 mt-4'>
 
                 <Section
-                    title="Services in New York"
+                    title="Facilities in Hulhumalé"
                     titleSize="lg"
                 >
                     <CardScroller space={15} className='mt-1.5 pb-4'>
                         <Card
-                            title="Photography"
+                            title="Football"
                             rounded="2xl"
-                            description='10 Available'
+                            description='3 Available'
                             width={100}
                             imageHeight={100}
-                            image="https://images.pexels.com/photos/1264210/pexels-photo-1264210.jpeg?auto=compress&cs=tinysrgb&w=1200"
+                            image={require('@/assets/img/room-1.avif')}
                         />
                         <Card
-                            title="Chefs"
+                            title="Cricket"
                             rounded="2xl"
-                            description='1 Available'
+                            description='2 Available'
                             width={100}
                             imageHeight={100}
-                            image="https://images.pexels.com/photos/1267320/pexels-photo-1267320.jpeg?auto=compress&cs=tinysrgb&w=1200"
+                            image={require('@/assets/img/room-2.avif')}
                         />
                         <Card
-                            title="Massage"
+                            title="Basketball"
                             rounded="2xl"
-                            description='Coming soon'
+                            description='2 Available'
                             width={100}
                             imageHeight={100}
-                            image="https://images.pexels.com/photos/3997993/pexels-photo-3997993.jpeg?auto=compress&cs=tinysrgb&w=1200"
+                            image={require('@/assets/img/room-3.avif')}
                         />
                         <Card
-                            title="Training"
+                            title="Swimming"
                             rounded="2xl"
-                            description='Coming soon'
+                            description='2 Available'
                             width={100}
                             imageHeight={100}
-                            image="https://images.pexels.com/photos/841130/pexels-photo-841130.jpeg?auto=compress&cs=tinysrgb&w=1200"
+                            image={require('@/assets/img/room-7.avif')}
                         />
                     </CardScroller>
                 </Section>
-               
 
                 {[
                     {
-                        title: "Top Photographers",
+                        title: "Phase 1 Facilities",
                         services: [
-                            { 
-                                title: "Sarah's Portrait Studio", 
-                                image: "https://images.pexels.com/photos/2773498/pexels-photo-2773498.jpeg?auto=compress&cs=tinysrgb&w=1200",
-                                price: "$150/hr",
-                                badge: "Featured"
+                            {
+                                title: "Hulhumalé Football Ground",
+                                image: require('@/assets/img/room-1.avif'),
+                                price: "MVR 500/slot",
+                                badge: "Popular"
                             },
-                            { 
-                                title: "NYC Wedding Photos", 
-                                image: "https://images.pexels.com/photos/3321793/pexels-photo-3321793.jpeg?auto=compress&cs=tinysrgb&w=1200",
-                                price: "$200/hr"
+                            {
+                                title: "HDC Cricket Ground",
+                                image: require('@/assets/img/room-2.avif'),
+                                price: "MVR 800/slot"
                             },
-                            { 
-                                title: "Urban Photography", 
-                                image: "https://images.pexels.com/photos/2901581/pexels-photo-2901581.jpeg?auto=compress&cs=tinysrgb&w=1200",
-                                price: "$125/hr"
+                            {
+                                title: "Sports Stadium Court",
+                                image: require('@/assets/img/room-3.avif'),
+                                price: "MVR 350/slot"
                             },
-                            { 
-                                title: "Event Photography", 
-                                image: "https://images.pexels.com/photos/2608517/pexels-photo-2608517.jpeg?auto=compress&cs=tinysrgb&w=1200",
-                                price: "$175/hr",
+                            {
+                                title: "HDC Badminton Hall",
+                                image: require('@/assets/img/room-4.avif'),
+                                price: "MVR 250/slot",
+                                badge: "Nearby"
+                            }
+                        ]
+                    },
+                    {
+                        title: "Phase 2 Facilities",
+                        services: [
+                            {
+                                title: "Hulhumalé Futsal Arena",
+                                image: require('@/assets/img/room-1.avif'),
+                                price: "MVR 400/slot",
+                                badge: "New"
+                            },
+                            {
+                                title: "Phase 2 Basketball Court",
+                                image: require('@/assets/img/room-3.avif'),
+                                price: "MVR 300/slot"
+                            },
+                            {
+                                title: "Phase 2 Volleyball Court",
+                                image: require('@/assets/img/room-5.avif'),
+                                price: "MVR 250/slot"
+                            },
+                            {
+                                title: "Water Sports Beach Center",
+                                image: require('@/assets/img/room-7.avif'),
+                                price: "MVR 150/slot",
                                 badge: "Popular"
                             }
                         ]
                     },
                     {
-                        title: "Private Chefs",
+                        title: "Volleyball Courts",
                         services: [
-                            { 
-                                title: "Chef Maria's Italian", 
-                                image: "https://images.pexels.com/photos/3338497/pexels-photo-3338497.jpeg?auto=compress&cs=tinysrgb&w=1200",
-                                price: "$250/event",
+                            {
+                                title: "Hulhumalé Volleyball Court",
+                                image: require('@/assets/img/room-5.avif'),
+                                price: "MVR 300/slot",
                                 badge: "Top Rated"
                             },
-                            { 
-                                title: "Asian Fusion Chef", 
-                                image: "https://images.pexels.com/photos/3298637/pexels-photo-3298637.jpeg?auto=compress&cs=tinysrgb&w=1200",
-                                price: "$200/event"
+                            {
+                                title: "Phase 2 Volleyball Court",
+                                image: require('@/assets/img/room-5.avif'),
+                                price: "MVR 250/slot"
                             },
-                            { 
-                                title: "Vegan Specialist", 
-                                image: "https://images.pexels.com/photos/3338537/pexels-photo-3338537.jpeg?auto=compress&cs=tinysrgb&w=1200",
-                                price: "$180/event",
+                            {
+                                title: "Beach Volleyball Area",
+                                image: require('@/assets/img/room-5.avif'),
+                                price: "MVR 200/slot",
                                 badge: "New"
-                            },
-                            { 
-                                title: "BBQ Master", 
-                                image: "https://images.pexels.com/photos/3338523/pexels-photo-3338523.jpeg?auto=compress&cs=tinysrgb&w=1200",
-                                price: "$220/event"
                             }
                         ]
                     },
                     {
-                        title: "Professional Massage",
+                        title: "Tennis & Racquet Sports",
                         services: [
-                            { 
-                                title: "Wellness Massage", 
-                                image: "https://images.pexels.com/photos/3865776/pexels-photo-3865776.jpeg?auto=compress&cs=tinysrgb&w=1200",
-                                price: "$90/hr",
-                                badge: "Best Value"
-                            },
-                            { 
-                                title: "Sports Massage", 
-                                image: "https://images.pexels.com/photos/3757942/pexels-photo-3757942.jpeg?auto=compress&cs=tinysrgb&w=1200",
-                                price: "$110/hr"
-                            },
-                            { 
-                                title: "Deep Tissue", 
-                                image: "https://images.pexels.com/photos/3757952/pexels-photo-3757952.jpeg?auto=compress&cs=tinysrgb&w=1200",
-                                price: "$100/hr",
+                            {
+                                title: "HDC Tennis Court",
+                                image: require('@/assets/img/room-6.avif'),
+                                price: "MVR 400/slot",
                                 badge: "Popular"
                             },
-                            { 
-                                title: "Couples Massage", 
-                                image: "https://images.pexels.com/photos/3757957/pexels-photo-3757957.jpeg?auto=compress&cs=tinysrgb&w=1200",
-                                price: "$160/hr"
+                            {
+                                title: "HDC Badminton Hall",
+                                image: require('@/assets/img/room-4.avif'),
+                                price: "MVR 250/slot"
                             }
                         ]
                     },
                     {
-                        title: "Top Restaurants",
+                        title: "Water Sports & Swimming",
                         services: [
-                            { 
-                                title: "La Bella Italia", 
-                                image: "https://images.pexels.com/photos/67468/pexels-photo-67468.jpeg?auto=compress&cs=tinysrgb&w=1200",
-                                price: "$$$$",
-                                badge: "Michelin Star"
+                            {
+                                title: "Hulhumalé Swimming Pool",
+                                image: require('@/assets/img/room-7.avif'),
+                                price: "MVR 200/slot",
+                                badge: "Popular"
                             },
-                            { 
-                                title: "Sushi Master", 
-                                image: "https://images.pexels.com/photos/359993/pexels-photo-359993.jpeg?auto=compress&cs=tinysrgb&w=1200",
-                                price: "$$$"
-                            },
-                            { 
-                                title: "Urban Bistro", 
-                                image: "https://images.pexels.com/photos/262978/pexels-photo-262978.jpeg?auto=compress&cs=tinysrgb&w=1200",
-                                price: "$$",
-                                badge: "New"
-                            },
-                            { 
-                                title: "The Steakhouse", 
-                                image: "https://images.pexels.com/photos/3535383/pexels-photo-3535383.jpeg?auto=compress&cs=tinysrgb&w=1200",
-                                price: "$$$$"
-                            }
-                        ]
-                    },
-                    {
-                        title: "Makeup Artists",
-                        services: [
-                            { 
-                                title: "Bridal Makeup", 
-                                image: "https://images.pexels.com/photos/2681751/pexels-photo-2681751.jpeg?auto=compress&cs=tinysrgb&w=1200",
-                                price: "$200/session",
-                                badge: "Top Choice"
-                            },
-                            { 
-                                title: "Editorial Style", 
-                                image: "https://images.pexels.com/photos/2442906/pexels-photo-2442906.jpeg?auto=compress&cs=tinysrgb&w=1200",
-                                price: "$150/session"
-                            },
-                            { 
-                                title: "Natural Glam", 
-                                image: "https://images.pexels.com/photos/2683821/pexels-photo-2683821.jpeg?auto=compress&cs=tinysrgb&w=1200",
-                                price: "$120/session",
-                                badge: "Trending"
-                            },
-                            { 
-                                title: "Special Effects", 
-                                image: "https://images.pexels.com/photos/2695679/pexels-photo-2695679.jpeg?auto=compress&cs=tinysrgb&w=1200",
-                                price: "$180/session"
+                            {
+                                title: "Water Sports Beach Center",
+                                image: require('@/assets/img/room-7.avif'),
+                                price: "MVR 150/slot"
                             }
                         ]
                     }
@@ -205,7 +174,6 @@ const ServicesScreen = () => {
                         key={`service-section-${index}`}
                         title={section.title}
                         titleSize="lg"
-                        link="/screens/map"
                         linkText="View all"
                     >
                         <CardScroller space={15} className='mt-1.5 pb-4'>
@@ -214,9 +182,7 @@ const ServicesScreen = () => {
                                     key={`service-${index}-${propIndex}`}
                                     title={service.title}
                                     rounded="2xl"
-                                    hasFavorite
                                     rating={4.8}
-                                    href="/screens/service-detail"
                                     price={service.price}
                                     width={160}
                                     imageHeight={160}
@@ -230,9 +196,7 @@ const ServicesScreen = () => {
 
             </AnimatedView>
         </ThemeScroller>
-
     );
 }
-
 
 export default ServicesScreen;

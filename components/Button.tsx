@@ -92,7 +92,7 @@ export const Button: React.FC<ButtonProps> = ({
   const ButtonContent = (
     <>
       {loading ? (
-        <ActivityIndicator color={variant === 'outline' || variant === 'secondary' || variant === 'ghost' ? '#0EA5E9' : '#fff'} />
+        <ActivityIndicator color={variant === 'outline' || variant === 'secondary' || variant === 'ghost' ? '#39A845' : '#fff'} />
       ) : (
         <View className="flex-row items-center justify-center">
           {iconStart && (
