@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { supabase } from '@/lib/supabase';
+import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 import { useAuth } from '@/app/contexts/AuthContext';
 import type {
   Facility,
@@ -21,6 +21,12 @@ export function useFacilities() {
   const [error, setError] = useState<string | null>(null);
 
   const fetch = useCallback(async () => {
+    if (!isSupabaseConfigured) {
+      setFacilities([]);
+      setLoading(false);
+      return;
+    }
+
     setLoading(true);
     setError(null);
     const { data, error: err } = await supabase
@@ -61,7 +67,7 @@ export function useFacility(id: string) {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!id) {
+    if (!id || !isSupabaseConfigured) {
       setLoading(false);
       return;
     }
@@ -129,7 +135,7 @@ export function useFacilitySlots(facilityId: string, date: string) {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!facilityId || !date) {
+    if (!facilityId || !date || !isSupabaseConfigured) {
       setSlots([]);
       setLoading(false);
       return;
@@ -229,7 +235,7 @@ export function useMyBookings() {
   const [error, setError] = useState<string | null>(null);
 
   const fetch = useCallback(async () => {
-    if (!user) {
+    if (!user || !isSupabaseConfigured) {
       setBookings([]);
       setLoading(false);
       return;
@@ -293,7 +299,7 @@ export function useMyTeam() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!user) {
+    if (!user || !isSupabaseConfigured) {
       setLoading(false);
       return;
     }
@@ -342,6 +348,11 @@ export function useGuidelines() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    if (!isSupabaseConfigured) {
+      setLoading(false);
+      return;
+    }
+
     let cancelled = false;
 
     async function fetch() {
