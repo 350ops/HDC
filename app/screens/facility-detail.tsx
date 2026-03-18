@@ -12,6 +12,7 @@ import Divider from '@/components/layout/Divider';
 import Icon, { IconName } from '@/components/Icon';
 import { Button } from '@/components/Button';
 import { useFacility, useFacilitySlots } from '@/lib/hooks';
+import { isSupabaseConfigured } from '@/lib/supabase';
 import useThemeColors from '@/app/contexts/ThemeColors';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
@@ -134,7 +135,11 @@ const FacilityDetail = () => {
       <Header variant="transparent" title="" rightComponents={rightComponents} showBackButton />
       <ThemedScroller className="px-0 bg-light-primary dark:bg-dark-primary">
         <ImageCarousel
-          images={placeholderImages}
+          images={
+            facility.image_urls && facility.image_urls.length > 0 && facility.image_urls[0]
+              ? facility.image_urls
+              : placeholderImages
+          }
           height={400}
           paginationStyle="dots"
         />

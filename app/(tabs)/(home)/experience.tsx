@@ -6,6 +6,10 @@ import { CardScroller } from '@/components/CardScroller';
 import Card from '@/components/Card';
 import AnimatedView from '@/components/AnimatedView';
 import { ScrollContext } from './_layout';
+import { isSupabaseConfigured, getStorageUrl } from '@/lib/supabase';
+
+const img = (storagePath: string, localAsset: any): string | any =>
+    isSupabaseConfigured ? getStorageUrl('facility-images', storagePath) : localAsset;
 
 const ExperienceScreen = () => {
     const scrollY = useContext(ScrollContext);
@@ -25,26 +29,26 @@ const ExperienceScreen = () => {
                         experiences: [
                             {
                                 title: "Hulhumalé Football Ground",
-                                image: require('@/assets/img/room-1.avif'),
+                                image: img('football/pitch-main.jpg', require('@/assets/img/room-1.avif')),
                                 price: "MVR 500/slot",
                                 rating: 4.9,
                                 badge: "Popular"
                             },
                             {
                                 title: "HDC Cricket Ground",
-                                image: require('@/assets/img/room-2.avif'),
+                                image: img('cricket/ground-main.jpg', require('@/assets/img/room-2.avif')),
                                 price: "MVR 800/slot",
                                 rating: 4.8,
                             },
                             {
                                 title: "Sports Stadium Court",
-                                image: require('@/assets/img/room-3.avif'),
+                                image: img('basketball/court-main.jpg', require('@/assets/img/room-3.avif')),
                                 price: "MVR 350/slot",
                                 rating: 4.7
                             },
                             {
                                 title: "HDC Badminton Hall",
-                                image: require('@/assets/img/room-4.avif'),
+                                image: img('badminton/hall-main.jpg', require('@/assets/img/room-4.avif')),
                                 price: "MVR 250/slot",
                                 rating: 4.8
                             }
@@ -55,26 +59,26 @@ const ExperienceScreen = () => {
                         experiences: [
                             {
                                 title: "Hulhumalé Futsal Arena",
-                                image: require('@/assets/img/room-1.avif'),
+                                image: img('football/pitch-aerial.jpg', require('@/assets/img/room-1.avif')),
                                 price: "MVR 400/slot",
                                 rating: 4.9,
                                 badge: "New"
                             },
                             {
                                 title: "Phase 2 Basketball Court",
-                                image: require('@/assets/img/room-3.avif'),
+                                image: img('basketball/court-indoor.jpg', require('@/assets/img/room-3.avif')),
                                 price: "MVR 300/slot",
                                 rating: 4.7
                             },
                             {
                                 title: "Phase 2 Volleyball Court",
-                                image: require('@/assets/img/room-5.avif'),
+                                image: img('volleyball/court-main.jpg', require('@/assets/img/room-5.avif')),
                                 price: "MVR 250/slot",
                                 rating: 4.6
                             },
                             {
                                 title: "Water Sports Beach Center",
-                                image: require('@/assets/img/room-7.avif'),
+                                image: img('swimming/pool-aerial.jpg', require('@/assets/img/room-7.avif')),
                                 price: "MVR 150/slot",
                                 rating: 4.8,
                                 badge: "Popular"
@@ -86,27 +90,27 @@ const ExperienceScreen = () => {
                         experiences: [
                             {
                                 title: "Hulhumalé Swimming Pool",
-                                image: require('@/assets/img/room-7.avif'),
+                                image: img('swimming/pool-main.jpg', require('@/assets/img/room-7.avif')),
                                 price: "MVR 200/slot",
                                 rating: 4.8,
                                 badge: "Popular"
                             },
                             {
                                 title: "Water Sports Beach Center",
-                                image: require('@/assets/img/room-7.avif'),
+                                image: img('swimming/pool-lanes.jpg', require('@/assets/img/room-7.avif')),
                                 price: "MVR 150/slot",
                                 rating: 4.7
                             },
                             {
                                 title: "Beach Volleyball Court",
-                                image: require('@/assets/img/room-5.avif'),
+                                image: img('volleyball/court-beach.jpg', require('@/assets/img/room-5.avif')),
                                 price: "MVR 300/slot",
                                 rating: 4.9,
                                 badge: "Top Rated"
                             },
                             {
                                 title: "HDC Tennis Court",
-                                image: require('@/assets/img/room-6.avif'),
+                                image: img('tennis/court-main.jpg', require('@/assets/img/room-6.avif')),
                                 price: "MVR 400/slot",
                                 rating: 4.6
                             }
@@ -117,26 +121,26 @@ const ExperienceScreen = () => {
                         experiences: [
                             {
                                 title: "Hulhumalé Football Ground",
-                                image: require('@/assets/img/room-1.avif'),
+                                image: img('football/pitch-night.jpg', require('@/assets/img/room-1.avif')),
                                 price: "MVR 500/slot",
                                 rating: 4.9
                             },
                             {
                                 title: "HDC Cricket Ground",
-                                image: require('@/assets/img/room-2.avif'),
+                                image: img('cricket/nets-practice.jpg', require('@/assets/img/room-2.avif')),
                                 price: "MVR 800/slot",
                                 rating: 4.8,
                                 badge: "Top Rated"
                             },
                             {
                                 title: "Hulhumalé Volleyball Court",
-                                image: require('@/assets/img/room-5.avif'),
+                                image: img('volleyball/court-sunset.jpg', require('@/assets/img/room-5.avif')),
                                 price: "MVR 300/slot",
                                 rating: 4.7
                             },
                             {
                                 title: "Sports Stadium Court",
-                                image: require('@/assets/img/room-3.avif'),
+                                image: img('basketball/court-night.jpg', require('@/assets/img/room-3.avif')),
                                 price: "MVR 350/slot",
                                 rating: 4.8
                             }

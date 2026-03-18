@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Alert, ActivityIndicator, ScrollView } from 'react-native';
+import { View, Alert, ActivityIndicator, ScrollView, Image } from 'react-native';
 import { useLocalSearchParams, router } from 'expo-router';
 import Header from '@/components/Header';
 import ThemedText from '@/components/ThemedText';
@@ -132,9 +132,19 @@ const BookingConfirmScreen = () => {
         {/* Booking Summary Card */}
         <View className="px-global pt-6">
           <View
-            className="bg-light-primary dark:bg-dark-secondary rounded-2xl p-5"
+            className="bg-light-primary dark:bg-dark-secondary rounded-2xl overflow-hidden"
             style={shadowPresets.large}
           >
+            {/* Facility image from Supabase storage */}
+            {facility?.image_urls && facility.image_urls.length > 0 && facility.image_urls[0] ? (
+              <Image
+                source={{ uri: facility.image_urls[0] }}
+                className="w-full h-40"
+                resizeMode="cover"
+              />
+            ) : null}
+
+            <View className="p-5">
             <ThemedText className="text-xl font-bold mb-4">
               {facility?.name}
             </ThemedText>
@@ -159,6 +169,7 @@ const BookingConfirmScreen = () => {
             <View className="flex-row justify-between">
               <ThemedText className="text-light-subtext dark:text-dark-subtext">Team</ThemedText>
               <ThemedText className="font-medium">{team.name}</ThemedText>
+            </View>
             </View>
           </View>
         </View>

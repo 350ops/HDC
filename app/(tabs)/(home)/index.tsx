@@ -10,6 +10,7 @@ import ThemedText from '@/components/ThemedText';
 import { shadowPresets } from '@/utils/useShadow';
 import Icon from '@/components/Icon';
 import type { Facility } from '@/lib/types';
+import { isSupabaseConfigured, getFacilityImageUrls } from '@/lib/supabase';
 
 const sportImageMap: Record<string, any> = {
     Football: require('@/assets/img/room-1.avif'),
@@ -31,81 +32,101 @@ const sportIcons: Record<string, string> = {
     Swimming: '\uD83C\uDFCA',
 };
 
-const getFacilityImage = (sportType: string) => {
-    return sportImageMap[sportType] || require('@/assets/img/room-1.avif');
+/**
+ * Get the display image for a facility.
+ * Prefers Supabase storage URLs from image_urls, falls back to local assets.
+ */
+const getFacilityImage = (facility: Facility): string | any => {
+    if (facility.image_urls && facility.image_urls.length > 0 && facility.image_urls[0]) {
+        return facility.image_urls[0];
+    }
+    return sportImageMap[facility.sport_type] || require('@/assets/img/room-1.avif');
 };
 
 // Local facilities based on Hulhumalé Sports & Recreation Zone
+// image_urls are populated from Supabase storage when configured
 const LOCAL_FACILITIES: Facility[] = [
     {
         id: 'facility-1', name: 'Hulhumalé Football Ground', neighborhood: 'Phase 1', sport_type: 'Football',
-        description: 'Full-size football pitch with floodlights', capacity: 22, image_urls: [],
+        description: 'Full-size football pitch with floodlights', capacity: 22,
+        image_urls: getFacilityImageUrls('Football'),
         slot_duration_min: 60, price_per_slot: 500, operating_start: '06:00', operating_end: '22:00',
         requires_approval: false, status: 'active', created_at: '', updated_at: '',
     },
     {
         id: 'facility-2', name: 'Hulhumalé Futsal Arena', neighborhood: 'Phase 2', sport_type: 'Football',
-        description: 'Indoor futsal court', capacity: 10, image_urls: [],
+        description: 'Indoor futsal court', capacity: 10,
+        image_urls: getFacilityImageUrls('Football'),
         slot_duration_min: 60, price_per_slot: 400, operating_start: '06:00', operating_end: '23:00',
         requires_approval: false, status: 'active', created_at: '', updated_at: '',
     },
     {
         id: 'facility-3', name: 'HDC Cricket Ground', neighborhood: 'Phase 1', sport_type: 'Cricket',
-        description: 'Cricket ground with practice nets', capacity: 22, image_urls: [],
+        description: 'Cricket ground with practice nets', capacity: 22,
+        image_urls: getFacilityImageUrls('Cricket'),
         slot_duration_min: 120, price_per_slot: 800, operating_start: '06:00', operating_end: '18:00',
         requires_approval: true, status: 'active', created_at: '', updated_at: '',
     },
     {
         id: 'facility-4', name: 'Hulhumalé Cricket Nets', neighborhood: 'Phase 2', sport_type: 'Cricket',
-        description: 'Practice nets for cricket training', capacity: 6, image_urls: [],
+        description: 'Practice nets for cricket training', capacity: 6,
+        image_urls: getFacilityImageUrls('Cricket'),
         slot_duration_min: 60, price_per_slot: 300, operating_start: '06:00', operating_end: '20:00',
         requires_approval: false, status: 'active', created_at: '', updated_at: '',
     },
     {
         id: 'facility-5', name: 'Sports Stadium Court', neighborhood: 'Phase 1', sport_type: 'Basketball',
-        description: 'Outdoor basketball court at the stadium', capacity: 10, image_urls: [],
+        description: 'Outdoor basketball court at the stadium', capacity: 10,
+        image_urls: getFacilityImageUrls('Basketball'),
         slot_duration_min: 60, price_per_slot: 350, operating_start: '06:00', operating_end: '22:00',
         requires_approval: false, status: 'active', created_at: '', updated_at: '',
     },
     {
         id: 'facility-6', name: 'Phase 2 Basketball Court', neighborhood: 'Phase 2', sport_type: 'Basketball',
-        description: 'Community basketball court', capacity: 10, image_urls: [],
+        description: 'Community basketball court', capacity: 10,
+        image_urls: getFacilityImageUrls('Basketball'),
         slot_duration_min: 60, price_per_slot: 300, operating_start: '06:00', operating_end: '21:00',
         requires_approval: false, status: 'active', created_at: '', updated_at: '',
     },
     {
         id: 'facility-7', name: 'HDC Badminton Hall', neighborhood: 'Phase 1', sport_type: 'Badminton',
-        description: 'Indoor badminton courts', capacity: 4, image_urls: [],
+        description: 'Indoor badminton courts', capacity: 4,
+        image_urls: getFacilityImageUrls('Badminton'),
         slot_duration_min: 60, price_per_slot: 250, operating_start: '06:00', operating_end: '22:00',
         requires_approval: false, status: 'active', created_at: '', updated_at: '',
     },
     {
         id: 'facility-8', name: 'Hulhumalé Volleyball Court', neighborhood: 'Phase 1', sport_type: 'Volleyball',
-        description: 'Beach volleyball court near the waterfront', capacity: 12, image_urls: [],
+        description: 'Beach volleyball court near the waterfront', capacity: 12,
+        image_urls: getFacilityImageUrls('Volleyball'),
         slot_duration_min: 60, price_per_slot: 300, operating_start: '06:00', operating_end: '20:00',
         requires_approval: false, status: 'active', created_at: '', updated_at: '',
     },
     {
         id: 'facility-9', name: 'Phase 2 Volleyball Court', neighborhood: 'Phase 2', sport_type: 'Volleyball',
-        description: 'Community volleyball court', capacity: 12, image_urls: [],
+        description: 'Community volleyball court', capacity: 12,
+        image_urls: getFacilityImageUrls('Volleyball'),
         slot_duration_min: 60, price_per_slot: 250, operating_start: '06:00', operating_end: '20:00',
         requires_approval: false, status: 'active', created_at: '', updated_at: '',
     },
     {
         id: 'facility-10', name: 'HDC Tennis Court', neighborhood: 'Phase 1', sport_type: 'Tennis',
-        description: 'Hard court tennis facility', capacity: 4, image_urls: [],
+        description: 'Hard court tennis facility', capacity: 4,
+        image_urls: getFacilityImageUrls('Tennis'),
         slot_duration_min: 60, price_per_slot: 400, operating_start: '06:00', operating_end: '21:00',
         requires_approval: false, status: 'active', created_at: '', updated_at: '',
     },
     {
         id: 'facility-11', name: 'Hulhumalé Swimming Pool', neighborhood: 'Phase 1', sport_type: 'Swimming',
-        description: 'Olympic-size swimming pool', capacity: 30, image_urls: [],
+        description: 'Olympic-size swimming pool', capacity: 30,
+        image_urls: getFacilityImageUrls('Swimming'),
         slot_duration_min: 60, price_per_slot: 200, operating_start: '06:00', operating_end: '20:00',
         requires_approval: false, status: 'active', created_at: '', updated_at: '',
     },
     {
         id: 'facility-12', name: 'Water Sports Beach Center', neighborhood: 'Phase 2', sport_type: 'Swimming',
-        description: 'Beach water sports and swimming area', capacity: 20, image_urls: [],
+        description: 'Beach water sports and swimming area', capacity: 20,
+        image_urls: getFacilityImageUrls('Swimming'),
         slot_duration_min: 60, price_per_slot: 150, operating_start: '07:00', operating_end: '18:00',
         requires_approval: false, status: 'active', created_at: '', updated_at: '',
     },
@@ -181,7 +202,7 @@ const HomeScreen = () => {
                                     price={`MVR ${facility.price_per_slot}/slot`}
                                     width={170}
                                     imageHeight={170}
-                                    image={getFacilityImage(facility.sport_type)}
+                                    image={getFacilityImage(facility)}
                                 />
                             ))}
                         </CardScroller>

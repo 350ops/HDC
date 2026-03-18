@@ -6,6 +6,11 @@ import { CardScroller } from '@/components/CardScroller';
 import Card from '@/components/Card';
 import AnimatedView from '@/components/AnimatedView';
 import { ScrollContext } from './_layout';
+import { isSupabaseConfigured, getStorageUrl } from '@/lib/supabase';
+
+/** Get image: Supabase storage URL if configured, otherwise local asset */
+const img = (storagePath: string, localAsset: any): string | any =>
+    isSupabaseConfigured ? getStorageUrl('facility-images', storagePath) : localAsset;
 
 const ServicesScreen = () => {
     const scrollY = useContext(ScrollContext);
@@ -31,7 +36,7 @@ const ServicesScreen = () => {
                             description='3 Available'
                             width={100}
                             imageHeight={100}
-                            image={require('@/assets/img/room-1.avif')}
+                            image={img('football/pitch-main.jpg', require('@/assets/img/room-1.avif'))}
                         />
                         <Card
                             title="Cricket"
@@ -39,7 +44,7 @@ const ServicesScreen = () => {
                             description='2 Available'
                             width={100}
                             imageHeight={100}
-                            image={require('@/assets/img/room-2.avif')}
+                            image={img('cricket/ground-main.jpg', require('@/assets/img/room-2.avif'))}
                         />
                         <Card
                             title="Basketball"
@@ -47,7 +52,7 @@ const ServicesScreen = () => {
                             description='2 Available'
                             width={100}
                             imageHeight={100}
-                            image={require('@/assets/img/room-3.avif')}
+                            image={img('basketball/court-main.jpg', require('@/assets/img/room-3.avif'))}
                         />
                         <Card
                             title="Swimming"
@@ -55,7 +60,7 @@ const ServicesScreen = () => {
                             description='2 Available'
                             width={100}
                             imageHeight={100}
-                            image={require('@/assets/img/room-7.avif')}
+                            image={img('swimming/pool-main.jpg', require('@/assets/img/room-7.avif'))}
                         />
                     </CardScroller>
                 </Section>
@@ -66,23 +71,23 @@ const ServicesScreen = () => {
                         services: [
                             {
                                 title: "Hulhumalé Football Ground",
-                                image: require('@/assets/img/room-1.avif'),
+                                image: img('football/pitch-main.jpg', require('@/assets/img/room-1.avif')),
                                 price: "MVR 500/slot",
                                 badge: "Popular"
                             },
                             {
                                 title: "HDC Cricket Ground",
-                                image: require('@/assets/img/room-2.avif'),
+                                image: img('cricket/ground-main.jpg', require('@/assets/img/room-2.avif')),
                                 price: "MVR 800/slot"
                             },
                             {
                                 title: "Sports Stadium Court",
-                                image: require('@/assets/img/room-3.avif'),
+                                image: img('basketball/court-main.jpg', require('@/assets/img/room-3.avif')),
                                 price: "MVR 350/slot"
                             },
                             {
                                 title: "HDC Badminton Hall",
-                                image: require('@/assets/img/room-4.avif'),
+                                image: img('badminton/hall-main.jpg', require('@/assets/img/room-4.avif')),
                                 price: "MVR 250/slot",
                                 badge: "Nearby"
                             }
@@ -93,23 +98,23 @@ const ServicesScreen = () => {
                         services: [
                             {
                                 title: "Hulhumalé Futsal Arena",
-                                image: require('@/assets/img/room-1.avif'),
+                                image: img('football/pitch-aerial.jpg', require('@/assets/img/room-1.avif')),
                                 price: "MVR 400/slot",
                                 badge: "New"
                             },
                             {
                                 title: "Phase 2 Basketball Court",
-                                image: require('@/assets/img/room-3.avif'),
+                                image: img('basketball/court-indoor.jpg', require('@/assets/img/room-3.avif')),
                                 price: "MVR 300/slot"
                             },
                             {
                                 title: "Phase 2 Volleyball Court",
-                                image: require('@/assets/img/room-5.avif'),
+                                image: img('volleyball/court-main.jpg', require('@/assets/img/room-5.avif')),
                                 price: "MVR 250/slot"
                             },
                             {
                                 title: "Water Sports Beach Center",
-                                image: require('@/assets/img/room-7.avif'),
+                                image: img('swimming/pool-aerial.jpg', require('@/assets/img/room-7.avif')),
                                 price: "MVR 150/slot",
                                 badge: "Popular"
                             }
@@ -120,18 +125,18 @@ const ServicesScreen = () => {
                         services: [
                             {
                                 title: "Hulhumalé Volleyball Court",
-                                image: require('@/assets/img/room-5.avif'),
+                                image: img('volleyball/court-beach.jpg', require('@/assets/img/room-5.avif')),
                                 price: "MVR 300/slot",
                                 badge: "Top Rated"
                             },
                             {
                                 title: "Phase 2 Volleyball Court",
-                                image: require('@/assets/img/room-5.avif'),
+                                image: img('volleyball/court-main.jpg', require('@/assets/img/room-5.avif')),
                                 price: "MVR 250/slot"
                             },
                             {
                                 title: "Beach Volleyball Area",
-                                image: require('@/assets/img/room-5.avif'),
+                                image: img('volleyball/court-sunset.jpg', require('@/assets/img/room-5.avif')),
                                 price: "MVR 200/slot",
                                 badge: "New"
                             }
@@ -142,13 +147,13 @@ const ServicesScreen = () => {
                         services: [
                             {
                                 title: "HDC Tennis Court",
-                                image: require('@/assets/img/room-6.avif'),
+                                image: img('tennis/court-main.jpg', require('@/assets/img/room-6.avif')),
                                 price: "MVR 400/slot",
                                 badge: "Popular"
                             },
                             {
                                 title: "HDC Badminton Hall",
-                                image: require('@/assets/img/room-4.avif'),
+                                image: img('badminton/court-close.jpg', require('@/assets/img/room-4.avif')),
                                 price: "MVR 250/slot"
                             }
                         ]
@@ -158,13 +163,13 @@ const ServicesScreen = () => {
                         services: [
                             {
                                 title: "Hulhumalé Swimming Pool",
-                                image: require('@/assets/img/room-7.avif'),
+                                image: img('swimming/pool-main.jpg', require('@/assets/img/room-7.avif')),
                                 price: "MVR 200/slot",
                                 badge: "Popular"
                             },
                             {
                                 title: "Water Sports Beach Center",
-                                image: require('@/assets/img/room-7.avif'),
+                                image: img('swimming/pool-lanes.jpg', require('@/assets/img/room-7.avif')),
                                 price: "MVR 150/slot"
                             }
                         ]
