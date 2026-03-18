@@ -5,11 +5,30 @@ import { createClient } from '@supabase/supabase-js';
 const supabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL || '';
 const supabaseAnonKey = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY || '';
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
-  auth: {
-    storage: AsyncStorage,
-    autoRefreshToken: true,
-    persistSession: true,
-    detectSessionInUrl: false,
-  },
-});
+export const isSupabaseConfigured = Boolean(supabaseUrl && supabaseAnonKey);
+
+type AuthChangeCallback = (event: string, session: any) => void;
+
+function createMockSupabase() {
+  return {
+    auth: {
+      getSession: async () => ({ data: { session: null as any } }),
+      onAuthStateChange: (_cb: AuthChangeCallback) => ({
+        data: { subscription: { unsubscribe: () => {} } },
+      }),
+      signInWithIdToken: async (_args: any) => ({ data: null, error: null }),
+      signOut: async () => ({ error: null }),
+    },
+  } as any;
+}
+
+export const supabase = isSupabaseConfigured
+  ? createClient(supabaseUrl, supabaseAnonKey, {
+      auth: {
+        storage: AsyncStorage,
+        autoRefreshToken: true,
+        persistSession: true,
+        detectSessionInUrl: false,
+      },
+    })
+  : createMockSupabase();

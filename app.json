@@ -6,22 +6,24 @@
     "version": "1.0.0",
     "runtimeVersion": "1.0.0",
     "scheme": "hdc-sports",
-
     "experiments": {
       "tsconfigPaths": true
     },
-    "platforms": ["ios", "android"],
+    "platforms": [
+      "ios",
+      "android"
+    ],
     "plugins": [
       "expo-router",
       "expo-font",
       "expo-apple-authentication",
-      "expo-crypto",
       [
         "@react-native-google-signin/google-signin",
         {
           "iosUrlScheme": "com.googleusercontent.apps.YOUR_IOS_CLIENT_ID"
         }
-      ]
+      ],
+      "expo-web-browser"
     ],
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -37,7 +39,8 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "mv.com.hdc.sports",
-      "usesAppleSignIn": true
+      "usesAppleSignIn": true,
+      "appleTeamId": "ANAZ4TXPX5"
     },
     "android": {
       "package": "mv.com.hdc.sports",
