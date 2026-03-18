@@ -1,19 +1,27 @@
 {
   "expo": {
     "newArchEnabled": true,
-    "name": "Propia",
-    "slug": "propia",
+    "name": "HDC Sports",
+    "slug": "hdc-sports",
     "version": "1.0.0",
     "runtimeVersion": "1.0.0",
-    "scheme": "propia",
-   
+    "scheme": "hdc-sports",
+
     "experiments": {
       "tsconfigPaths": true
     },
     "platforms": ["ios", "android"],
     "plugins": [
       "expo-router",
-      "expo-font"
+      "expo-font",
+      "expo-apple-authentication",
+      "expo-crypto",
+      [
+        "@react-native-google-signin/google-signin",
+        {
+          "iosUrlScheme": "com.googleusercontent.apps.YOUR_IOS_CLIENT_ID"
+        }
+      ]
     ],
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -27,9 +35,12 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "mv.com.hdc.sports",
+      "usesAppleSignIn": true
     },
     "android": {
+      "package": "mv.com.hdc.sports",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
