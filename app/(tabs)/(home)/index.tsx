@@ -1,7 +1,6 @@
-import Header, { HeaderIcon } from '@/components/Header';
 import ThemeScroller from '@/components/ThemeScroller';
 import React, { useContext, useMemo } from 'react';
-import { View, Text, Pressable, Image, Animated } from 'react-native';
+import { View, Pressable, Animated } from 'react-native';
 import Section from '@/components/layout/Section';
 import { CardScroller } from '@/components/CardScroller';
 import Card from '@/components/Card';
@@ -9,9 +8,6 @@ import AnimatedView from '@/components/AnimatedView';
 import { ScrollContext } from './_layout';
 import ThemedText from '@/components/ThemedText';
 import { shadowPresets } from '@/utils/useShadow';
-import { router } from 'expo-router';
-import { useFacilities } from '@/lib/hooks';
-import SkeletonLoader from '@/components/SkeletonLoader';
 import Icon from '@/components/Icon';
 import type { Facility } from '@/lib/types';
 
@@ -39,96 +35,90 @@ const getFacilityImage = (sportType: string) => {
     return sportImageMap[sportType] || require('@/assets/img/room-1.avif');
 };
 
-// Sample facilities based on Hulhumalé Sports & Recreation Zone
-const SAMPLE_FACILITIES: Facility[] = [
+// Local facilities based on Hulhumalé Sports & Recreation Zone
+const LOCAL_FACILITIES: Facility[] = [
     {
-        id: 'sample-1', name: 'Hulhumalé Football Ground', neighborhood: 'Phase 1', sport_type: 'Football',
+        id: 'facility-1', name: 'Hulhumalé Football Ground', neighborhood: 'Phase 1', sport_type: 'Football',
         description: 'Full-size football pitch with floodlights', capacity: 22, image_urls: [],
         slot_duration_min: 60, price_per_slot: 500, operating_start: '06:00', operating_end: '22:00',
         requires_approval: false, status: 'active', created_at: '', updated_at: '',
     },
     {
-        id: 'sample-2', name: 'Hulhumalé Futsal Arena', neighborhood: 'Phase 2', sport_type: 'Football',
+        id: 'facility-2', name: 'Hulhumalé Futsal Arena', neighborhood: 'Phase 2', sport_type: 'Football',
         description: 'Indoor futsal court', capacity: 10, image_urls: [],
         slot_duration_min: 60, price_per_slot: 400, operating_start: '06:00', operating_end: '23:00',
         requires_approval: false, status: 'active', created_at: '', updated_at: '',
     },
     {
-        id: 'sample-3', name: 'HDC Cricket Ground', neighborhood: 'Phase 1', sport_type: 'Cricket',
+        id: 'facility-3', name: 'HDC Cricket Ground', neighborhood: 'Phase 1', sport_type: 'Cricket',
         description: 'Cricket ground with practice nets', capacity: 22, image_urls: [],
         slot_duration_min: 120, price_per_slot: 800, operating_start: '06:00', operating_end: '18:00',
         requires_approval: true, status: 'active', created_at: '', updated_at: '',
     },
     {
-        id: 'sample-4', name: 'Hulhumalé Cricket Nets', neighborhood: 'Phase 2', sport_type: 'Cricket',
+        id: 'facility-4', name: 'Hulhumalé Cricket Nets', neighborhood: 'Phase 2', sport_type: 'Cricket',
         description: 'Practice nets for cricket training', capacity: 6, image_urls: [],
         slot_duration_min: 60, price_per_slot: 300, operating_start: '06:00', operating_end: '20:00',
         requires_approval: false, status: 'active', created_at: '', updated_at: '',
     },
     {
-        id: 'sample-5', name: 'Sports Stadium Court', neighborhood: 'Phase 1', sport_type: 'Basketball',
+        id: 'facility-5', name: 'Sports Stadium Court', neighborhood: 'Phase 1', sport_type: 'Basketball',
         description: 'Outdoor basketball court at the stadium', capacity: 10, image_urls: [],
         slot_duration_min: 60, price_per_slot: 350, operating_start: '06:00', operating_end: '22:00',
         requires_approval: false, status: 'active', created_at: '', updated_at: '',
     },
     {
-        id: 'sample-6', name: 'Phase 2 Basketball Court', neighborhood: 'Phase 2', sport_type: 'Basketball',
+        id: 'facility-6', name: 'Phase 2 Basketball Court', neighborhood: 'Phase 2', sport_type: 'Basketball',
         description: 'Community basketball court', capacity: 10, image_urls: [],
         slot_duration_min: 60, price_per_slot: 300, operating_start: '06:00', operating_end: '21:00',
         requires_approval: false, status: 'active', created_at: '', updated_at: '',
     },
     {
-        id: 'sample-7', name: 'HDC Badminton Hall', neighborhood: 'Phase 1', sport_type: 'Badminton',
+        id: 'facility-7', name: 'HDC Badminton Hall', neighborhood: 'Phase 1', sport_type: 'Badminton',
         description: 'Indoor badminton courts', capacity: 4, image_urls: [],
         slot_duration_min: 60, price_per_slot: 250, operating_start: '06:00', operating_end: '22:00',
         requires_approval: false, status: 'active', created_at: '', updated_at: '',
     },
     {
-        id: 'sample-8', name: 'Hulhumalé Volleyball Court', neighborhood: 'Phase 1', sport_type: 'Volleyball',
+        id: 'facility-8', name: 'Hulhumalé Volleyball Court', neighborhood: 'Phase 1', sport_type: 'Volleyball',
         description: 'Beach volleyball court near the waterfront', capacity: 12, image_urls: [],
         slot_duration_min: 60, price_per_slot: 300, operating_start: '06:00', operating_end: '20:00',
         requires_approval: false, status: 'active', created_at: '', updated_at: '',
     },
     {
-        id: 'sample-9', name: 'Phase 2 Volleyball Court', neighborhood: 'Phase 2', sport_type: 'Volleyball',
+        id: 'facility-9', name: 'Phase 2 Volleyball Court', neighborhood: 'Phase 2', sport_type: 'Volleyball',
         description: 'Community volleyball court', capacity: 12, image_urls: [],
         slot_duration_min: 60, price_per_slot: 250, operating_start: '06:00', operating_end: '20:00',
         requires_approval: false, status: 'active', created_at: '', updated_at: '',
     },
     {
-        id: 'sample-10', name: 'HDC Tennis Court', neighborhood: 'Phase 1', sport_type: 'Tennis',
+        id: 'facility-10', name: 'HDC Tennis Court', neighborhood: 'Phase 1', sport_type: 'Tennis',
         description: 'Hard court tennis facility', capacity: 4, image_urls: [],
         slot_duration_min: 60, price_per_slot: 400, operating_start: '06:00', operating_end: '21:00',
         requires_approval: false, status: 'active', created_at: '', updated_at: '',
     },
     {
-        id: 'sample-11', name: 'Hulhumalé Swimming Pool', neighborhood: 'Phase 1', sport_type: 'Swimming',
+        id: 'facility-11', name: 'Hulhumalé Swimming Pool', neighborhood: 'Phase 1', sport_type: 'Swimming',
         description: 'Olympic-size swimming pool', capacity: 30, image_urls: [],
         slot_duration_min: 60, price_per_slot: 200, operating_start: '06:00', operating_end: '20:00',
         requires_approval: false, status: 'active', created_at: '', updated_at: '',
     },
     {
-        id: 'sample-12', name: 'Water Sports Beach Center', neighborhood: 'Phase 2', sport_type: 'Swimming',
+        id: 'facility-12', name: 'Water Sports Beach Center', neighborhood: 'Phase 2', sport_type: 'Swimming',
         description: 'Beach water sports and swimming area', capacity: 20, image_urls: [],
         slot_duration_min: 60, price_per_slot: 150, operating_start: '07:00', operating_end: '18:00',
         requires_approval: false, status: 'active', created_at: '', updated_at: '',
     },
 ];
 
+const grouped = LOCAL_FACILITIES.reduce<Record<string, Facility[]>>((acc, f) => {
+    if (!acc[f.sport_type]) acc[f.sport_type] = [];
+    acc[f.sport_type].push(f);
+    return acc;
+}, {});
+
 const HomeScreen = () => {
     const scrollY = useContext(ScrollContext);
-    const { facilities: dbFacilities, grouped: dbGrouped, loading, error } = useFacilities();
-
-    // Use sample data as fallback when DB is empty
-    const facilities = dbFacilities.length > 0 ? dbFacilities : SAMPLE_FACILITIES;
-    const grouped = useMemo(() => {
-        if (dbFacilities.length > 0) return dbGrouped;
-        return SAMPLE_FACILITIES.reduce<Record<string, Facility[]>>((acc, f) => {
-            if (!acc[f.sport_type]) acc[f.sport_type] = [];
-            acc[f.sport_type].push(f);
-            return acc;
-        }, {});
-    }, [dbFacilities, dbGrouped]);
 
     return (
         <ThemeScroller
@@ -173,19 +163,7 @@ const HomeScreen = () => {
                     ))}
                 </CardScroller>
 
-                {loading && (
-                    <SkeletonLoader variant="grid" count={4} />
-                )}
-
-                {error && (
-                    <View className="p-5 mb-4 rounded-2xl bg-red-50 dark:bg-red-900/20">
-                        <ThemedText className="text-red-600 dark:text-red-400 text-sm">
-                            Failed to load facilities: {error}
-                        </ThemedText>
-                    </View>
-                )}
-
-                {!loading && Object.entries(grouped).map(([sportType, sportFacilities], index) => (
+                {Object.entries(grouped).map(([sportType, sportFacilities], index) => (
                     <Section
                         key={`sport-section-${index}`}
                         title={`${sportIcons[sportType] || ''} ${sportType}`}
@@ -200,7 +178,6 @@ const HomeScreen = () => {
                                     description={facility.neighborhood || ''}
                                     rounded="2xl"
                                     badge={facility.sport_type}
-                                    href={facility.id.startsWith('sample-') ? undefined : `/screens/facility-detail?id=${facility.id}`}
                                     price={`MVR ${facility.price_per_slot}/slot`}
                                     width={170}
                                     imageHeight={170}
