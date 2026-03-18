@@ -1,129 +1,96 @@
-import { View, ImageBackground, Text, TouchableOpacity, Pressable, Image, Alert } from 'react-native';
+import { View, Pressable, Alert } from 'react-native';
 import Header, { HeaderIcon } from '@/components/Header';
 import ThemedText from '@/components/ThemedText';
-import { useBusinessMode } from '@/app/contexts/BusinesModeContext';
 import Avatar from '@/components/Avatar';
 import ListLink from '@/components/ListLink';
 import AnimatedView from '@/components/AnimatedView';
 import ThemedScroller from '@/components/ThemeScroller';
-import {Button} from '@/components/Button';
-import BusinessSwitch from '@/components/BusinessSwitch';
 import React from 'react';
 import ThemeToggle from '@/components/ThemeToggle';
 import { shadowPresets } from '@/utils/useShadow';
 import Divider from '@/components/layout/Divider';
-import { router } from 'expo-router';
+import Icon from '@/components/Icon';
 import { useAuth } from '@/app/contexts/AuthContext';
 
 export default function ProfileScreen() {
-    const { isBusinessMode } = useBusinessMode();
-    return (
-        <View className="flex-1 bg-light-primary dark:bg-dark-primary">
-            <Header
-                leftComponent={<ThemeToggle />}
-                rightComponents={[<HeaderIcon icon="Bell" href="/screens/notifications" />]} />
-            <View className='flex-1 bg-light-primary dark:bg-dark-primary'>
+  const { user, signOut } = useAuth();
 
-                <ThemedScroller>
+  const handleSignOut = async () => {
+    try {
+      await signOut();
+    } catch (error: any) {
+      Alert.alert('Error', error.message || 'Failed to sign out');
+    }
+  };
 
+  const displayName = user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'Guest User';
+  const email = user?.email || 'Not signed in';
 
-
-                    {isBusinessMode ? (
-                        <HostProfile />
-                    ) : (
-                        <PersonalProfile />
-                    )}
-
-                </ThemedScroller>
-                <BusinessSwitch />
-
+  return (
+    <View className="flex-1 bg-light-primary dark:bg-dark-primary">
+      <Header
+        leftComponent={<ThemeToggle />}
+        rightComponents={[<HeaderIcon icon="Bell" href="/screens/notifications" />]}
+      />
+      <ThemedScroller>
+        <AnimatedView className="pt-2" animation="scaleIn">
+          {/* Profile Card */}
+          <View
+            style={shadowPresets.large}
+            className="items-center mb-6 bg-light-primary dark:bg-dark-secondary rounded-3xl p-8"
+          >
+            <View className="w-20 h-20 rounded-full bg-highlight/10 items-center justify-center mb-4">
+              <Icon name="User" size={36} strokeWidth={1.5} />
             </View>
-        </View>
-    );
-}
+            <ThemedText className="text-2xl font-bold">{displayName}</ThemedText>
+            <ThemedText className="text-sm text-light-subtext dark:text-dark-subtext mt-1">
+              {email}
+            </ThemedText>
 
-const HostProfile = () => {
-    return (
-        <>
-            <AnimatedView className='' animation='scaleIn'>
-                <View className="p-10 items-center rounded-3xl bg-slate-200 mt-6 mb-8 dark:bg-dark-secondary">
-                    <View className='w-20 h-20 relative'>
-                        <View className='w-full h-full rounded-xl relative z-20 overflow-hidden border-2 border-light-primary dark:border-dark-primary'>
-                            <Image className='w-full h-full' source={{ uri: 'https://images.unsplash.com/photo-1526318896980-cf78c088247c?q=80&w=400' }} />
-                        </View>
-                        <View className='w-full h-full absolute top-0 left-8 rotate-12 rounded-xl overflow-hidden border-2 border-light-primary dark:border-dark-primary'>
-                            <Image className='w-full h-full' source={{ uri: 'https://images.pexels.com/photos/69903/pexels-photo-69903.jpeg?auto=compress&cs=tinysrgb&w=1200' }} />
-                        </View>
-                        <View className='w-full h-full absolute top-0 right-8 -rotate-12 rounded-xl overflow-hidden border-2 border-light-primary dark:border-dark-primary'>
-                            <Image className='w-full h-full' source={{ uri: 'https://images.pexels.com/photos/69903/pexels-photo-69903.jpeg?auto=compress&cs=tinysrgb&w=1200' }} />
-                        </View>
-                    </View>
-                    <ThemedText className='text-2xl font-semibold mt-4'>New to hosting?</ThemedText>
-                    <ThemedText className="text-sm font-light text-center px-4 ">Discover how to start hosting and earn extra income</ThemedText>
-                    <Button title="Get started" className='mt-4' textClassName='text-white' />
-                </View>
-                <View className='px-4'>
-                    <ListLink showChevron title="Reservations" icon="Briefcase" href="/screens/reservations" />
-                    <ListLink showChevron title="Earnings" icon="Banknote" href="/screens/earnings" />
-                    <ListLink showChevron title="Insights" icon="BarChart" href="/screens/insights" />
-                    <ListLink showChevron title="Create new listing" icon="PlusCircle" href="/screens/add-property-start" />
-                </View>
-            </AnimatedView>
-        </>
-    );
-}
-
-const PersonalProfile = () => {
-    const { user, signOut } = useAuth();
-
-    const handleSignOut = async () => {
-        try {
-            await signOut();
-        } catch (error: any) {
-            Alert.alert('Error', error.message || 'Failed to sign out');
-        }
-    };
-
-    return (
-        <AnimatedView className='pt-4' animation='scaleIn'>
-            <View style={{ ...shadowPresets.large }} className="flex-row  items-center justify-center mb-4 bg-light-primary dark:bg-dark-secondary rounded-3xl p-10">
-                <View className='flex-col items-center w-1/2'>
-                    <Avatar src={require('@/assets/img/thomino.jpg')} size="xxl" />
-                    <View className="flex-1 items-center justify-center">
-                        <ThemedText className="text-2xl font-bold">
-                            {user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'User'}
-                        </ThemedText>
-                        <View className='flex flex-row items-center'>
-                            <ThemedText className='text-sm text-light-subtext dark:text-dark-subtext ml-2'>
-                                {user?.email || ''}
-                            </ThemedText>
-                        </View>
-                    </View>
-                </View>
-                <View className='flex-col items-start justify-center w-1/2 pl-12'>
-                    <View className='w-full'>
-                        <ThemedText className="text-xl font-bold">0</ThemedText>
-                        <ThemedText className="text-xs">Bookings</ThemedText>
-                    </View>
-                    <View className='w-full py-3 my-3 border-y border-neutral-300 dark:border-dark-primary'>
-                        <ThemedText className="text-xl font-bold">-</ThemedText>
-                        <ThemedText className="text-xs">Team</ThemedText>
-                    </View>
-                </View>
-
+            {/* Stats Row */}
+            <View className="flex-row mt-6 w-full">
+              <View className="flex-1 items-center border-r border-light-secondary dark:border-dark-primary">
+                <ThemedText className="text-xl font-bold">0</ThemedText>
+                <ThemedText className="text-xs text-light-subtext dark:text-dark-subtext">Bookings</ThemedText>
+              </View>
+              <View className="flex-1 items-center border-r border-light-secondary dark:border-dark-primary">
+                <ThemedText className="text-xl font-bold">-</ThemedText>
+                <ThemedText className="text-xs text-light-subtext dark:text-dark-subtext">Team</ThemedText>
+              </View>
+              <View className="flex-1 items-center">
+                <ThemedText className="text-xl font-bold">-</ThemedText>
+                <ThemedText className="text-xs text-light-subtext dark:text-dark-subtext">Sport</ThemedText>
+              </View>
             </View>
+          </View>
 
-            <View className='gap-1 px-4'>
-                <ListLink showChevron title="Account settings" icon="Settings" href="/screens/settings" />
-                <ListLink showChevron title="Edit profile" icon="UserRoundPen" href="/screens/edit-profile" />
-                <ListLink showChevron title="Get help" icon="HelpCircle" href="/screens/help" />
-                <Divider />
-                <Pressable onPress={handleSignOut} className="flex-row items-center py-3 px-1">
-                    <ThemedText className="text-base text-red-500">Sign out</ThemedText>
-                </Pressable>
-            </View>
+          {/* Menu Items */}
+          <View className="gap-1 px-2">
+            <ThemedText className="text-xs font-semibold uppercase tracking-wide text-light-subtext dark:text-dark-subtext mb-2 px-2">
+              Account
+            </ThemedText>
+            <ListLink showChevron title="Edit profile" icon="UserRoundPen" href="/screens/edit-profile" />
+            <ListLink showChevron title="My team" icon="Users" href="/screens/team" />
+            <ListLink showChevron title="Payment methods" icon="CreditCard" href="/screens/profile/payments" />
+
+            <Divider className="my-3" />
+
+            <ThemedText className="text-xs font-semibold uppercase tracking-wide text-light-subtext dark:text-dark-subtext mb-2 px-2">
+              Support
+            </ThemedText>
+            <ListLink showChevron title="Help & FAQ" icon="HelpCircle" href="/screens/help" />
+            <ListLink showChevron title="Report an issue" icon="Flag" href="/screens/report" />
+            <ListLink showChevron title="About HDC Sports" icon="Info" href="/screens/about" />
+
+            <Divider className="my-3" />
+
+            <Pressable onPress={handleSignOut} className="flex-row items-center py-3 px-2">
+              <Icon name="LogOut" size={20} strokeWidth={1.5} className="mr-3" />
+              <ThemedText className="text-base text-red-500">Sign out</ThemedText>
+            </Pressable>
+          </View>
         </AnimatedView>
-
-    );
+      </ThemedScroller>
+    </View>
+  );
 }
-

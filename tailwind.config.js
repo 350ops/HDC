@@ -16,21 +16,20 @@ module.exports = {
         global: '24px'
       },
       colors: {
-        // Light theme colors
-        highlight: '#FF2056',
+        highlight: '#0EA5E9',
+        accent: '#10B981',
         light: {
-          primary: '#ffffff', // White
-          secondary: '#F5F5F5', // Light gray
-          text: '#000000', // Black
+          primary: '#ffffff',
+          secondary: '#F1F5F9',
+          text: '#0F172A',
           subtext: '#64748B'
         },
-        // Dark theme colors
         dark: {
-          primary: '#171717', // Black
-          secondary: '#262626',
-          darker: '#000000',
-          text: '#ffffff', // White
-          subtext: '#A1A1A1'
+          primary: '#0F172A',
+          secondary: '#1E293B',
+          darker: '#020617',
+          text: '#ffffff',
+          subtext: '#94A3B8'
         },
       },
     },

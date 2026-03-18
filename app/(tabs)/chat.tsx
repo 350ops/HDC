@@ -1,248 +1,204 @@
 import React, { useState } from 'react';
-import { View, FlatList, TouchableOpacity, Image } from 'react-native';
-import { Link } from 'expo-router';
-import Avatar from '@/components/Avatar';
+import { View, FlatList, Pressable } from 'react-native';
 import Header from '@/components/Header';
 import ThemedText from '@/components/ThemedText';
 import AnimatedView from '@/components/AnimatedView';
 import { Chip } from '@/components/Chip';
 import { CardScroller } from '@/components/CardScroller';
-import Section from '@/components/layout/Section';
+import Icon, { IconName } from '@/components/Icon';
 import { useCollapsibleTitle } from '@/app/hooks/useCollapsibleTitle';
+import { shadowPresets } from '@/utils/useShadow';
 
-interface ChatUser {
+interface Notification {
   id: string;
-  name: string;
-  avatar: string;
-  lastMessage: string;
+  title: string;
+  message: string;
   timestamp: string;
-  unread: boolean;
-  propertyImage?: string;
-  destination?: string;
-  dates?: string;
-  type: 'host' | 'guest' | 'support';
+  read: boolean;
+  icon: IconName;
+  iconBg: string;
+  type: 'booking' | 'payment' | 'system' | 'reminder';
 }
 
-// Mock data for demonstration
-const mockChats: ChatUser[] = [
+const mockNotifications: Notification[] = [
   {
     id: '1',
-    name: 'Sarah (Host)',
-    avatar: 'https://i.pravatar.cc/150?img=1',
-    lastMessage: 'Welcome to Barcelona! Check-in is at 3 PM. Let me know if you need anything.',
-    timestamp: '2m ago',
-    unread: true,
-    propertyImage: 'https://images.pexels.com/photos/1571453/pexels-photo-1571453.jpeg?auto=compress&cs=tinysrgb&w=400',
-    destination: 'Barcelona, Spain',
-    dates: 'Dec 15-22',
-    type: 'host',
+    title: 'Booking Confirmed',
+    message: 'Your football pitch booking for Mar 20, 4:00 PM has been confirmed.',
+    timestamp: '2h ago',
+    read: false,
+    icon: 'CheckCircle',
+    iconBg: 'bg-emerald-100 dark:bg-emerald-900/40',
+    type: 'booking',
   },
   {
     id: '2',
-    name: 'Michael (Host)',
-    avatar: 'https://i.pravatar.cc/150?img=2',
-    lastMessage: 'Thanks for staying! Hope you enjoyed your time in Paris.',
-    timestamp: '1h ago',
-    unread: false,
-    propertyImage: 'https://images.pexels.com/photos/1571457/pexels-photo-1571457.jpeg?auto=compress&cs=tinysrgb&w=400',
-    destination: 'Paris, France',
-    dates: 'Nov 8-15',
-    type: 'host',
+    title: 'Payment Received',
+    message: 'Payment of MVR 500 for Basketball Court booking received.',
+    timestamp: '5h ago',
+    read: false,
+    icon: 'CreditCard',
+    iconBg: 'bg-sky-100 dark:bg-sky-900/40',
+    type: 'payment',
   },
   {
     id: '3',
-    name: 'Emma (Guest)',
-    avatar: 'https://i.pravatar.cc/150?img=3',
-    lastMessage: 'Hi! I\'ll be arriving around 6 PM. Is that okay for check-in?',
-    timestamp: '3h ago',
-    unread: true,
-    destination: 'Your place in NYC',
-    dates: 'Dec 20-27',
-    type: 'guest',
+    title: 'Upcoming Booking',
+    message: 'Reminder: Badminton Court tomorrow at 6:00 PM. Don\'t forget your gear!',
+    timestamp: '1d ago',
+    read: true,
+    icon: 'Clock',
+    iconBg: 'bg-amber-100 dark:bg-amber-900/40',
+    type: 'reminder',
   },
   {
     id: '4',
-    name: 'David (Host)',
-    avatar: 'https://i.pravatar.cc/150?img=4',
-    lastMessage: 'The WiFi password is "welcome123". Enjoy your stay!',
-    timestamp: '5h ago',
-    unread: false,
-    propertyImage: 'https://images.pexels.com/photos/1571467/pexels-photo-1571467.jpeg?auto=compress&cs=tinysrgb&w=400',
-    destination: 'London, UK',
-    dates: 'Oct 12-19',
-    type: 'host',
+    title: 'Booking Pending',
+    message: 'Your cricket ground booking for Mar 22 is pending approval from admin.',
+    timestamp: '1d ago',
+    read: true,
+    icon: 'Hourglass',
+    iconBg: 'bg-orange-100 dark:bg-orange-900/40',
+    type: 'booking',
   },
   {
     id: '5',
-    name: 'Airbnb Support',
-    avatar: 'https://i.pravatar.cc/150?img=5',
-    lastMessage: 'We\'ve processed your refund. It should appear in 3-5 business days.',
-    timestamp: 'Yesterday',
-    unread: false,
-    type: 'support',
+    title: 'Facility Maintenance',
+    message: 'Swimming Pool will be closed for maintenance on Mar 25-26.',
+    timestamp: '2d ago',
+    read: true,
+    icon: 'AlertTriangle',
+    iconBg: 'bg-red-100 dark:bg-red-900/40',
+    type: 'system',
   },
   {
     id: '6',
-    name: 'Lisa (Host)',
-    avatar: 'https://i.pravatar.cc/150?img=6',
-    lastMessage: 'The apartment is ready for your arrival. See you soon!',
-    timestamp: '2 days ago',
-    unread: true,
-    propertyImage: 'https://images.pexels.com/photos/1571472/pexels-photo-1571472.jpeg?auto=compress&cs=tinysrgb&w=400',
-    destination: 'Rome, Italy',
-    dates: 'Jan 5-12',
-    type: 'host',
+    title: 'New Facility Available',
+    message: 'A new Tennis Court has been added. Check it out and book your slot!',
+    timestamp: '3d ago',
+    read: true,
+    icon: 'Plus',
+    iconBg: 'bg-violet-100 dark:bg-violet-900/40',
+    type: 'system',
   },
   {
     id: '7',
-    name: 'Airbnb Support',
-    avatar: 'https://i.pravatar.cc/150?img=5',
-    lastMessage: 'We\'ve processed your refund. It should appear in 3-5 business days.',
-    timestamp: 'Yesterday',
-    unread: false,
-    type: 'support',
-  },
-  {
-    id: '8',
-    name: 'Lisa (Host)',
-    avatar: 'https://i.pravatar.cc/150?img=6',
-    lastMessage: 'The apartment is ready for your arrival. See you soon!',
-    timestamp: '2 days ago',
-    unread: true,
-    propertyImage: 'https://images.pexels.com/photos/1571472/pexels-photo-1571472.jpeg?auto=compress&cs=tinysrgb&w=400',
-    destination: 'Rome, Italy',
-    dates: 'Jan 5-12',
-    type: 'host',
+    title: 'Booking Cancelled',
+    message: 'Your volleyball court booking for Mar 18 was cancelled as requested.',
+    timestamp: '4d ago',
+    read: true,
+    icon: 'XCircle',
+    iconBg: 'bg-gray-100 dark:bg-gray-800',
+    type: 'booking',
   },
 ];
 
-type FilterType = 'all' | 'read' | 'unread';
+type FilterType = 'all' | 'unread' | 'bookings' | 'system';
 
-export default function ChatListScreen() {
+export default function NotificationsScreen() {
   const [selectedFilter, setSelectedFilter] = useState<FilterType>('all');
   const { scrollY, onScroll, scrollEventThrottle } = useCollapsibleTitle();
-  // Filter chats based on selection
-  const filteredChats = mockChats.filter(chat => {
+
+  const filteredNotifications = mockNotifications.filter(n => {
     if (selectedFilter === 'all') return true;
-    if (selectedFilter === 'read') return !chat.unread;
-    if (selectedFilter === 'unread') return chat.unread;
+    if (selectedFilter === 'unread') return !n.read;
+    if (selectedFilter === 'bookings') return n.type === 'booking' || n.type === 'payment';
+    if (selectedFilter === 'system') return n.type === 'system' || n.type === 'reminder';
     return true;
   });
 
-  // Count messages by filter type
-  const unreadCount = mockChats.filter(chat => chat.unread).length;
-  const readCount = mockChats.filter(chat => !chat.unread).length;
+  const unreadCount = mockNotifications.filter(n => !n.read).length;
 
-  const renderChatItem = ({ item }: { item: ChatUser }) => (
-    <Link href={`/screens/chat/${item.id}`} asChild>
-      <TouchableOpacity activeOpacity={0.8} className="flex-row p-4 border-b border-light-secondary dark:border-dark-secondary">
-        {/* Property Image or Avatar */}
-        <View className="relative">
-          {item.propertyImage ? (
-            <View className="relative">
-              <Image 
-                source={{ uri: item.propertyImage }} 
-                className="w-16 h-16 rounded-xl"
-              />
-              <View className="absolute -bottom-1 -right-1 w-8 h-8 rounded-full border-2 border-white dark:border-dark-primary">
-                <Image source={{ uri: item.avatar }} className='w-7 h-7 rounded-full' />
-              </View>
-            </View>
-          ) : (
-            <Avatar size="lg" src={item.avatar} name={item.name} />
-          )}
-        </View>
+  const renderItem = ({ item }: { item: Notification }) => (
+    <Pressable
+      style={!item.read ? shadowPresets.card : undefined}
+      className={`flex-row p-4 mx-4 mb-2 rounded-2xl ${
+        !item.read
+          ? 'bg-light-primary dark:bg-dark-secondary'
+          : 'bg-transparent'
+      }`}
+    >
+      <View className={`w-11 h-11 rounded-full items-center justify-center ${item.iconBg}`}>
+        <Icon name={item.icon} size={20} strokeWidth={1.8} />
+      </View>
 
-        {/* Content */}
-        <View className="flex-1 ml-5">
-          {/* Name and Time */}
-          <View className="flex-row justify-between items-center mb-1">
-            <ThemedText className="font-medium text-base" numberOfLines={1}>
-              {item.name}
-            </ThemedText>
-            <View className='flex-row items-center'>
-              <ThemedText className="text-xs text-light-subtext dark:text-dark-subtext">
-                {item.timestamp}
-              </ThemedText>
-              {item.unread && (
-                <View className="w-2 h-2 rounded-full bg-highlight ml-2" />
-              )}
-            </View>
-          </View>
-
-          {/* Message */}
-          <ThemedText
-            numberOfLines={1}
-            className={`text-sm mb-1 ${item.unread ? 'text-black dark:text-white font-medium' : 'text-light-subtext dark:text-dark-subtext'}`}
-          >
-            {item.lastMessage}
+      <View className="flex-1 ml-3">
+        <View className="flex-row justify-between items-start mb-0.5">
+          <ThemedText className={`text-sm flex-1 mr-2 ${!item.read ? 'font-bold' : 'font-medium'}`} numberOfLines={1}>
+            {item.title}
           </ThemedText>
-
-          {/* Destination and Dates */}
-          {item.destination && (
-            <View className="flex-row items-center justify-start">
-              <ThemedText className="text-xs text-light-subtext dark:text-dark-subtext" numberOfLines={1}>
-                {item.destination}
-              </ThemedText>
-              <View className='w-px h-px rounded-full bg-light-subtext dark:bg-dark-subtext mx-1' />
-              {item.dates && (
-                <ThemedText className="text-xs text-light-subtext dark:text-dark-subtext">
-                  {item.dates}
-                </ThemedText>
-              )}
-            </View>
-          )}
+          <ThemedText className="text-xs text-light-subtext dark:text-dark-subtext">
+            {item.timestamp}
+          </ThemedText>
         </View>
-      </TouchableOpacity>
-    </Link>
+        <ThemedText
+          className="text-xs text-light-subtext dark:text-dark-subtext leading-4"
+          numberOfLines={2}
+        >
+          {item.message}
+        </ThemedText>
+      </View>
+
+      {!item.read && (
+        <View className="w-2.5 h-2.5 rounded-full bg-highlight ml-2 mt-1" />
+      )}
+    </Pressable>
   );
 
   return (
     <>
       <Header
-
-        title="Chat"
+        title="Activity"
         variant="collapsibleTitle"
         scrollY={scrollY}
       />
       <View className="flex-1 bg-light-primary dark:bg-dark-primary">
-
-
-        <AnimatedView animation="scaleIn" className='flex-1'>
+        <AnimatedView animation="scaleIn" className="flex-1">
           <View className="px-4 py-0">
-            <CardScroller className='mb-2' space={5}>
+            <CardScroller className="mb-2" space={5}>
               <Chip
                 label="All"
-                size='lg'
+                size="lg"
                 isSelected={selectedFilter === 'all'}
                 onPress={() => setSelectedFilter('all')}
               />
               <Chip
                 label={`Unread (${unreadCount})`}
-                size='lg'
+                size="lg"
                 isSelected={selectedFilter === 'unread'}
                 onPress={() => setSelectedFilter('unread')}
               />
               <Chip
-                label={`Read (${readCount})`}
-                size='lg'
-                isSelected={selectedFilter === 'read'}
-                onPress={() => setSelectedFilter('read')}
+                label="Bookings"
+                size="lg"
+                isSelected={selectedFilter === 'bookings'}
+                onPress={() => setSelectedFilter('bookings')}
+              />
+              <Chip
+                label="Updates"
+                size="lg"
+                isSelected={selectedFilter === 'system'}
+                onPress={() => setSelectedFilter('system')}
               />
             </CardScroller>
           </View>
 
           <FlatList
-            className='pb-80'
             onScroll={onScroll}
             scrollEventThrottle={scrollEventThrottle}
-            ListFooterComponent={
-              <View className='h-52' />
-            }
-            data={filteredChats}
-            renderItem={renderChatItem}
+            data={filteredNotifications}
+            renderItem={renderItem}
             keyExtractor={(item) => item.id}
-            contentContainerStyle={{ flexGrow: 1 }}
+            contentContainerStyle={{ paddingTop: 8, flexGrow: 1 }}
+            ListFooterComponent={<View className="h-52" />}
+            ListEmptyComponent={
+              <View className="flex-1 items-center justify-center pt-32">
+                <Icon name="BellOff" size={48} strokeWidth={1} className="mb-4 opacity-30" />
+                <ThemedText className="text-light-subtext dark:text-dark-subtext">
+                  No notifications yet
+                </ThemedText>
+              </View>
+            }
           />
         </AnimatedView>
       </View>
