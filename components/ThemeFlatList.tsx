@@ -1,6 +1,6 @@
+import { styled } from 'nativewind';
 import React, { forwardRef } from 'react';
 import { FlatList, FlatListProps } from 'react-native';
-import { styled } from 'nativewind';
 
 // Create a styled FlatList
 const StyledFlatList = styled(FlatList);
@@ -17,14 +17,14 @@ function ThemedFlatListInner<T>(
 ) {
   // We need to cast StyledFlatList to any to avoid TypeScript errors with generics
   const TypedStyledFlatList = StyledFlatList as any;
-  
+
   return (
     <TypedStyledFlatList
-      bounces={true}
-      overScrollMode='never'
+      bounces
+      overScrollMode="never"
       ref={ref}
       showsVerticalScrollIndicator={false}
-      className={`bg-light-primary dark:bg-dark-primary flex-1 px-global ${className || ''}`}
+      className={`flex-1 bg-light-primary px-global dark:bg-dark-primary ${className || ''}`}
       {...props}
     />
   );

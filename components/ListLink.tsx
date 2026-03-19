@@ -1,6 +1,7 @@
+import { Link } from 'expo-router';
 import React from 'react';
 import { View, Pressable, ViewStyle } from 'react-native';
-import { Link } from 'expo-router';
+
 import Icon, { IconName } from './Icon';
 import ThemedText from './ThemedText';
 
@@ -28,14 +29,16 @@ const ListLink: React.FC<ListLinkProps> = ({
   showChevron = false,
   className = '',
   iconSize = 24,
-  rightIcon = "ChevronRight",
+  rightIcon = 'ChevronRight',
   disabled = false,
   style,
-  hasBorder = false
+  hasBorder = false,
 }) => {
   // Component for the actual content
   const Content = () => (
-    <View className={`flex-row items-center py-4 ${className} ${disabled ? 'opacity-50' : ''}`} style={style}>
+    <View
+      className={`flex-row items-center py-4 ${className} ${disabled ? 'opacity-50' : ''}`}
+      style={style}>
       {icon && (
         <View className="mr-4">
           <Icon name={icon} size={iconSize} strokeWidth={1.3} />
@@ -50,12 +53,8 @@ const ListLink: React.FC<ListLinkProps> = ({
         )}
       </View>
       {showChevron && (
-        <View className='opacity-20'>
-          <Icon
-            name={rightIcon}
-            size={24}
-            strokeWidth={2}
-          />
+        <View className="opacity-20">
+          <Icon name={rightIcon} size={24} strokeWidth={2} />
         </View>
       )}
     </View>
@@ -64,7 +63,10 @@ const ListLink: React.FC<ListLinkProps> = ({
   // If we have an href, make it a Link, otherwise a Pressable
   if (href && !disabled) {
     return (
-      <Link href={href} asChild className={` ${hasBorder ?  'border-b border-light-secondary dark:border-dark-secondary' : ''}`}>
+      <Link
+        href={href}
+        asChild
+        className={` ${hasBorder ? 'border-b border-light-secondary dark:border-dark-secondary' : ''}`}>
         <Pressable>
           <Content />
         </Pressable>
@@ -75,11 +77,10 @@ const ListLink: React.FC<ListLinkProps> = ({
   return (
     <Pressable
       onPress={disabled ? undefined : onPress}
-      className={` ${hasBorder ? 'border-light-secondary border-b dark:border-dark-secondary' : ''}`}
-    >
+      className={` ${hasBorder ? 'border-b border-light-secondary dark:border-dark-secondary' : ''}`}>
       <Content />
     </Pressable>
   );
 };
 
-export default ListLink; 
+export default ListLink;

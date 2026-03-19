@@ -1,13 +1,14 @@
 import '../global.css';
-import React from 'react';
 import { Stack } from 'expo-router';
 import { NativeWindStyleSheet } from 'nativewind';
-import { ThemeProvider } from './contexts/ThemeContext';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import useThemedNavigation from './hooks/useThemedNavigation';
+import React from 'react';
 import { Platform } from 'react-native';
-import { BusinessModeProvider } from './contexts/BusinesModeContext';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+
 import { AuthProvider } from './contexts/AuthContext';
+import { BusinessModeProvider } from './contexts/BusinesModeContext';
+import { ThemeProvider } from './contexts/ThemeContext';
+import useThemedNavigation from './hooks/useThemedNavigation';
 
 NativeWindStyleSheet.setOutput({
   default: 'native',

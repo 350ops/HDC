@@ -6,16 +6,17 @@ const supabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL || '';
 const supabaseAnonKey = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY || '';
 
 // Only create a real client if credentials are provided
-export const supabase: SupabaseClient = supabaseUrl && supabaseAnonKey
-  ? createClient(supabaseUrl, supabaseAnonKey, {
-      auth: {
-        storage: AsyncStorage,
-        autoRefreshToken: true,
-        persistSession: true,
-        detectSessionInUrl: false,
-      },
-    })
-  : (null as unknown as SupabaseClient);
+export const supabase: SupabaseClient =
+  supabaseUrl && supabaseAnonKey
+    ? createClient(supabaseUrl, supabaseAnonKey, {
+        auth: {
+          storage: AsyncStorage,
+          autoRefreshToken: true,
+          persistSession: true,
+          detectSessionInUrl: false,
+        },
+      })
+    : (null as unknown as SupabaseClient);
 
 export const isSupabaseConfigured = Boolean(supabaseUrl && supabaseAnonKey);
 
@@ -33,41 +34,21 @@ export function getStorageUrl(bucket: string, path: string): string {
  * Each sport has multiple images for carousel display.
  */
 export const FACILITY_IMAGE_PATHS: Record<string, string[]> = {
-  Football: [
-    'football/pitch-main.jpg',
-    'football/pitch-aerial.jpg',
-    'football/pitch-night.jpg',
-  ],
-  Cricket: [
-    'cricket/ground-main.jpg',
-    'cricket/nets-practice.jpg',
-    'cricket/pavilion.jpg',
-  ],
+  Football: ['football/pitch-main.jpg', 'football/pitch-aerial.jpg', 'football/pitch-night.jpg'],
+  Cricket: ['cricket/ground-main.jpg', 'cricket/nets-practice.jpg', 'cricket/pavilion.jpg'],
   Basketball: [
     'basketball/court-main.jpg',
     'basketball/court-indoor.jpg',
     'basketball/court-night.jpg',
   ],
-  Badminton: [
-    'badminton/hall-main.jpg',
-    'badminton/court-close.jpg',
-    'badminton/hall-wide.jpg',
-  ],
+  Badminton: ['badminton/hall-main.jpg', 'badminton/court-close.jpg', 'badminton/hall-wide.jpg'],
   Volleyball: [
     'volleyball/court-beach.jpg',
     'volleyball/court-main.jpg',
     'volleyball/court-sunset.jpg',
   ],
-  Tennis: [
-    'tennis/court-main.jpg',
-    'tennis/court-aerial.jpg',
-    'tennis/court-close.jpg',
-  ],
-  Swimming: [
-    'swimming/pool-main.jpg',
-    'swimming/pool-lanes.jpg',
-    'swimming/pool-aerial.jpg',
-  ],
+  Tennis: ['tennis/court-main.jpg', 'tennis/court-aerial.jpg', 'tennis/court-close.jpg'],
+  Swimming: ['swimming/pool-main.jpg', 'swimming/pool-lanes.jpg', 'swimming/pool-aerial.jpg'],
 };
 
 /**

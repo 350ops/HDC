@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import { View, FlatList, Pressable } from 'react-native';
-import Header from '@/components/Header';
-import ThemedText from '@/components/ThemedText';
-import AnimatedView from '@/components/AnimatedView';
-import { Chip } from '@/components/Chip';
-import { CardScroller } from '@/components/CardScroller';
-import Icon, { IconName } from '@/components/Icon';
+
 import { useCollapsibleTitle } from '@/app/hooks/useCollapsibleTitle';
-import { shadowPresets } from '@/utils/useShadow';
+import AnimatedView from '@/components/AnimatedView';
+import { CardScroller } from '@/components/CardScroller';
+import { Chip } from '@/components/Chip';
+import Header from '@/components/Header';
+import Icon, { IconName } from '@/components/Icon';
+import ThemedText from '@/components/ThemedText';
+import { shadowPresets } from '@/utils/createShadow';
 
 interface Notification {
   id: string;
@@ -44,7 +45,7 @@ const mockNotifications: Notification[] = [
   {
     id: '3',
     title: 'Upcoming Booking',
-    message: 'Reminder: Badminton Court tomorrow at 6:00 PM. Don\'t forget your gear!',
+    message: "Reminder: Badminton Court tomorrow at 6:00 PM. Don't forget your gear!",
     timestamp: '1d ago',
     read: true,
     icon: 'Clock',
@@ -99,7 +100,7 @@ export default function NotificationsScreen() {
   const [selectedFilter, setSelectedFilter] = useState<FilterType>('all');
   const { scrollY, onScroll, scrollEventThrottle } = useCollapsibleTitle();
 
-  const filteredNotifications = mockNotifications.filter(n => {
+  const filteredNotifications = mockNotifications.filter((n) => {
     if (selectedFilter === 'all') return true;
     if (selectedFilter === 'unread') return !n.read;
     if (selectedFilter === 'bookings') return n.type === 'booking' || n.type === 'payment';
@@ -107,24 +108,23 @@ export default function NotificationsScreen() {
     return true;
   });
 
-  const unreadCount = mockNotifications.filter(n => !n.read).length;
+  const unreadCount = mockNotifications.filter((n) => !n.read).length;
 
   const renderItem = ({ item }: { item: Notification }) => (
     <Pressable
       style={!item.read ? shadowPresets.card : undefined}
-      className={`flex-row p-4 mx-4 mb-2 rounded-2xl ${
-        !item.read
-          ? 'bg-light-primary dark:bg-dark-secondary'
-          : 'bg-transparent'
-      }`}
-    >
-      <View className={`w-11 h-11 rounded-full items-center justify-center ${item.iconBg}`}>
+      className={`mx-4 mb-2 flex-row rounded-2xl p-4 ${
+        !item.read ? 'bg-light-primary dark:bg-dark-secondary' : 'bg-transparent'
+      }`}>
+      <View className={`h-11 w-11 items-center justify-center rounded-full ${item.iconBg}`}>
         <Icon name={item.icon} size={20} strokeWidth={1.8} />
       </View>
 
-      <View className="flex-1 ml-3">
-        <View className="flex-row justify-between items-start mb-0.5">
-          <ThemedText className={`text-sm flex-1 mr-2 ${!item.read ? 'font-bold' : 'font-medium'}`} numberOfLines={1}>
+      <View className="ml-3 flex-1">
+        <View className="mb-0.5 flex-row items-start justify-between">
+          <ThemedText
+            className={`mr-2 flex-1 text-sm ${!item.read ? 'font-bold' : 'font-medium'}`}
+            numberOfLines={1}>
             {item.title}
           </ThemedText>
           <ThemedText className="text-xs text-light-subtext dark:text-dark-subtext">
@@ -132,26 +132,19 @@ export default function NotificationsScreen() {
           </ThemedText>
         </View>
         <ThemedText
-          className="text-xs text-light-subtext dark:text-dark-subtext leading-4"
-          numberOfLines={2}
-        >
+          className="text-xs leading-4 text-light-subtext dark:text-dark-subtext"
+          numberOfLines={2}>
           {item.message}
         </ThemedText>
       </View>
 
-      {!item.read && (
-        <View className="w-2.5 h-2.5 rounded-full bg-highlight ml-2 mt-1" />
-      )}
+      {!item.read && <View className="ml-2 mt-1 h-2.5 w-2.5 rounded-full bg-highlight" />}
     </Pressable>
   );
 
   return (
     <>
-      <Header
-        title="Activity"
-        variant="collapsibleTitle"
-        scrollY={scrollY}
-      />
+      <Header title="Activity" variant="collapsibleTitle" scrollY={scrollY} />
       <View className="flex-1 bg-light-primary dark:bg-dark-primary">
         <AnimatedView animation="scaleIn" className="flex-1">
           <View className="px-4 py-0">

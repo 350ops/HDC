@@ -1,11 +1,12 @@
+import { Link, router } from 'expo-router';
 import React, { useState } from 'react';
 import { View, Pressable, Alert } from 'react-native';
-import { Link, router } from 'expo-router';
-import Input from '@/components/forms/Input';
-import ThemedText from '@/components/ThemedText';
-import { Button } from '@/components/Button';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
+import { Button } from '@/components/Button';
 import Header from '@/components/Header';
+import ThemedText from '@/components/ThemedText';
+import Input from '@/components/forms/Input';
 
 export default function ForgotPasswordScreen() {
   const insets = useSafeAreaInsets();
@@ -36,61 +37,60 @@ export default function ForgotPasswordScreen() {
         setIsLoading(false);
         // Show success message
         Alert.alert(
-          "Password Reset Link Sent",
+          'Password Reset Link Sent',
           "We've sent a password reset link to your email address. Please check your inbox.",
-          [
-            { text: "OK", onPress: () => router.back() }
-          ]
+          [{ text: 'OK', onPress: () => router.back() }]
         );
       }, 1500);
     }
   };
 
   return (
-
     <>
-    <Header showBackButton />
-    <View className="flex-1 bg-light-primary dark:bg-dark-primary p-6" style={{paddingTop: insets.top}}>
-     
-      
-      <View className="mt-8">
-        <ThemedText className="text-3xl font-bold mb-1">Reset Password</ThemedText>
-        <ThemedText className="text-light-subtext dark:text-dark-subtext mb-14">
-          Enter your email address and we'll send you a link to reset your password
-        </ThemedText>
-        
-        <Input
-          label="Email"
-          value={email}
-          onChangeText={(text) => {
-            setEmail(text);
-            if (emailError) validateEmail(text);
-          }}
-          error={emailError}
-          keyboardType="email-address"
-          autoCapitalize="none"
-          autoComplete="email"
-          containerClassName='mb-4'
-        />
-        
-        <Button 
-          title="Send Reset Link" 
-          onPress={handleResetPassword} 
-          loading={isLoading}
-          size="large"
-          className="mb-6"
-        />
-        
-        <View className="flex-row justify-center mt-8">
-          <ThemedText className="text-light-subtext dark:text-dark-subtext">Remember your password? </ThemedText>
-          <Link href="/screens/login" asChild>
-            <Pressable>
-              <ThemedText className="underline">Log in</ThemedText>
-            </Pressable>
-          </Link>
+      <Header showBackButton />
+      <View
+        className="flex-1 bg-light-primary p-6 dark:bg-dark-primary"
+        style={{ paddingTop: insets.top }}>
+        <View className="mt-8">
+          <ThemedText className="mb-1 text-3xl font-bold">Reset Password</ThemedText>
+          <ThemedText className="mb-14 text-light-subtext dark:text-dark-subtext">
+            Enter your email address and we'll send you a link to reset your password
+          </ThemedText>
+
+          <Input
+            label="Email"
+            value={email}
+            onChangeText={(text) => {
+              setEmail(text);
+              if (emailError) validateEmail(text);
+            }}
+            error={emailError}
+            keyboardType="email-address"
+            autoCapitalize="none"
+            autoComplete="email"
+            containerClassName="mb-4"
+          />
+
+          <Button
+            title="Send Reset Link"
+            onPress={handleResetPassword}
+            loading={isLoading}
+            size="large"
+            className="mb-6"
+          />
+
+          <View className="mt-8 flex-row justify-center">
+            <ThemedText className="text-light-subtext dark:text-dark-subtext">
+              Remember your password?{' '}
+            </ThemedText>
+            <Link href="/screens/login" asChild>
+              <Pressable>
+                <ThemedText className="underline">Log in</ThemedText>
+              </Pressable>
+            </Link>
+          </View>
         </View>
       </View>
-    </View>
     </>
   );
 }

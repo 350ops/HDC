@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
-import { supabase, isSupabaseConfigured } from '@/lib/supabase';
+
 import { useAuth } from '@/app/contexts/AuthContext';
+import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 import type {
   Facility,
   Booking,
@@ -97,7 +98,9 @@ export function useFacility(id: string) {
       }
 
       if (blockoutsRes.error) {
-        setError((prev) => prev ? `${prev}; ${blockoutsRes.error.message}` : blockoutsRes.error.message);
+        setError((prev) =>
+          prev ? `${prev}; ${blockoutsRes.error.message}` : blockoutsRes.error.message
+        );
       } else {
         setBlockouts(blockoutsRes.data as Blockout[]);
       }
@@ -106,7 +109,9 @@ export function useFacility(id: string) {
     }
 
     fetch();
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+    };
   }, [id]);
 
   return { facility, blockouts, loading, error };
@@ -119,7 +124,9 @@ export function useFacility(id: string) {
 function addMinutes(time: string, minutes: number): string {
   const [h, m] = time.split(':').map(Number);
   const total = h * 60 + m + minutes;
-  const hh = Math.floor(total / 60).toString().padStart(2, '0');
+  const hh = Math.floor(total / 60)
+    .toString()
+    .padStart(2, '0');
   const mm = (total % 60).toString().padStart(2, '0');
   return `${hh}:${mm}`;
 }
@@ -218,7 +225,9 @@ export function useFacilitySlots(facilityId: string, date: string) {
     }
 
     fetch();
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+    };
   }, [facilityId, date]);
 
   return { slots, loading, error };
@@ -332,7 +341,9 @@ export function useMyTeam() {
     }
 
     fetch();
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+    };
   }, [user]);
 
   return { team, isRepresentative, loading, error };
@@ -377,7 +388,9 @@ export function useGuidelines() {
     }
 
     fetch();
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   return { guideline, loading, error };

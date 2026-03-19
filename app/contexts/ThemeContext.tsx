@@ -1,5 +1,5 @@
-import React, { createContext, useContext, useEffect, useState, useCallback } from 'react';
 import { useColorScheme } from 'nativewind';
+import React, { createContext, useContext, useEffect, useState, useCallback } from 'react';
 
 type ThemeContextType = {
   isDark: boolean;
@@ -27,18 +27,14 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
   // Create a stable toggleTheme function with useCallback
   const toggleTheme = useCallback(() => {
     const nextTheme = isDark ? 'light' : 'dark';
-    
+
     // Use requestAnimationFrame to defer state updates
     requestAnimationFrame(() => {
       setColorScheme(nextTheme);
     });
   }, [isDark, setColorScheme]);
 
-  return (
-    <ThemeContext.Provider value={{ isDark, toggleTheme }}>
-      {children}
-    </ThemeContext.Provider>
-  );
+  return <ThemeContext.Provider value={{ isDark, toggleTheme }}>{children}</ThemeContext.Provider>;
 };
 
 export const useTheme = () => {

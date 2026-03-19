@@ -1,18 +1,19 @@
+import { useLocalSearchParams, router } from 'expo-router';
 import React, { useState } from 'react';
 import { View, Alert, ActivityIndicator, ScrollView, Image } from 'react-native';
-import { useLocalSearchParams, router } from 'expo-router';
-import Header from '@/components/Header';
-import ThemedText from '@/components/ThemedText';
-import ThemedScroller from '@/components/ThemeScroller';
-import { Button } from '@/components/Button';
-import Divider from '@/components/layout/Divider';
-import Checkbox from '@/components/forms/Checkbox';
-import { useFacility, useMyTeam, useGuidelines } from '@/lib/hooks';
-import { useAuth } from '@/app/contexts/AuthContext';
-import { supabase } from '@/lib/supabase';
-import { shadowPresets } from '@/utils/useShadow';
-import useThemeColors from '@/app/contexts/ThemeColors';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
+import { useAuth } from '@/app/contexts/AuthContext';
+import useThemeColors from '@/app/contexts/ThemeColors';
+import { Button } from '@/components/Button';
+import Header from '@/components/Header';
+import ThemedScroller from '@/components/ThemeScroller';
+import ThemedText from '@/components/ThemedText';
+import Checkbox from '@/components/forms/Checkbox';
+import Divider from '@/components/layout/Divider';
+import { useFacility, useMyTeam, useGuidelines } from '@/lib/hooks';
+import { supabase } from '@/lib/supabase';
+import { shadowPresets } from '@/utils/createShadow';
 
 function formatDate(dateStr: string): string {
   const date = new Date(dateStr + 'T00:00:00');
@@ -49,7 +50,10 @@ const BookingConfirmScreen = () => {
     if (!user || !team || !facility || !guideline) return;
 
     if (!isRepresentative) {
-      Alert.alert('Not Eligible', 'You must be a registered team representative to book facilities.');
+      Alert.alert(
+        'Not Eligible',
+        'You must be a registered team representative to book facilities.'
+      );
       return;
     }
 
@@ -73,13 +77,11 @@ const BookingConfirmScreen = () => {
       if (bookingError) throw bookingError;
 
       // Create guideline acceptance record
-      const { error: acceptanceError } = await supabase
-        .from('guideline_acceptances')
-        .insert({
-          booking_id: booking.id,
-          user_id: user.id,
-          guideline_version: guideline.version,
-        });
+      const { error: acceptanceError } = await supabase.from('guideline_acceptances').insert({
+        booking_id: booking.id,
+        user_id: user.id,
+        guideline_version: guideline.version,
+      });
 
       if (acceptanceError) throw acceptanceError;
 
@@ -116,9 +118,10 @@ const BookingConfirmScreen = () => {
     return (
       <>
         <Header title="Confirm Booking" showBackButton />
-        <View className="flex-1 items-center justify-center px-global bg-light-primary dark:bg-dark-primary">
+        <View className="flex-1 items-center justify-center bg-light-primary px-global dark:bg-dark-primary">
           <ThemedText className="text-center text-lg text-light-subtext dark:text-dark-subtext">
-            You must be a registered team representative to book facilities. Contact HDC to register your team.
+            You must be a registered team representative to book facilities. Contact HDC to register
+            your team.
           </ThemedText>
         </View>
       </>
@@ -132,55 +135,52 @@ const BookingConfirmScreen = () => {
         {/* Booking Summary Card */}
         <View className="px-global pt-6">
           <View
-            className="bg-light-primary dark:bg-dark-secondary rounded-2xl overflow-hidden"
-            style={shadowPresets.large}
-          >
+            className="overflow-hidden rounded-2xl bg-light-primary dark:bg-dark-secondary"
+            style={shadowPresets.large}>
             {/* Facility image from Supabase storage */}
             {facility?.image_urls && facility.image_urls.length > 0 && facility.image_urls[0] ? (
               <Image
                 source={{ uri: facility.image_urls[0] }}
-                className="w-full h-40"
+                className="h-40 w-full"
                 resizeMode="cover"
               />
             ) : null}
 
             <View className="p-5">
-            <ThemedText className="text-xl font-bold mb-4">
-              {facility?.name}
-            </ThemedText>
+              <ThemedText className="mb-4 text-xl font-bold">{facility?.name}</ThemedText>
 
-            <View className="flex-row justify-between mb-3">
-              <ThemedText className="text-light-subtext dark:text-dark-subtext">Date</ThemedText>
-              <ThemedText className="font-medium">{formatDate(date)}</ThemedText>
-            </View>
+              <View className="mb-3 flex-row justify-between">
+                <ThemedText className="text-light-subtext dark:text-dark-subtext">Date</ThemedText>
+                <ThemedText className="font-medium">{formatDate(date)}</ThemedText>
+              </View>
 
-            <View className="flex-row justify-between mb-3">
-              <ThemedText className="text-light-subtext dark:text-dark-subtext">Time</ThemedText>
-              <ThemedText className="font-medium">{startTime} - {endTime}</ThemedText>
-            </View>
+              <View className="mb-3 flex-row justify-between">
+                <ThemedText className="text-light-subtext dark:text-dark-subtext">Time</ThemedText>
+                <ThemedText className="font-medium">
+                  {startTime} - {endTime}
+                </ThemedText>
+              </View>
 
-            <View className="flex-row justify-between mb-3">
-              <ThemedText className="text-light-subtext dark:text-dark-subtext">Price</ThemedText>
-              <ThemedText className="font-medium">MVR {facility?.price_per_slot}</ThemedText>
-            </View>
+              <View className="mb-3 flex-row justify-between">
+                <ThemedText className="text-light-subtext dark:text-dark-subtext">Price</ThemedText>
+                <ThemedText className="font-medium">MVR {facility?.price_per_slot}</ThemedText>
+              </View>
 
-            <Divider className="my-3" />
+              <Divider className="my-3" />
 
-            <View className="flex-row justify-between">
-              <ThemedText className="text-light-subtext dark:text-dark-subtext">Team</ThemedText>
-              <ThemedText className="font-medium">{team.name}</ThemedText>
-            </View>
+              <View className="flex-row justify-between">
+                <ThemedText className="text-light-subtext dark:text-dark-subtext">Team</ThemedText>
+                <ThemedText className="font-medium">{team.name}</ThemedText>
+              </View>
             </View>
           </View>
         </View>
 
         {/* Guidelines Section */}
         <View className="px-global pt-6">
-          <ThemedText className="text-lg font-bold mb-3">
-            Facility Usage Guidelines
-          </ThemedText>
+          <ThemedText className="mb-3 text-lg font-bold">Facility Usage Guidelines</ThemedText>
 
-          <View className="bg-light-secondary dark:bg-dark-secondary rounded-xl p-4 max-h-64">
+          <View className="max-h-64 rounded-xl bg-light-secondary p-4 dark:bg-dark-secondary">
             <ScrollView nestedScrollEnabled>
               <ThemedText className="text-sm leading-6 text-light-subtext dark:text-dark-subtext">
                 {guideline?.content || 'No guidelines available.'}
@@ -203,9 +203,8 @@ const BookingConfirmScreen = () => {
 
       {/* Book & Pay Button */}
       <View
-        className="absolute bottom-0 left-0 right-0 bg-light-primary dark:bg-dark-primary px-global pt-global"
-        style={{ paddingBottom: insets.bottom || 16 }}
-      >
+        className="absolute bottom-0 left-0 right-0 bg-light-primary px-global pt-global dark:bg-dark-primary"
+        style={{ paddingBottom: insets.bottom || 16 }}>
         <Button
           title="Submit Booking Request"
           variant="primary"

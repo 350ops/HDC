@@ -8,9 +8,19 @@ export type UserRole = 'team_rep' | 'csr_admin' | 'finance' | 'sys_admin';
 export type TeamStatus = 'active' | 'inactive' | 'suspended';
 export type MemberStatus = 'active' | 'inactive';
 export type FacilityStatus = 'active' | 'inactive';
-export type BookingStatus = 'pending_approval' | 'blocked' | 'confirmed' | 'expired' | 'cancelled' | 'rejected';
+export type BookingStatus =
+  | 'pending_approval'
+  | 'blocked'
+  | 'confirmed'
+  | 'expired'
+  | 'cancelled'
+  | 'rejected';
 export type PaymentStatus = 'pending' | 'completed' | 'refunded' | 'failed';
-export type NotificationType = 'email_blocked' | 'sms_confirmed' | 'email_confirmed' | 'email_expired';
+export type NotificationType =
+  | 'email_blocked'
+  | 'sms_confirmed'
+  | 'email_confirmed'
+  | 'email_expired';
 export type NotificationLogStatus = 'sent' | 'failed';
 
 // Tables
@@ -54,7 +64,7 @@ export interface Facility {
   slot_duration_min: number;
   price_per_slot: number;
   operating_start: string; // time as HH:MM
-  operating_end: string;   // time as HH:MM
+  operating_end: string; // time as HH:MM
   requires_approval: boolean;
   status: FacilityStatus;
   created_at: string;
@@ -78,8 +88,8 @@ export interface Booking {
   facility_id: string;
   booked_by: string;
   booking_date: string; // date as YYYY-MM-DD
-  start_time: string;   // time as HH:MM
-  end_time: string;     // time as HH:MM
+  start_time: string; // time as HH:MM
+  end_time: string; // time as HH:MM
   status: BookingStatus;
   payment_deadline: string | null;
   created_at: string;
@@ -157,7 +167,7 @@ export interface FacilityWithAvailability extends Facility {
 // Time slot for the availability calendar
 export interface TimeSlot {
   start_time: string; // HH:MM
-  end_time: string;   // HH:MM
+  end_time: string; // HH:MM
   available: boolean;
   booking?: Booking;
 }

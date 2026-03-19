@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { View, useWindowDimensions } from 'react-native';
 import { CalendarList, DateData } from 'react-native-calendars';
-import useThemeColors from '@/app/contexts/ThemeColors';
+
 import ThemedText from './ThemedText';
+
+import useThemeColors from '@/app/contexts/ThemeColors';
 
 interface DateRange {
   startDate?: string;
@@ -22,7 +24,7 @@ const DateRangeCalendar: React.FC<DateRangeCalendarProps> = ({
   initialRange,
   minDate,
   maxDate,
-  className = ''
+  className = '',
 }) => {
   const colors = useThemeColors();
   const { width: screenWidth } = useWindowDimensions();
@@ -43,7 +45,7 @@ const DateRangeCalendar: React.FC<DateRangeCalendarProps> = ({
 
   const handleDayPress = (day: DateData) => {
     const { dateString } = day;
-    
+
     if (!selectedRange.startDate || (selectedRange.startDate && selectedRange.endDate)) {
       // Start new selection
       const newRange = { startDate: dateString, endDate: undefined };
@@ -53,12 +55,11 @@ const DateRangeCalendar: React.FC<DateRangeCalendarProps> = ({
       // Complete the range
       const startDate = selectedRange.startDate;
       const endDate = dateString;
-      
+
       // Ensure start date is before end date
-      const newRange = startDate <= endDate 
-        ? { startDate, endDate }
-        : { startDate: endDate, endDate: startDate };
-      
+      const newRange =
+        startDate <= endDate ? { startDate, endDate } : { startDate: endDate, endDate: startDate };
+
       setSelectedRange(newRange);
       onDateRangeChange?.(newRange);
     }
@@ -66,31 +67,31 @@ const DateRangeCalendar: React.FC<DateRangeCalendarProps> = ({
 
   const getMarkedDates = () => {
     const marked: any = {};
-    
+
     if (selectedRange.startDate && selectedRange.endDate) {
       const start = new Date(selectedRange.startDate);
       const end = new Date(selectedRange.endDate);
-      
+
       // Mark all dates in range
       for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
         const dateString = d.toISOString().split('T')[0];
-        
+
         if (dateString === selectedRange.startDate) {
           marked[dateString] = {
             startingDay: true,
             color: colors.highlight,
-            textColor: 'white'
+            textColor: 'white',
           };
         } else if (dateString === selectedRange.endDate) {
           marked[dateString] = {
             endingDay: true,
             color: colors.highlight,
-            textColor: 'white'
+            textColor: 'white',
           };
         } else {
           marked[dateString] = {
             color: colors.highlight + '40',
-            textColor: colors.text
+            textColor: colors.text,
           };
         }
       }
@@ -99,10 +100,10 @@ const DateRangeCalendar: React.FC<DateRangeCalendarProps> = ({
       marked[selectedRange.startDate] = {
         selected: true,
         selectedColor: colors.highlight,
-        selectedTextColor: 'white'
+        selectedTextColor: 'white',
       };
     }
-    
+
     return marked;
   };
 
@@ -126,14 +127,14 @@ const DateRangeCalendar: React.FC<DateRangeCalendarProps> = ({
         <ThemedText className="text-sm font-medium mb-2">Selected dates</ThemedText>
         <ThemedText className="text-lg font-semibold">{formatDateRange()}</ThemedText>
       </View>*/}
-      
+
       <CalendarList
-        horizontal={true}
-        pagingEnabled={true}
-        scrollEnabled={true}
+        horizontal
+        pagingEnabled
+        scrollEnabled
         showScrollIndicator={false}
         calendarWidth={calendarWidth}
-        calendarHeight={350} 
+        calendarHeight={350}
         onDayPress={handleDayPress}
         markingType={getMarkingType()}
         markedDates={getMarkedDates()}
@@ -162,16 +163,16 @@ const DateRangeCalendar: React.FC<DateRangeCalendarProps> = ({
           textDayHeaderFontWeight: '600',
           textDayFontSize: 16,
           textMonthFontSize: 18,
-          textDayHeaderFontSize: 14
+          textDayHeaderFontSize: 14,
         }}
         style={{
           borderRadius: 12,
           overflow: 'hidden',
-          width: '100%'
+          width: '100%',
         }}
       />
     </View>
   );
 };
 
-export default DateRangeCalendar; 
+export default DateRangeCalendar;

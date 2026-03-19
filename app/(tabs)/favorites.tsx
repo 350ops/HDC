@@ -1,14 +1,15 @@
 import React from 'react';
 import { View, Pressable, Image } from 'react-native';
-import ThemedText from '@/components/ThemedText';
-import ThemeScroller from '@/components/ThemeScroller';
-import { Placeholder } from '@/components/Placeholder';
+
+import { useCollapsibleTitle } from '@/app/hooks/useCollapsibleTitle';
 import AnimatedView from '@/components/AnimatedView';
+import Card from '@/components/Card';
 import Header from '@/components/Header';
 import Icon from '@/components/Icon';
+import { Placeholder } from '@/components/Placeholder';
+import ThemeScroller from '@/components/ThemeScroller';
+import ThemedText from '@/components/ThemedText';
 import Grid from '@/components/layout/Grid';
-import Card from '@/components/Card';
-import { useCollapsibleTitle } from '@/app/hooks/useCollapsibleTitle';
 
 const savedFacilities = [
   {
@@ -47,16 +48,11 @@ const FavoritesScreen = () => {
   return (
     <View className="flex-1 bg-light-primary dark:bg-dark-primary">
       <AnimatedView animation="scaleIn" className="flex-1">
-        <Header
-          title="Saved"
-          variant="collapsibleTitle"
-          scrollY={scrollY}
-        />
+        <Header title="Saved" variant="collapsibleTitle" scrollY={scrollY} />
         <ThemeScroller
           onScroll={scrollHandler}
           scrollEventThrottle={scrollEventThrottle}
-          className="pt-4"
-        >
+          className="pt-4">
           {savedFacilities.length > 0 ? (
             <Grid className="mt-2" columns={2} spacing={20}>
               {savedFacilities.map((item) => (

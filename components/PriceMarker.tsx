@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Platform } from 'react-native';
 import { Marker } from 'react-native-maps';
+
 import ThemedText from './ThemedText';
 
 interface PriceMarkerProps {
@@ -19,9 +20,8 @@ const PriceMarker: React.FC<PriceMarkerProps> = ({
   price,
   title,
   onPress,
-  isSelected = false
+  isSelected = false,
 }) => {
-  
   if (Platform.OS === 'android') {
     // Android: Use default pin markers to avoid sizing issues
     return (
@@ -37,25 +37,13 @@ const PriceMarker: React.FC<PriceMarkerProps> = ({
 
   // iOS: Use custom black rectangle markers
   return (
-    <Marker
-      coordinate={coordinate}
-      title={title}
-      onPress={onPress}
-      anchor={{ x: 0.5, y: 0.5 }}
-    >
-      <View 
+    <Marker coordinate={coordinate} title={title} onPress={onPress} anchor={{ x: 0.5, y: 0.5 }}>
+      <View
         className={`
-          rounded-lg px-3 py-2 min-w-[60px] items-center justify-center
-          ${isSelected 
-            ? 'bg-black' 
-            : 'bg-black'
-          }
-        `}
-      >
-        <ThemedText 
-          className="text-white text-sm font-bold"
-          numberOfLines={1}
-        >
+          min-w-[60px] items-center justify-center rounded-lg px-3 py-2
+          ${isSelected ? 'bg-black' : 'bg-black'}
+        `}>
+        <ThemedText className="text-sm font-bold text-white" numberOfLines={1}>
           {price}
         </ThemedText>
       </View>
@@ -63,4 +51,4 @@ const PriceMarker: React.FC<PriceMarkerProps> = ({
   );
 };
 
-export default PriceMarker; 
+export default PriceMarker;

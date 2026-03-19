@@ -1,22 +1,21 @@
+import { useFocusEffect } from '@react-navigation/native';
+import { useLocalSearchParams, router } from 'expo-router';
+import { StatusBar } from 'expo-status-bar';
 import React, { useState, useMemo } from 'react';
-import { View, Pressable, ActivityIndicator, ScrollView } from 'react-native';
-import { Share } from 'react-native';
-import { useLocalSearchParams } from 'expo-router';
-import { router } from 'expo-router';
-import Header, { HeaderIcon } from '@/components/Header';
-import ThemedText from '@/components/ThemedText';
-import ThemedScroller from '@/components/ThemeScroller';
-import ImageCarousel from '@/components/ImageCarousel';
-import Section from '@/components/layout/Section';
-import Divider from '@/components/layout/Divider';
-import Icon, { IconName } from '@/components/Icon';
+import { View, Pressable, ActivityIndicator, ScrollView, Share } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
+import useThemeColors from '@/app/contexts/ThemeColors';
 import { Button } from '@/components/Button';
+import Header, { HeaderIcon } from '@/components/Header';
+import Icon, { IconName } from '@/components/Icon';
+import ImageCarousel from '@/components/ImageCarousel';
+import ThemedScroller from '@/components/ThemeScroller';
+import ThemedText from '@/components/ThemedText';
+import Divider from '@/components/layout/Divider';
+import Section from '@/components/layout/Section';
 import { useFacility, useFacilitySlots } from '@/lib/hooks';
 import { isSupabaseConfigured } from '@/lib/supabase';
-import useThemeColors from '@/app/contexts/ThemeColors';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { StatusBar } from 'expo-status-bar';
-import { useFocusEffect } from '@react-navigation/native';
 import type { TimeSlot } from '@/lib/types';
 
 const placeholderImages = [
@@ -133,7 +132,7 @@ const FacilityDetail = () => {
     <>
       {isFocused && <StatusBar style="light" translucent />}
       <Header variant="transparent" title="" rightComponents={rightComponents} showBackButton />
-      <ThemedScroller className="px-0 bg-light-primary dark:bg-dark-primary">
+      <ThemedScroller className="bg-light-primary px-0 dark:bg-dark-primary">
         <ImageCarousel
           images={
             facility.image_urls && facility.image_urls.length > 0 && facility.image_urls[0]
@@ -146,27 +145,24 @@ const FacilityDetail = () => {
 
         <View
           style={{ borderTopLeftRadius: 30, borderTopRightRadius: 30 }}
-          className="p-global bg-light-primary dark:bg-dark-primary -mt-[30px]"
-        >
+          className="-mt-[30px] bg-light-primary p-global dark:bg-dark-primary">
           {/* Facility Name */}
-          <ThemedText className="text-3xl text-center font-semibold">
-            {facility.name}
-          </ThemedText>
+          <ThemedText className="text-center text-3xl font-semibold">{facility.name}</ThemedText>
 
           {/* Sport Type + Neighborhood Chips */}
-          <View className="flex-row items-center justify-center mt-4 gap-2">
-            <View className="bg-light-secondary dark:bg-dark-secondary px-3 py-1 rounded-full">
+          <View className="mt-4 flex-row items-center justify-center gap-2">
+            <View className="rounded-full bg-light-secondary px-3 py-1 dark:bg-dark-secondary">
               <ThemedText className="text-sm font-medium">{facility.sport_type}</ThemedText>
             </View>
             {facility.neighborhood && (
-              <View className="bg-light-secondary dark:bg-dark-secondary px-3 py-1 rounded-full">
+              <View className="rounded-full bg-light-secondary px-3 py-1 dark:bg-dark-secondary">
                 <ThemedText className="text-sm font-medium">{facility.neighborhood}</ThemedText>
               </View>
             )}
           </View>
 
           {/* Price */}
-          <ThemedText className="text-center mt-4 text-lg font-semibold text-highlight">
+          <ThemedText className="mt-4 text-center text-lg font-semibold text-highlight">
             MVR {facility.price_per_slot} per slot ({facility.slot_duration_min} min)
           </ThemedText>
 
@@ -206,11 +202,7 @@ const FacilityDetail = () => {
           {/* Availability Section */}
           <Section title="Availability" titleSize="lg" className="mb-6 mt-2">
             {/* Date Picker */}
-            <ScrollView
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              className="mt-4 mb-4"
-            >
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} className="mb-4 mt-4">
               {days.map((day) => {
                 const dateStr = formatDate(day);
                 const isSelected = dateStr === selectedDate;
@@ -221,24 +213,14 @@ const FacilityDetail = () => {
                       setSelectedDate(dateStr);
                       setSelectedSlot(null);
                     }}
-                    className={`items-center justify-center mr-3 px-4 py-3 rounded-xl ${
-                      isSelected
-                        ? 'bg-highlight'
-                        : 'bg-light-secondary dark:bg-dark-secondary'
-                    }`}
-                  >
-                    <ThemedText
-                      className={`text-xs font-medium ${
-                        isSelected ? 'text-white' : ''
-                      }`}
-                    >
+                    className={`mr-3 items-center justify-center rounded-xl px-4 py-3 ${
+                      isSelected ? 'bg-highlight' : 'bg-light-secondary dark:bg-dark-secondary'
+                    }`}>
+                    <ThemedText className={`text-xs font-medium ${isSelected ? 'text-white' : ''}`}>
                       {getDayLabel(day)}
                     </ThemedText>
                     <ThemedText
-                      className={`text-lg font-bold mt-1 ${
-                        isSelected ? 'text-white' : ''
-                      }`}
-                    >
+                      className={`mt-1 text-lg font-bold ${isSelected ? 'text-white' : ''}`}>
                       {day.getDate()}
                     </ThemedText>
                   </Pressable>
@@ -268,19 +250,17 @@ const FacilityDetail = () => {
                       key={slot.start_time}
                       disabled={!slot.available}
                       onPress={() => setSelectedSlot(slot)}
-                      className={`w-[48%] mb-3 px-3 py-3 rounded-lg items-center ${
+                      className={`mb-3 w-[48%] items-center rounded-lg px-3 py-3 ${
                         !slot.available
-                          ? 'bg-neutral-200 dark:bg-neutral-700 opacity-50'
+                          ? 'bg-neutral-200 opacity-50 dark:bg-neutral-700'
                           : isSelected
-                          ? 'bg-highlight'
-                          : 'bg-light-secondary dark:bg-dark-secondary'
-                      }`}
-                    >
+                            ? 'bg-highlight'
+                            : 'bg-light-secondary dark:bg-dark-secondary'
+                      }`}>
                       <ThemedText
                         className={`text-sm font-medium ${
                           isSelected ? 'text-white' : ''
-                        } ${!slot.available ? 'text-neutral-400 dark:text-neutral-500' : ''}`}
-                      >
+                        } ${!slot.available ? 'text-neutral-400 dark:text-neutral-500' : ''}`}>
                         {formatTime(slot.start_time)} - {formatTime(slot.end_time)}
                       </ThemedText>
                     </Pressable>
@@ -295,17 +275,14 @@ const FacilityDetail = () => {
       {/* Bottom Sticky Bar */}
       <View
         style={{ paddingBottom: insets.bottom }}
-        className="flex-row items-center justify-start px-global pt-4 border-t border-neutral-200 dark:border-dark-secondary"
-      >
+        className="flex-row items-center justify-start border-t border-neutral-200 px-global pt-4 dark:border-dark-secondary">
         <View className="flex-1">
           {selectedSlot ? (
             <>
               <ThemedText className="text-base font-bold">
                 {formatTime(selectedSlot.start_time)} - {formatTime(selectedSlot.end_time)}
               </ThemedText>
-              <ThemedText className="text-xs opacity-60">
-                {selectedDate}
-              </ThemedText>
+              <ThemedText className="text-xs opacity-60">{selectedDate}</ThemedText>
             </>
           ) : (
             <ThemedText className="text-sm text-light-subtext dark:text-dark-subtext">
@@ -315,7 +292,7 @@ const FacilityDetail = () => {
         </View>
         <Button
           title="Book Now"
-          className="bg-highlight ml-6 px-6"
+          className="ml-6 bg-highlight px-6"
           textClassName="text-white"
           size="medium"
           rounded="lg"

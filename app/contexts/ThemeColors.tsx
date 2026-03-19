@@ -18,7 +18,7 @@ export const useThemeColors = () => {
     placeholder: isDark ? 'rgba(255,255,255,0.4)' : 'rgba(0,0,0,0.4)',
     switch: isDark ? 'rgba(255,255,255,0.4)' : '#ccc',
     chatBg: isDark ? '#1E293B' : '#F1F5F9',
-    isDark
+    isDark,
   };
 };
 

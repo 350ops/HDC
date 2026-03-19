@@ -1,17 +1,28 @@
-import { View, Image } from 'react-native';
+import { Link } from 'expo-router';
 import React, { useState, useEffect } from 'react';
-import Header from '@/components/Header';
-import ThemedScroller from '@/components/ThemeScroller';
+import { View, Image } from 'react-native';
+
 import { Chip } from '@/components/Chip';
+import Header from '@/components/Header';
+import Icon, { IconName } from '@/components/Icon';
 import SkeletonLoader from '@/components/SkeletonLoader';
+import TabScreenWrapper from '@/components/TabScreenWrapper';
+import ThemedScroller from '@/components/ThemeScroller';
+import ThemedText from '@/components/ThemedText';
 import List from '@/components/layout/List';
 import ListItem from '@/components/layout/ListItem';
-import { Link } from 'expo-router';
-import ThemedText from '@/components/ThemedText';
-import TabScreenWrapper from '@/components/TabScreenWrapper';
-import Icon, { IconName } from '@/components/Icon';
 
-type NotificationType = 'purchase' | 'message' | 'review' | 'offer' | 'seller' | 'all' | 'booking' | 'payment' | 'inquiry' | 'cancellation';
+type NotificationType =
+  | 'purchase'
+  | 'message'
+  | 'review'
+  | 'offer'
+  | 'seller'
+  | 'all'
+  | 'booking'
+  | 'payment'
+  | 'inquiry'
+  | 'cancellation';
 
 interface User {
   id: number;
@@ -44,7 +55,7 @@ export default function NotificationsScreen() {
       message: 'Maria Rodriguez booked your Beachfront Villa for 7 nights',
       time: '2 min ago',
       read: false,
-      icon: 'Calendar'
+      icon: 'Calendar',
     },
     {
       id: 2,
@@ -57,8 +68,8 @@ export default function NotificationsScreen() {
       user: {
         id: 101,
         name: 'Alex Thompson',
-        avatar: 'https://randomuser.me/api/portraits/men/32.jpg'
-      }
+        avatar: 'https://randomuser.me/api/portraits/men/32.jpg',
+      },
     },
     {
       id: 3,
@@ -71,8 +82,8 @@ export default function NotificationsScreen() {
       user: {
         id: 102,
         name: 'Sarah Miller',
-        avatar: 'https://randomuser.me/api/portraits/women/44.jpg'
-      }
+        avatar: 'https://randomuser.me/api/portraits/women/44.jpg',
+      },
     },
     {
       id: 4,
@@ -85,17 +96,17 @@ export default function NotificationsScreen() {
       user: {
         id: 103,
         name: 'Michael Chen',
-        avatar: 'https://randomuser.me/api/portraits/men/45.jpg'
-      }
+        avatar: 'https://randomuser.me/api/portraits/men/45.jpg',
+      },
     },
     {
       id: 5,
       type: 'payment',
       title: 'Payment Received',
-      message: 'You received $650 for Jamie\'s stay at Ocean View Suite',
+      message: "You received $650 for Jamie's stay at Ocean View Suite",
       time: '2 days ago',
       read: false,
-      icon: 'DollarSign'
+      icon: 'DollarSign',
     },
     {
       id: 6,
@@ -108,8 +119,8 @@ export default function NotificationsScreen() {
       user: {
         id: 104,
         name: 'Emma Wilson',
-        avatar: 'https://randomuser.me/api/portraits/women/63.jpg'
-      }
+        avatar: 'https://randomuser.me/api/portraits/women/63.jpg',
+      },
     },
     {
       id: 7,
@@ -122,8 +133,8 @@ export default function NotificationsScreen() {
       user: {
         id: 105,
         name: 'David Kim',
-        avatar: 'https://randomuser.me/api/portraits/men/67.jpg'
-      }
+        avatar: 'https://randomuser.me/api/portraits/men/67.jpg',
+      },
     },
     {
       id: 8,
@@ -132,7 +143,7 @@ export default function NotificationsScreen() {
       message: 'Guest cancelled reservation for City Apartment - partial refund issued',
       time: '5 days ago',
       read: true,
-      icon: 'X'
+      icon: 'X',
     },
     {
       id: 9,
@@ -141,7 +152,7 @@ export default function NotificationsScreen() {
       message: 'Your weekly earnings of $1,250 have been transferred',
       time: '6 days ago',
       read: false,
-      icon: 'CreditCard'
+      icon: 'CreditCard',
     },
     {
       id: 10,
@@ -154,8 +165,8 @@ export default function NotificationsScreen() {
       user: {
         id: 106,
         name: 'Lisa Garcia',
-        avatar: 'https://randomuser.me/api/portraits/women/72.jpg'
-      }
+        avatar: 'https://randomuser.me/api/portraits/women/72.jpg',
+      },
     },
     {
       id: 11,
@@ -168,8 +179,8 @@ export default function NotificationsScreen() {
       user: {
         id: 107,
         name: 'Tom Anderson',
-        avatar: 'https://randomuser.me/api/portraits/men/89.jpg'
-      }
+        avatar: 'https://randomuser.me/api/portraits/men/89.jpg',
+      },
     },
     {
       id: 12,
@@ -178,55 +189,50 @@ export default function NotificationsScreen() {
       message: 'Guest asking about pet-friendly accommodations',
       time: '2 weeks ago',
       read: true,
-      icon: 'Heart'
-    }
+      icon: 'Heart',
+    },
   ];
 
   // Load notifications data with proper useEffect
   useEffect(() => {
-    console.log("Loading notifications...");
-    
+    console.log('Loading notifications...');
+
     // Simulate API call with a delay
     const loadData = async () => {
       try {
         // Simulate network delay
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+
         // Set notifications data
         setNotificationsData(notifications);
-        
+
         // Turn off loading state
         setIsLoading(false);
-        console.log("Notifications loaded successfully");
+        console.log('Notifications loaded successfully');
       } catch (error) {
-        console.error("Error loading notifications:", error);
+        console.error('Error loading notifications:', error);
         setIsLoading(false); // Ensure loading state is turned off even if there's an error
       }
     };
-    
+
     loadData();
-    
+
     // Cleanup function
     return () => {
-      console.log("Notifications component unmounted");
+      console.log('Notifications component unmounted');
     };
-  }, []);  // Empty dependency array means this runs once on mount
+  }, []); // Empty dependency array means this runs once on mount
 
   // Filter notifications based on selected type
-  const filteredNotifications = notificationsData.filter(notification =>
+  const filteredNotifications = notificationsData.filter((notification) =>
     selectedType === 'all' ? true : notification.type === selectedType
   );
 
-  
-
   return (
     <>
-      <Header 
-        showBackButton 
-        title="Notifications" 
-      />
+      <Header showBackButton title="Notifications" />
       <View className="flex-1 bg-light-primary dark:bg-dark-primary">
-        <View className="p-4 flex-row gap-1">
+        <View className="flex-row gap-1 p-4">
           <Chip
             label="All"
             isSelected={selectedType === 'all'}
@@ -268,12 +274,10 @@ export default function NotificationsScreen() {
             <List variant="divided">
               {filteredNotifications.length > 0 ? (
                 filteredNotifications.map((notification) => (
-                  <View key={notification.id}>
-                    {renderNotification(notification)}
-                  </View>
+                  <View key={notification.id}>{renderNotification(notification)}</View>
                 ))
               ) : (
-                <View className="p-8 items-center">
+                <View className="items-center p-8">
                   <ThemedText>No notifications found</ThemedText>
                 </View>
               )}
@@ -286,30 +290,23 @@ export default function NotificationsScreen() {
 }
 
 export const renderNotification = (notification: Notification) => (
-
-    <ListItem
-      leading={
-        notification.user ? (
-          <Image
-            source={{ uri: notification.user.avatar }}
-            className="w-10 h-10 rounded-full"
-          />
-        ) : (
-          <View className="bg-light-secondary/30 dark:bg-dark-subtext/30 w-10 h-10 rounded-full items-center justify-center">
-            <Icon name={notification.icon} size={20} />
-          </View>
-        )
-      }
-      title={
-        <ThemedText className="font-bold">{notification.title}</ThemedText>
-      }
-      subtitle={notification.message}
-      trailing={
-        <ThemedText className="text-xs text-light-subtext dark:text-dark-subtext">
-          {notification.time}
-        </ThemedText>
-      }
-      className={`py-4 ${!notification.read ? 'bg-light-secondary/5 dark:bg-dark-secondary/5' : ''}`}
-    />
-
+  <ListItem
+    leading={
+      notification.user ? (
+        <Image source={{ uri: notification.user.avatar }} className="h-10 w-10 rounded-full" />
+      ) : (
+        <View className="h-10 w-10 items-center justify-center rounded-full bg-light-secondary/30 dark:bg-dark-subtext/30">
+          <Icon name={notification.icon} size={20} />
+        </View>
+      )
+    }
+    title={<ThemedText className="font-bold">{notification.title}</ThemedText>}
+    subtitle={notification.message}
+    trailing={
+      <ThemedText className="text-xs text-light-subtext dark:text-dark-subtext">
+        {notification.time}
+      </ThemedText>
+    }
+    className={`py-4 ${!notification.read ? 'bg-light-secondary/5 dark:bg-dark-secondary/5' : ''}`}
+  />
 );

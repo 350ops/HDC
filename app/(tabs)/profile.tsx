@@ -1,16 +1,17 @@
-import { View, Pressable, Alert } from 'react-native';
-import Header, { HeaderIcon } from '@/components/Header';
-import ThemedText from '@/components/ThemedText';
-import Avatar from '@/components/Avatar';
-import ListLink from '@/components/ListLink';
-import AnimatedView from '@/components/AnimatedView';
-import ThemedScroller from '@/components/ThemeScroller';
 import React from 'react';
-import ThemeToggle from '@/components/ThemeToggle';
-import { shadowPresets } from '@/utils/useShadow';
-import Divider from '@/components/layout/Divider';
-import Icon from '@/components/Icon';
+import { View, Pressable, Alert } from 'react-native';
+
 import { useAuth } from '@/app/contexts/AuthContext';
+import AnimatedView from '@/components/AnimatedView';
+import Avatar from '@/components/Avatar';
+import Header, { HeaderIcon } from '@/components/Header';
+import Icon from '@/components/Icon';
+import ListLink from '@/components/ListLink';
+import ThemedScroller from '@/components/ThemeScroller';
+import ThemeToggle from '@/components/ThemeToggle';
+import ThemedText from '@/components/ThemedText';
+import Divider from '@/components/layout/Divider';
+import { shadowPresets } from '@/utils/createShadow';
 
 export default function ProfileScreen() {
   const { user, signOut } = useAuth();
@@ -37,45 +38,60 @@ export default function ProfileScreen() {
           {/* Profile Card */}
           <View
             style={shadowPresets.large}
-            className="items-center mb-6 bg-light-primary dark:bg-dark-secondary rounded-3xl p-8"
-          >
-            <View className="w-20 h-20 rounded-full bg-highlight/10 items-center justify-center mb-4">
+            className="mb-6 items-center rounded-3xl bg-light-primary p-8 dark:bg-dark-secondary">
+            <View className="mb-4 h-20 w-20 items-center justify-center rounded-full bg-highlight/10">
               <Icon name="User" size={36} strokeWidth={1.5} />
             </View>
             <ThemedText className="text-2xl font-bold">{displayName}</ThemedText>
-            <ThemedText className="text-sm text-light-subtext dark:text-dark-subtext mt-1">
+            <ThemedText className="mt-1 text-sm text-light-subtext dark:text-dark-subtext">
               {email}
             </ThemedText>
 
             {/* Stats Row */}
-            <View className="flex-row mt-6 w-full">
+            <View className="mt-6 w-full flex-row">
               <View className="flex-1 items-center border-r border-light-secondary dark:border-dark-primary">
                 <ThemedText className="text-xl font-bold">0</ThemedText>
-                <ThemedText className="text-xs text-light-subtext dark:text-dark-subtext">Bookings</ThemedText>
+                <ThemedText className="text-xs text-light-subtext dark:text-dark-subtext">
+                  Bookings
+                </ThemedText>
               </View>
               <View className="flex-1 items-center border-r border-light-secondary dark:border-dark-primary">
                 <ThemedText className="text-xl font-bold">-</ThemedText>
-                <ThemedText className="text-xs text-light-subtext dark:text-dark-subtext">Team</ThemedText>
+                <ThemedText className="text-xs text-light-subtext dark:text-dark-subtext">
+                  Team
+                </ThemedText>
               </View>
               <View className="flex-1 items-center">
                 <ThemedText className="text-xl font-bold">-</ThemedText>
-                <ThemedText className="text-xs text-light-subtext dark:text-dark-subtext">Sport</ThemedText>
+                <ThemedText className="text-xs text-light-subtext dark:text-dark-subtext">
+                  Sport
+                </ThemedText>
               </View>
             </View>
           </View>
 
           {/* Menu Items */}
           <View className="gap-1 px-2">
-            <ThemedText className="text-xs font-semibold uppercase tracking-wide text-light-subtext dark:text-dark-subtext mb-2 px-2">
+            <ThemedText className="mb-2 px-2 text-xs font-semibold uppercase tracking-wide text-light-subtext dark:text-dark-subtext">
               Account
             </ThemedText>
-            <ListLink showChevron title="Edit profile" icon="UserRoundPen" href="/screens/edit-profile" />
+            <ListLink
+              showChevron
+              title="Edit profile"
+              icon="UserRoundPen"
+              href="/screens/edit-profile"
+            />
             <ListLink showChevron title="My team" icon="Users" href="/screens/team" />
-            <ListLink showChevron title="Payment methods" icon="CreditCard" href="/screens/profile/payments" />
+            <ListLink
+              showChevron
+              title="Payment methods"
+              icon="CreditCard"
+              href="/screens/profile/payments"
+            />
 
             <Divider className="my-3" />
 
-            <ThemedText className="text-xs font-semibold uppercase tracking-wide text-light-subtext dark:text-dark-subtext mb-2 px-2">
+            <ThemedText className="mb-2 px-2 text-xs font-semibold uppercase tracking-wide text-light-subtext dark:text-dark-subtext">
               Support
             </ThemedText>
             <ListLink showChevron title="Help & FAQ" icon="HelpCircle" href="/screens/help" />
@@ -84,7 +100,7 @@ export default function ProfileScreen() {
 
             <Divider className="my-3" />
 
-            <Pressable onPress={handleSignOut} className="flex-row items-center py-3 px-2">
+            <Pressable onPress={handleSignOut} className="flex-row items-center px-2 py-3">
               <Icon name="LogOut" size={20} strokeWidth={1.5} className="mr-3" />
               <ThemedText className="text-base text-red-500">Sign out</ThemedText>
             </Pressable>

@@ -53,12 +53,10 @@ async function uploadFile(filePath: string, storagePath: string) {
   const fileBuffer = fs.readFileSync(filePath);
   const contentType = filePath.endsWith('.png') ? 'image/png' : 'image/jpeg';
 
-  const { error } = await supabase.storage
-    .from(BUCKET)
-    .upload(storagePath, fileBuffer, {
-      contentType,
-      upsert: true,
-    });
+  const { error } = await supabase.storage.from(BUCKET).upload(storagePath, fileBuffer, {
+    contentType,
+    upsert: true,
+  });
 
   if (error) {
     console.error(`Failed to upload ${storagePath}:`, error.message);
@@ -86,7 +84,9 @@ async function main() {
   if (!fs.existsSync(SAMPLE_DIR)) {
     console.error(`Sample images directory not found: ${SAMPLE_DIR}`);
     console.log('\nCreate the directory and add sport images:');
-    console.log('  mkdir -p scripts/sample-images/{football,cricket,basketball,badminton,volleyball,tennis,swimming}');
+    console.log(
+      '  mkdir -p scripts/sample-images/{football,cricket,basketball,badminton,volleyball,tennis,swimming}'
+    );
     console.log('  # Then add .jpg images matching the expected filenames above');
     process.exit(1);
   }

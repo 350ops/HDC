@@ -1,12 +1,13 @@
+import { Stack, Link, router } from 'expo-router';
 import React, { useState } from 'react';
 import { View, Pressable, StyleSheet, Text } from 'react-native';
-import { Stack, Link, router } from 'expo-router';
-import Input from '@/components/forms/Input';
-import ThemedText from '@/components/ThemedText';
-import { Button } from '@/components/Button';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
 import useThemeColors from '@/app/contexts/ThemeColors';
+import { Button } from '@/components/Button';
 import Header from '@/components/Header';
+import ThemedText from '@/components/ThemedText';
+import Input from '@/components/forms/Input';
 
 export default function LoginScreen() {
   const insets = useSafeAreaInsets();
@@ -65,12 +66,12 @@ export default function LoginScreen() {
   return (
     <>
       <Header showBackButton />
-      <View className="flex-1 bg-light-primary dark:bg-dark-primary p-6">
-
-
+      <View className="flex-1 bg-light-primary p-6 dark:bg-dark-primary">
         <View className="mt-8">
-          <ThemedText className="text-3xl font-bold mb-1">Welcome back</ThemedText>
-          <ThemedText className="text-light-subtext dark:text-dark-subtext mb-14">Sign in to your account</ThemedText>
+          <ThemedText className="mb-1 text-3xl font-bold">Welcome back</ThemedText>
+          <ThemedText className="mb-14 text-light-subtext dark:text-dark-subtext">
+            Sign in to your account
+          </ThemedText>
 
           <Input
             label="Email"
@@ -83,7 +84,7 @@ export default function LoginScreen() {
             keyboardType="email-address"
             autoCapitalize="none"
             autoComplete="email"
-            containerClassName='mb-4'
+            containerClassName="mb-4"
           />
 
           <Input
@@ -94,15 +95,16 @@ export default function LoginScreen() {
               if (passwordError) validatePassword(text);
             }}
             error={passwordError}
-            isPassword={true}
+            isPassword
             autoCapitalize="none"
-            containerClassName='mb-4'
+            containerClassName="mb-4"
           />
 
-          <Link className='underline text-black dark:text-white text-sm mb-4' href="/screens/forgot-password">
+          <Link
+            className="mb-4 text-sm text-black underline dark:text-white"
+            href="/screens/forgot-password">
             Forgot Password?
           </Link>
-
 
           <Button
             title="Login"
@@ -113,7 +115,9 @@ export default function LoginScreen() {
           />
 
           <View className="flex-row justify-center">
-            <ThemedText className="text-light-subtext dark:text-dark-subtext">Don't have an account? </ThemedText>
+            <ThemedText className="text-light-subtext dark:text-dark-subtext">
+              Don't have an account?{' '}
+            </ThemedText>
             <Link href="/screens/signup" asChild>
               <Pressable>
                 <ThemedText className="underline">Sign up</ThemedText>

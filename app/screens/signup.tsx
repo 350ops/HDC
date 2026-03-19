@@ -1,12 +1,13 @@
+import { Link, router } from 'expo-router';
 import React, { useState } from 'react';
 import { View, Pressable, StyleSheet, Text } from 'react-native';
-import { Link, router } from 'expo-router';
-import Input from '@/components/forms/Input';
-import ThemedText from '@/components/ThemedText';
-import { Button } from '@/components/Button';
-import useThemeColors from '@/app/contexts/ThemeColors';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
+import useThemeColors from '@/app/contexts/ThemeColors';
+import { Button } from '@/components/Button';
 import Header from '@/components/Header';
+import ThemedText from '@/components/ThemedText';
+import Input from '@/components/forms/Input';
 
 export default function SignupScreen() {
   const insets = useSafeAreaInsets();
@@ -36,7 +37,7 @@ export default function SignupScreen() {
 
   const checkPasswordStrength = (password: string) => {
     let strength = 0;
-    let feedback = [];
+    const feedback = [];
 
     // Length check
     if (password.length >= 8) {
@@ -122,15 +123,14 @@ export default function SignupScreen() {
   };
 
   return (
-
     <>
       <Header showBackButton />
-      <View className="flex-1 bg-light-primary dark:bg-dark-primary p-6">
-
-
+      <View className="flex-1 bg-light-primary p-6 dark:bg-dark-primary">
         <View className="mt-8">
-          <ThemedText className="text-3xl font-bold mb-1">Create new account</ThemedText>
-          <ThemedText className="text-light-subtext dark:text-dark-subtext mb-14">Create an account to continue</ThemedText>
+          <ThemedText className="mb-1 text-3xl font-bold">Create new account</ThemedText>
+          <ThemedText className="mb-14 text-light-subtext dark:text-dark-subtext">
+            Create an account to continue
+          </ThemedText>
 
           <Input
             label="Email"
@@ -144,7 +144,7 @@ export default function SignupScreen() {
             keyboardType="email-address"
             autoCapitalize="none"
             autoComplete="email"
-            containerClassName='mb-4'
+            containerClassName="mb-4"
           />
 
           <Input
@@ -157,9 +157,9 @@ export default function SignupScreen() {
               if (passwordError) validatePassword(text);
             }}
             error={passwordError}
-            isPassword={true}
+            isPassword
             autoCapitalize="none"
-            containerClassName='mb-4'
+            containerClassName="mb-4"
           />
 
           <Input
@@ -171,24 +171,23 @@ export default function SignupScreen() {
               if (confirmPasswordError) validateConfirmPassword(text);
             }}
             error={confirmPasswordError}
-            containerClassName='mb-4'
-            isPassword={true}
+            containerClassName="mb-4"
+            isPassword
             autoCapitalize="none"
           />
           {password.length > 0 && (
             <View className="mb-4">
-              <View className="w-full h-1 bg-light-secondary dark:bg-dark-secondary rounded-full overflow-hidden">
+              <View className="h-1 w-full overflow-hidden rounded-full bg-light-secondary dark:bg-dark-secondary">
                 <View
                   className={`h-full rounded-full ${passwordStrength >= 75 ? 'bg-green-500' : passwordStrength >= 50 ? 'bg-yellow-500' : 'bg-red-500'}`}
                   style={{ width: `${passwordStrength}%` }}
                 />
               </View>
-              <ThemedText className="text-xs mt-1 text-light-subtext dark:text-dark-subtext">
+              <ThemedText className="mt-1 text-xs text-light-subtext dark:text-dark-subtext">
                 {strengthText}
               </ThemedText>
             </View>
           )}
-
 
           <Button
             title="Sign up"
@@ -198,10 +197,10 @@ export default function SignupScreen() {
             className="mb-6"
           />
 
-
-
           <View className="flex-row justify-center">
-            <ThemedText className="text-light-subtext dark:text-dark-subtext">Already have an account? </ThemedText>
+            <ThemedText className="text-light-subtext dark:text-dark-subtext">
+              Already have an account?{' '}
+            </ThemedText>
             <Link href="/screens/login" asChild>
               <Pressable>
                 <ThemedText className="underline">Log in</ThemedText>
