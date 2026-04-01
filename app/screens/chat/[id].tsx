@@ -2,7 +2,6 @@ import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { View, TextInput, FlatList, TouchableOpacity, KeyboardAvoidingView, Platform, ScrollView, Keyboard } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import { Link } from 'expo-router';
-import ActionSheet, { ActionSheetRef } from 'react-native-actions-sheet';
 import { useThemeColors } from '@/app/contexts/ThemeColors';
 import Header, { HeaderIcon } from '@/components/Header';
 import Avatar from '@/components/Avatar';

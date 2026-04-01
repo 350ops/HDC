@@ -86,7 +86,7 @@ export default function BookingConfirmationScreen() {
       </View>
 
       {/* Next steps */}
-      <Section title="What's Next" titleSize="base" className="mx-4 mb-4">
+      <Section title="What's Next" titleSize="lg" className="mx-4 mb-4">
         <View className="gap-3">
           {[
             { icon: 'Mail', text: 'A confirmation email has been sent with your booking details and receipt.' },

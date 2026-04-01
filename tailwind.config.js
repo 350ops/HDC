@@ -17,32 +17,32 @@ module.exports = {
       },
       colors: {
         // Light theme colors
-        highlight: '#FF2056',
+        highlight: '#3AB24E',
         light: {
           primary: '#ffffff',
-          secondary: '#F5F5F5',
-          text: '#000000',
-          subtext: '#64748B'
+          secondary: '#F3F4F6',
+          text: '#0D131A',
+          subtext: '#6B7280'
         },
         // Dark theme colors
         dark: {
-          primary: '#171717',
-          secondary: '#262626',
-          darker: '#000000',
+          primary: '#0D131A',
+          secondary: '#1F2937',
+          darker: '#0B0F14',
           text: '#ffffff',
-          subtext: '#A1A1A1'
+          subtext: '#9CA3AF'
         },
         // HDC brand colors
         hdc: {
-          green: '#16A34A',
-          'green-dark': '#15803D',
-          'green-light': '#22C55E',
+          green: '#3AB24E',
+          'green-dark': '#139C50',
+          'green-light': '#66D17A',
           teal: '#0D9488',
           'teal-light': '#14B8A6',
           navy: '#1E3A5F',
           amber: '#F59E0B',
           'amber-light': '#FEF3C7',
-          'green-bg': '#F0FDF4',
+          'green-bg': '#EAF8ED',
         },
       },
     },

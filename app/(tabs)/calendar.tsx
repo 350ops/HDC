@@ -167,7 +167,7 @@ export default function AvailabilityScreen() {
         {selectedDate && facility && (
           <View className="mx-4 mt-4">
             <Divider />
-            <Section title={`Slots — ${selectedDate}`} titleSize="base" className="mt-4 mb-2">
+            <Section title={`Slots — ${selectedDate}`} titleSize="lg" className="mt-4 mb-2">
               {isAdmin ? (
                 // Admin: show who has booked
                 adminBookings.length > 0 ? (

@@ -79,7 +79,7 @@ export default function ReportsScreen() {
       <Divider className="mx-4" />
 
       {/* Booking status breakdown */}
-      <Section title="Status Breakdown" titleSize="base" className="px-4 mt-4 mb-2">
+      <Section title="Status Breakdown" titleSize="lg" className="px-4 mt-4 mb-2">
         {[
           { label: 'Confirmed', count: confirmedBookings.length, color: '#16A34A' },
           { label: 'Pending Payment', count: pendingCount, color: '#F59E0B' },
@@ -107,7 +107,7 @@ export default function ReportsScreen() {
       <Divider className="mx-4" />
 
       {/* Per-facility breakdown */}
-      <Section title="Facility Performance" titleSize="base" className="px-4 mt-4 mb-2">
+      <Section title="Facility Performance" titleSize="lg" className="px-4 mt-4 mb-2">
         {facilityStats.filter((f) => f.bookings > 0).map((f, i) => (
           <View key={f.id} className="flex-row items-center gap-3 mb-3">
             <View className="w-7 h-7 rounded-full bg-hdc-green items-center justify-center">

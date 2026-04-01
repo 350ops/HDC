@@ -4,19 +4,22 @@ export const useThemeColors = () => {
   const { isDark } = useTheme();
 
   return {
-    icon: isDark ? 'white' : 'black',
-    bg: isDark ? '#171717' : '#ffffff',
+    // HMC palette
+    icon: isDark ? '#FFFFFF' : '#0D131A',
+    bg: isDark ? '#0D131A' : '#FFFFFF',
     invert: isDark ? '#000000' : '#ffffff',
-    secondary: isDark ? '#262626' : '#F5F5F5',
-    state: isDark ? 'rgba(255, 255, 255, 0.3)' : 'rgba(0, 0, 0, 0.3)',
-    sheet: isDark ? '#262626' : '#ffffff',
-    highlight: '#FF2056',    
-    lightDark: isDark ? '#262626' : 'white',
-    border: isDark ? '#404040' : '#E2E8F0',
-    text: isDark ? 'white' : 'black',
-    placeholder: isDark ? 'rgba(255,255,255,0.4)' : 'rgba(0,0,0,0.4)',
-    switch: isDark ? 'rgba(255,255,255,0.4)' : '#ccc',
-    chatBg: isDark ? '#262626' : '#efefef',
+    secondary: isDark ? '#1F2937' : '#F3F4F6',
+    state: isDark ? 'rgba(255, 255, 255, 0.28)' : 'rgba(13, 19, 26, 0.22)',
+    sheet: isDark ? '#1F2937' : '#FFFFFF',
+    highlight: '#3AB24E',
+    highlightAlt: '#139C50',
+    lightDark: isDark ? '#1F2937' : '#FFFFFF',
+    border: isDark ? 'rgba(255,255,255,0.14)' : '#E5E7EB',
+    text: isDark ? '#FFFFFF' : '#0D131A',
+    subtext: isDark ? '#9CA3AF' : '#6B7280',
+    placeholder: isDark ? 'rgba(255,255,255,0.45)' : 'rgba(13,19,26,0.40)',
+    switch: isDark ? 'rgba(255,255,255,0.35)' : '#D1D5DB',
+    chatBg: isDark ? '#111827' : '#F3F4F6',
     isDark
   };
 };

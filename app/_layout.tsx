@@ -9,9 +9,7 @@ import { Platform } from 'react-native';
 import { AuthProvider } from './contexts/AuthContext';
 
 
-NativeWindStyleSheet.setOutput({
-  default: 'native',
-});
+// NativeWind v4 uses CSS Interop runtime (no manual output config needed).
 
 function ThemedLayout() {
   const { ThemedStatusBar, screenOptions } = useThemedNavigation();

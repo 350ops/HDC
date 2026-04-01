@@ -1,3 +1,5 @@
+import type { ImageSourcePropType } from 'react-native';
+
 // ─── User & Auth ─────────────────────────────────────────────────────────────
 
 export type UserRole = 'team_rep' | 'csr_admin' | 'finance' | 'sys_admin';
@@ -52,7 +54,7 @@ export interface Facility {
   neighborhoodLabel: string;
   sport: SportType;
   description: string;
-  images: string[];         // remote URLs or local require() paths
+  images: ImageSourcePropType[];
   operatingHours: OperatingHours;
   pricePerHour: number;     // MVR
   isActive: boolean;

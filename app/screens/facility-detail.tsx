@@ -11,7 +11,6 @@ import { Chip } from '@/components/Chip';
 import { FACILITIES, SPORT_LABELS } from '@/data/facilities';
 import { MOCK_OCCUPIED_SLOTS } from '@/data/mockData';
 import useThemeColors from '@/app/contexts/ThemeColors';
-import { useAuth } from '@/app/contexts/AuthContext';
 import { Calendar } from 'react-native-calendars';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
@@ -28,7 +27,6 @@ function generateTimeSlots(open: string, close: string) {
 
 export default function FacilityDetailScreen() {
   const colors = useThemeColors();
-  const { user } = useAuth();
   const { id } = useLocalSearchParams<{ id: string }>();
 
   const facility = FACILITIES.find((f) => f.id === id);
@@ -80,7 +78,7 @@ export default function FacilityDetailScreen() {
             {facility.images.map((img, idx) => (
               <Image
                 key={idx}
-                source={{ uri: img }}
+                source={img}
                 style={{ width: SCREEN_WIDTH, height: 240 }}
                 resizeMode="cover"
               />
@@ -110,7 +108,7 @@ export default function FacilityDetailScreen() {
           <View className="flex-row items-start justify-between mb-1">
             <ThemedText className="text-xl font-bold flex-1 mr-2">{facility.name}</ThemedText>
             <View className="bg-hdc-green-bg dark:bg-hdc-green/20 rounded-full px-3 py-1 flex-row items-center gap-1">
-              <Icon name="Dumbbell" size={11} color="#16A34A" />
+              <Icon name="Dumbbell" size={11} color="#3AB24E" />
               <ThemedText className="text-xs font-semibold text-hdc-green">
                 {SPORT_LABELS[facility.sport]}
               </ThemedText>
@@ -123,20 +121,20 @@ export default function FacilityDetailScreen() {
           {/* Key info row */}
           <View className="flex-row gap-3 mb-4">
             <View className="flex-1 bg-light-secondary dark:bg-dark-secondary rounded-xl p-3 items-center gap-1">
-              <Icon name="Clock" size={18} color="#16A34A" />
+              <Icon name="Clock" size={18} color="#3AB24E" />
               <ThemedText className="text-xs text-light-subtext dark:text-dark-subtext">Hours</ThemedText>
               <ThemedText className="text-xs font-semibold text-center">
                 {facility.operatingHours.open}–{facility.operatingHours.close}
               </ThemedText>
             </View>
             <View className="flex-1 bg-light-secondary dark:bg-dark-secondary rounded-xl p-3 items-center gap-1">
-              <Icon name="Banknote" size={18} color="#16A34A" />
+              <Icon name="Banknote" size={18} color="#3AB24E" />
               <ThemedText className="text-xs text-light-subtext dark:text-dark-subtext">Rate</ThemedText>
               <ThemedText className="text-xs font-semibold">MVR {facility.pricePerHour}/hr</ThemedText>
             </View>
             {facility.capacity && (
               <View className="flex-1 bg-light-secondary dark:bg-dark-secondary rounded-xl p-3 items-center gap-1">
-                <Icon name="Users" size={18} color="#16A34A" />
+                <Icon name="Users" size={18} color="#3AB24E" />
                 <ThemedText className="text-xs text-light-subtext dark:text-dark-subtext">Capacity</ThemedText>
                 <ThemedText className="text-xs font-semibold">{facility.capacity}</ThemedText>
               </View>
@@ -146,7 +144,7 @@ export default function FacilityDetailScreen() {
           <Divider />
 
           {/* Description */}
-          <Section title="About" titleSize="base" className="mt-4 mb-2">
+          <Section title="About" titleSize="lg" className="mt-4 mb-2">
             <ThemedText className="text-sm text-light-subtext dark:text-dark-subtext leading-relaxed">
               {facility.description}
             </ThemedText>
@@ -154,14 +152,14 @@ export default function FacilityDetailScreen() {
 
           {/* Amenities */}
           {facility.amenities && facility.amenities.length > 0 && (
-            <Section title="Amenities" titleSize="base" className="mt-4 mb-2">
+            <Section title="Amenities" titleSize="lg" className="mt-4 mb-2">
               <View className="flex-row flex-wrap gap-2">
                 {facility.amenities.map((a) => (
                   <View
                     key={a}
                     className="flex-row items-center gap-1.5 bg-light-secondary dark:bg-dark-secondary rounded-full px-3 py-1.5"
                   >
-                    <Icon name="CheckCircle" size={13} color="#16A34A" />
+                    <Icon name="CheckCircle" size={13} color="#3AB24E" />
                     <ThemedText className="text-sm">{a}</ThemedText>
                   </View>
                 ))}
@@ -172,7 +170,7 @@ export default function FacilityDetailScreen() {
           <Divider className="mt-4" />
 
           {/* Availability calendar */}
-          <Section title="Check Availability" titleSize="base" className="mt-4 mb-2">
+          <Section title="Check Availability" titleSize="lg" className="mt-4 mb-2">
             <ThemedText className="text-xs text-light-subtext dark:text-dark-subtext mb-3">
               Select a date to see available time slots (06:00–23:00)
             </ThemedText>
@@ -180,15 +178,15 @@ export default function FacilityDetailScreen() {
               minDate={today}
               onDayPress={(day: { dateString: string }) => setSelectedDate(day.dateString)}
               markedDates={
-                selectedDate ? { [selectedDate]: { selected: true, selectedColor: '#16A34A' } } : {}
+                selectedDate ? { [selectedDate]: { selected: true, selectedColor: '#3AB24E' } } : {}
               }
               theme={{
                 backgroundColor: 'transparent',
                 calendarBackground: 'transparent',
-                selectedDayBackgroundColor: '#16A34A',
+                selectedDayBackgroundColor: '#3AB24E',
                 selectedDayTextColor: '#ffffff',
-                todayTextColor: '#16A34A',
-                arrowColor: '#16A34A',
+                todayTextColor: '#3AB24E',
+                arrowColor: '#3AB24E',
                 textSectionTitleColor: colors.text,
                 dayTextColor: colors.text,
                 monthTextColor: colors.text,

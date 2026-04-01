@@ -79,7 +79,7 @@ export default function AdminDashboardScreen() {
       <Divider className="mx-4" />
 
       {/* Quick actions */}
-      <Section title="Quick Actions" titleSize="base" className="px-4 mt-4 mb-2">
+      <Section title="Quick Actions" titleSize="lg" className="px-4 mt-4 mb-2">
         <View className="flex-row gap-3">
           {[
             { label: 'All Bookings', icon: 'CalendarCheck', route: '/(tabs)/admin-bookings' },
@@ -101,7 +101,7 @@ export default function AdminDashboardScreen() {
       <Divider className="mx-4 mt-2" />
 
       {/* Recent bookings */}
-      <Section title="Recent Bookings" titleSize="base" className="px-4 mt-4 mb-2">
+      <Section title="Recent Bookings" titleSize="lg" className="px-4 mt-4 mb-2">
         {recentBookings.map((b) => (
           <BookingCard
             key={b.id}

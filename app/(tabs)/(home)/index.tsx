@@ -146,7 +146,7 @@ export default function FacilitiesScreen() {
       renderItem={({ item }) =>
         item.facilities.length === 0 ? null : (
           <View className="px-4">
-            <Section title={item.label} titleSize="base" className="mt-2 mb-1">
+            <Section title={item.label} titleSize="lg" className="mt-2 mb-1">
               {item.facilities.map((facility) => (
                 <FacilityCard
                   key={facility.id}

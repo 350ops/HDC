@@ -21,7 +21,7 @@ const STATUS_CONFIG: Record<
     bgClass: 'bg-hdc-green-bg dark:bg-hdc-green/10',
     textClass: 'text-hdc-green',
     iconName: 'CheckCircle',
-    iconColor: '#16A34A',
+    iconColor: '#3AB24E',
   },
   expired: {
     label: 'Expired',
@@ -81,7 +81,7 @@ export default function BookingCard({ booking, onPress }: BookingCardProps) {
 
         {/* Date & time */}
         <View className="flex-row items-center gap-1.5 mb-1">
-          <Icon name="CalendarDays" size={13} color="#16A34A" />
+          <Icon name="CalendarDays" size={13} color="#3AB24E" />
           <ThemedText className="text-sm text-light-subtext dark:text-dark-subtext">
             {booking.date} · {booking.startTime} – {booking.endTime}
           </ThemedText>
@@ -89,7 +89,7 @@ export default function BookingCard({ booking, onPress }: BookingCardProps) {
 
         {/* Team */}
         <View className="flex-row items-center gap-1.5 mb-3">
-          <Icon name="Users" size={13} color="#16A34A" />
+          <Icon name="Users" size={13} color="#3AB24E" />
           <ThemedText className="text-sm text-light-subtext dark:text-dark-subtext">
             {booking.teamName}
           </ThemedText>

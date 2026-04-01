@@ -1,109 +1,61 @@
-import { useThemeColors } from 'app/contexts/ThemeColors';
-import { TabButton } from 'components/TabButton';
-import { Tabs, TabList, TabTrigger, TabSlot } from 'expo-router/ui';
 import React from 'react';
+import { DynamicColorIOS, PlatformColor } from 'react-native';
+import { NativeTabs } from 'expo-router/unstable-native-tabs';
 import { useAuth } from '@/app/contexts/AuthContext';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function Layout() {
-  const colors = useThemeColors();
   const { isAdmin } = useAuth();
-  const insets = useSafeAreaInsets();
 
   return (
-    <Tabs>
-      <TabSlot />
-      <TabList
-        style={{
-          backgroundColor: colors.bg,
-          borderTopColor: colors.secondary,
-          borderTopWidth: 1,
-          paddingBottom: insets.bottom,
-        }}
-      >
-        {/* ── Team Rep tabs ────────────────────────────────────── */}
-        <TabTrigger
-          name="(home)"
-          href="/(tabs)/(home)"
-          asChild
-          style={{ display: isAdmin ? 'none' : 'flex' }}
-        >
-          <TabButton labelAnimated={false} icon="MapPin">Facilities</TabButton>
-        </TabTrigger>
+    <NativeTabs
+      labelStyle={{
+        color: PlatformColor('label'),
+      }}
+      tintColor={PlatformColor('label')}
+      shadowColor="transparent"
+    >
+      {/* ── Team Rep tabs ────────────────────────────────────── */}
+      <NativeTabs.Trigger name="(home)" hidden={isAdmin}>
+        <NativeTabs.Trigger.Icon sf={{ default: 'map', selected: 'map.fill' } as any} md="place" />
+        <NativeTabs.Trigger.Label>Facilities</NativeTabs.Trigger.Label>
+      </NativeTabs.Trigger>
 
-        <TabTrigger
-          name="calendar"
-          href="/(tabs)/calendar"
-          asChild
-          style={{ display: isAdmin ? 'none' : 'flex' }}
-        >
-          <TabButton labelAnimated={false} icon="CalendarDays">Availability</TabButton>
-        </TabTrigger>
+      <NativeTabs.Trigger name="calendar" hidden={isAdmin}>
+        <NativeTabs.Trigger.Icon sf={{ default: 'calendar', selected: 'calendar.circle.fill' } as any} md="calendar_month" />
+        <NativeTabs.Trigger.Label>Availability</NativeTabs.Trigger.Label>
+      </NativeTabs.Trigger>
 
-        <TabTrigger
-          name="trips"
-          href="/(tabs)/trips"
-          asChild
-          style={{ display: isAdmin ? 'none' : 'flex' }}
-        >
-          <TabButton labelAnimated={false} icon="Ticket">My Bookings</TabButton>
-        </TabTrigger>
+      <NativeTabs.Trigger name="trips" hidden={isAdmin}>
+        <NativeTabs.Trigger.Icon sf={{ default: 'ticket', selected: 'ticket.fill' } as any} md="confirmation_number" />
+        <NativeTabs.Trigger.Label>My Bookings</NativeTabs.Trigger.Label>
+      </NativeTabs.Trigger>
 
-        <TabTrigger
-          name="profile"
-          href="/(tabs)/profile"
-          asChild
-          style={{ display: isAdmin ? 'none' : 'flex' }}
-        >
-          <TabButton labelAnimated={false} icon="CircleUser">Profile</TabButton>
-        </TabTrigger>
+      {/* ── CSR Admin tabs ───────────────────────────────────── */}
+      <NativeTabs.Trigger name="dashboard" hidden={!isAdmin}>
+        <NativeTabs.Trigger.Icon sf={{ default: 'rectangle.3.group', selected: 'rectangle.3.group.fill' } as any} md="dashboard" />
+        <NativeTabs.Trigger.Label>Dashboard</NativeTabs.Trigger.Label>
+      </NativeTabs.Trigger>
 
-        {/* ── CSR Admin tabs ───────────────────────────────────── */}
-        <TabTrigger
-          name="dashboard"
-          href="/(tabs)/dashboard"
-          asChild
-          style={{ display: isAdmin ? 'flex' : 'none' }}
-        >
-          <TabButton labelAnimated={false} icon="LayoutDashboard">Dashboard</TabButton>
-        </TabTrigger>
+      <NativeTabs.Trigger name="listings" hidden={!isAdmin}>
+        <NativeTabs.Trigger.Icon sf={{ default: 'building.2', selected: 'building.2.fill' } as any} md="business" />
+        <NativeTabs.Trigger.Label>Facilities</NativeTabs.Trigger.Label>
+      </NativeTabs.Trigger>
 
-        <TabTrigger
-          name="listings"
-          href="/(tabs)/listings"
-          asChild
-          style={{ display: isAdmin ? 'flex' : 'none' }}
-        >
-          <TabButton labelAnimated={false} icon="Building2">Facilities</TabButton>
-        </TabTrigger>
+      <NativeTabs.Trigger name="admin-bookings" hidden={!isAdmin}>
+        <NativeTabs.Trigger.Icon sf={{ default: 'calendar.badge.checkmark', selected: 'calendar.badge.checkmark' } as any} md="event_available" />
+        <NativeTabs.Trigger.Label>Bookings</NativeTabs.Trigger.Label>
+      </NativeTabs.Trigger>
 
-        <TabTrigger
-          name="admin-bookings"
-          href="/(tabs)/admin-bookings"
-          asChild
-          style={{ display: isAdmin ? 'flex' : 'none' }}
-        >
-          <TabButton labelAnimated={false} icon="CalendarCheck">Bookings</TabButton>
-        </TabTrigger>
+      <NativeTabs.Trigger name="reports" hidden={!isAdmin}>
+        <NativeTabs.Trigger.Icon sf={{ default: 'chart.bar', selected: 'chart.bar.fill' } as any} md="bar_chart" />
+        <NativeTabs.Trigger.Label>Reports</NativeTabs.Trigger.Label>
+      </NativeTabs.Trigger>
 
-        <TabTrigger
-          name="reports"
-          href="/(tabs)/reports"
-          asChild
-          style={{ display: isAdmin ? 'flex' : 'none' }}
-        >
-          <TabButton labelAnimated={false} icon="BarChart2">Reports</TabButton>
-        </TabTrigger>
-
-        <TabTrigger
-          name="admin-profile"
-          href="/(tabs)/profile"
-          asChild
-          style={{ display: isAdmin ? 'flex' : 'none' }}
-        >
-          <TabButton labelAnimated={false} icon="CircleUser">Profile</TabButton>
-        </TabTrigger>
-      </TabList>
-    </Tabs>
+      {/* ── Shared tab (both roles) ─────────────────────────── */}
+      <NativeTabs.Trigger name="profile">
+        <NativeTabs.Trigger.Icon sf={{ default: 'person.crop.circle', selected: 'person.crop.circle.fill' } as any} md="person" />
+        <NativeTabs.Trigger.Label>Profile</NativeTabs.Trigger.Label>
+      </NativeTabs.Trigger>
+    </NativeTabs>
   );
 }

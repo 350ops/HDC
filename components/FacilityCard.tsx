@@ -38,7 +38,7 @@ export default function FacilityCard({ facility, onPress, variant = 'full' }: Fa
       >
         <View className="rounded-2xl overflow-hidden bg-light-secondary dark:bg-dark-secondary">
           <Image
-            source={{ uri: facility.images[0] }}
+            source={facility.images[0]}
             style={{ width: 160, height: 110 }}
             resizeMode="cover"
           />
@@ -68,7 +68,7 @@ export default function FacilityCard({ facility, onPress, variant = 'full' }: Fa
       {/* Image */}
       <View className="relative">
         <Image
-          source={{ uri: facility.images[0] }}
+          source={facility.images[0]}
           style={{ width: '100%', height: 180 }}
           resizeMode="cover"
         />
@@ -99,7 +99,7 @@ export default function FacilityCard({ facility, onPress, variant = 'full' }: Fa
           </View>
           {/* Sport chip */}
           <View className="bg-hdc-green-bg dark:bg-hdc-green/20 rounded-full px-2.5 py-1 flex-row items-center gap-1">
-            <Icon name="Dumbbell" size={10} color="#16A34A" />
+            <Icon name="Dumbbell" size={10} color="#3AB24E" />
             <ThemedText className="text-xs font-semibold text-hdc-green">{sportLabel}</ThemedText>
           </View>
         </View>
@@ -124,14 +124,14 @@ export default function FacilityCard({ facility, onPress, variant = 'full' }: Fa
         {/* Footer */}
         <View className="flex-row items-center justify-between mt-3 pt-3 border-t border-light-secondary dark:border-dark-primary">
           <View className="flex-row items-center gap-1">
-            <Icon name="Clock" size={12} color="#16A34A" />
+            <Icon name="Clock" size={12} color="#3AB24E" />
             <ThemedText className="text-xs text-light-subtext dark:text-dark-subtext">
               {facility.operatingHours.open} – {facility.operatingHours.close}
             </ThemedText>
           </View>
           <View className="flex-row items-center gap-1">
             <ThemedText className="text-xs font-semibold text-hdc-green">Book now</ThemedText>
-            <Icon name="ChevronRight" size={12} color="#16A34A" />
+            <Icon name="ChevronRight" size={12} color="#3AB24E" />
           </View>
         </View>
       </View>

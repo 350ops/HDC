@@ -2,18 +2,23 @@
   "expo": {
     "newArchEnabled": true,
     "name": "HDC Sports",
-    "slug": "hdc-sports",
+    "slug": "hdc",
     "version": "1.0.0",
     "runtimeVersion": "1.0.0",
     "scheme": "hdcsports",
-   
     "experiments": {
       "tsconfigPaths": true
     },
-    "platforms": ["ios", "android"],
+    "platforms": [
+      "ios",
+      "android"
+    ],
     "plugins": [
       "expo-router",
-      "expo-font"
+      "expo-font",
+      "@react-native-community/datetimepicker",
+      "expo-asset",
+      "expo-sharing"
     ],
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -27,7 +32,11 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.hdccsr.hdc",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -38,17 +47,18 @@
       "predictiveBackGestureEnabled": false,
       "config": {
         "enableOnBackInvokedCallback": false
-      }
+      },
+      "package": "com.hdccsr.hdc"
     },
     "extra": {
       "router": {
         "origin": false
       },
       "eas": {
-        "projectId": "11853cd2-a6e3-4b02-8a81-29938150b8a1"
+        "projectId": "8d124867-8ec9-4a34-961b-60cc95e233bf"
       }
     },
-    "owner": "thomino",
+    "owner": "hdccsr",
     "updates": {
       "url": "https://u.expo.dev/11853cd2-a6e3-4b02-8a81-29938150b8a1"
     }

@@ -1,12 +1,12 @@
 import React, { useRef, useState } from 'react';
 import { View, Text, TouchableOpacity, Pressable, Animated, Platform, ViewStyle } from 'react-native';
-import ActionSheet, { ActionSheetRef } from 'react-native-actions-sheet';
 import useThemeColors from '@/app/contexts/ThemeColors';
 import Icon from '@/components/Icon';
 import ThemedText from '@/components/ThemedText';
 import * as NavigationBar from 'expo-navigation-bar';
 import { useTheme } from '@/app/contexts/ThemeContext';
 import { InputVariant } from './Input';
+import BottomSheet, { BottomSheetRef } from '@/components/BottomSheet';
 
 interface SelectOption {
     label: string;
@@ -38,7 +38,7 @@ const Select: React.FC<SelectProps> = ({
 }) => {
     const { isDark } = useTheme();
     const colors = useThemeColors();
-    const actionSheetRef = useRef<ActionSheetRef>(null);
+    const actionSheetRef = useRef<BottomSheetRef>(null);
     const [isFocused, setIsFocused] = useState(false);
     const [selectedOption, setSelectedOption] = useState<SelectOption | undefined>(
         options.find(option => option.value === value)
@@ -120,34 +120,13 @@ const Select: React.FC<SelectProps> = ({
 
     // Render the action sheet
     const renderActionSheet = () => (
-        <ActionSheet
+        <BottomSheet
             ref={actionSheetRef}
             onClose={handleClose}
-            isModal={true}
-            enableGesturesInScrollView={true}
-            statusBarTranslucent={true}
-            drawUnderStatusBar={false}
             containerStyle={{
                 backgroundColor: colors.bg,
-                borderTopLeftRadius: 20,
-                borderTopRightRadius: 20
-            }}
-            animated={true}
-            openAnimationConfig={{
-                stiffness: 3000,
-                damping: 500,
-                mass: 3,
-                overshootClamping: true,
-                restDisplacementThreshold: 0.01,
-                restSpeedThreshold: 0.01
-            }}
-            closeAnimationConfig={{
-                stiffness: 1000,
-                damping: 500,
-                mass: 3,
-                overshootClamping: true,
-                restDisplacementThreshold: 0.01,
-                restSpeedThreshold: 0.01
+                borderTopLeftRadius: 24,
+                borderTopRightRadius: 24
             }}
         >
             <View className="p-4">
@@ -163,7 +142,7 @@ const Select: React.FC<SelectProps> = ({
                     </Pressable>
                 ))}
             </View>
-        </ActionSheet>
+        </BottomSheet>
     );
 
     // Classic variant
