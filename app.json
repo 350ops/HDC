@@ -1,11 +1,11 @@
 {
   "expo": {
     "newArchEnabled": true,
-    "name": "Propia",
-    "slug": "propia",
+    "name": "HDC Sports",
+    "slug": "hdc-sports",
     "version": "1.0.0",
     "runtimeVersion": "1.0.0",
-    "scheme": "propia",
+    "scheme": "hdcsports",
    
     "experiments": {
       "tsconfigPaths": true
@@ -21,7 +21,7 @@
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#16A34A"
     },
     "assetBundlePatterns": [
       "**/*"

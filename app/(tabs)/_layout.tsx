@@ -1,110 +1,109 @@
 import { useThemeColors } from 'app/contexts/ThemeColors';
 import { TabButton } from 'components/TabButton';
 import { Tabs, TabList, TabTrigger, TabSlot } from 'expo-router/ui';
-import { KeyboardAvoidingView, Platform, SafeAreaView, View } from 'react-native';
 import React from 'react';
-import { useBusinessMode } from '@/app/contexts/BusinesModeContext';
+import { useAuth } from '@/app/contexts/AuthContext';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function Layout() {
   const colors = useThemeColors();
-  const { isBusinessMode } = useBusinessMode();
+  const { isAdmin } = useAuth();
   const insets = useSafeAreaInsets();
+
   return (
-
-
-    <Tabs
-
-    >
+    <Tabs>
       <TabSlot />
       <TabList
         style={{
-          //height: 80,
           backgroundColor: colors.bg,
           borderTopColor: colors.secondary,
           borderTopWidth: 1,
-          // paddingTop: insets.top,
           paddingBottom: insets.bottom,
         }}
       >
-        {/****Host tabs */}
-        <TabTrigger
-          name="dashboard"
-          href="/(tabs)/dashboard"
-          asChild
-          style={{ display: isBusinessMode ? 'flex' : 'none' }}
-        >
-          <TabButton labelAnimated={false} icon="Home">Home</TabButton>
-        </TabTrigger>
-        <TabTrigger
-          name="calendar"
-          href="/(tabs)/calendar"
-          asChild
-          style={{ display: isBusinessMode ? 'flex' : 'none' }}
-        >
-          <TabButton labelAnimated={false} icon="CalendarFold">Calendar</TabButton>
-        </TabTrigger>
-        <TabTrigger
-          name="analytics"
-          href="/(tabs)/listings"
-          asChild
-          style={{ display: isBusinessMode ? 'flex' : 'none' }}
-        >
-          <TabButton labelAnimated={false} icon="File">Listings</TabButton>
-        </TabTrigger>
-
-
-        {/* Consumer mode tabs */}
+        {/* ── Team Rep tabs ────────────────────────────────────── */}
         <TabTrigger
           name="(home)"
           href="/(tabs)/(home)"
           asChild
-          style={{ display: isBusinessMode ? 'none' : 'flex' }}
+          style={{ display: isAdmin ? 'none' : 'flex' }}
         >
-          <TabButton labelAnimated={false} icon="Search">Home</TabButton>
+          <TabButton labelAnimated={false} icon="MapPin">Facilities</TabButton>
         </TabTrigger>
 
         <TabTrigger
-          name="favorites"
-          href="/favorites"
+          name="calendar"
+          href="/(tabs)/calendar"
           asChild
-          style={{ display: isBusinessMode ? 'none' : 'flex' }}
+          style={{ display: isAdmin ? 'none' : 'flex' }}
         >
-          <TabButton labelAnimated={false} icon="Heart">Favorites</TabButton>
+          <TabButton labelAnimated={false} icon="CalendarDays">Availability</TabButton>
         </TabTrigger>
 
         <TabTrigger
           name="trips"
-          href="/trips"
+          href="/(tabs)/trips"
           asChild
-          style={{ display: isBusinessMode ? 'none' : 'flex' }}
+          style={{ display: isAdmin ? 'none' : 'flex' }}
         >
-          <TabButton labelAnimated={false} icon="Plane">Trips</TabButton>
+          <TabButton labelAnimated={false} icon="Ticket">My Bookings</TabButton>
         </TabTrigger>
-
-        <TabTrigger
-          name="chat"
-          href="/(tabs)/chat"
-          asChild
-          style={{ display: isBusinessMode ? 'flex' : 'flex' }}
-        >
-          <TabButton labelAnimated={false} hasBadge icon="MessageSquare">Messages</TabButton>
-        </TabTrigger>
-
-
 
         <TabTrigger
           name="profile"
-          href="/profile"
+          href="/(tabs)/profile"
           asChild
-          style={{ display: isBusinessMode ? 'flex' : 'flex' }}
+          style={{ display: isAdmin ? 'none' : 'flex' }}
         >
           <TabButton labelAnimated={false} icon="CircleUser">Profile</TabButton>
         </TabTrigger>
 
+        {/* ── CSR Admin tabs ───────────────────────────────────── */}
+        <TabTrigger
+          name="dashboard"
+          href="/(tabs)/dashboard"
+          asChild
+          style={{ display: isAdmin ? 'flex' : 'none' }}
+        >
+          <TabButton labelAnimated={false} icon="LayoutDashboard">Dashboard</TabButton>
+        </TabTrigger>
 
+        <TabTrigger
+          name="listings"
+          href="/(tabs)/listings"
+          asChild
+          style={{ display: isAdmin ? 'flex' : 'none' }}
+        >
+          <TabButton labelAnimated={false} icon="Building2">Facilities</TabButton>
+        </TabTrigger>
+
+        <TabTrigger
+          name="admin-bookings"
+          href="/(tabs)/admin-bookings"
+          asChild
+          style={{ display: isAdmin ? 'flex' : 'none' }}
+        >
+          <TabButton labelAnimated={false} icon="CalendarCheck">Bookings</TabButton>
+        </TabTrigger>
+
+        <TabTrigger
+          name="reports"
+          href="/(tabs)/reports"
+          asChild
+          style={{ display: isAdmin ? 'flex' : 'none' }}
+        >
+          <TabButton labelAnimated={false} icon="BarChart2">Reports</TabButton>
+        </TabTrigger>
+
+        <TabTrigger
+          name="admin-profile"
+          href="/(tabs)/profile"
+          asChild
+          style={{ display: isAdmin ? 'flex' : 'none' }}
+        >
+          <TabButton labelAnimated={false} icon="CircleUser">Profile</TabButton>
+        </TabTrigger>
       </TabList>
     </Tabs>
-
   );
 }

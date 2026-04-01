@@ -1,197 +1,122 @@
-import Header, { HeaderIcon } from '@/components/Header';
-import ThemeScroller from '@/components/ThemeScroller';
 import React from 'react';
-import { View, Image, Pressable } from 'react-native';
-import Icon, { IconName } from '@/components/Icon';
-import Section from '@/components/layout/Section';
-import { renderNotification } from '@/app/screens/notifications';
-import AnimatedView from '@/components/AnimatedView';
-import { shadowPresets } from '@/utils/useShadow';
+import { View, ScrollView, TouchableOpacity } from 'react-native';
 import ThemedText from '@/components/ThemedText';
-import { CardScroller } from '@/components/CardScroller';
-import { Chip } from '@/components/Chip';
+import Icon from '@/components/Icon';
+import Section from '@/components/layout/Section';
+import Divider from '@/components/layout/Divider';
+import BookingCard from '@/components/BookingCard';
+import { Button } from '@/components/Button';
+import { MOCK_BOOKINGS } from '@/data/mockData';
+import { useAuth } from '@/app/contexts/AuthContext';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { router } from 'expo-router';
 
-// Order interfaces
-interface MarketplaceOrder {
-    id: number;
-    serviceName: string;
-    customerName: string;
-    customerAvatar: any;
-    date: string;
-    status: 'pending' | 'completed' | 'canceled';
-    totalPaid: string;
-}
+// Compute stats from mock bookings
+const today = new Date().toISOString().split('T')[0];
+const bookingsToday = MOCK_BOOKINGS.filter((b) => b.date === today).length;
+const pendingPayment = MOCK_BOOKINGS.filter((b) => b.status === 'pending_payment').length;
+const confirmedToday = MOCK_BOOKINGS.filter((b) => b.date === today && b.status === 'confirmed').length;
+const revenueThisMonth = MOCK_BOOKINGS.filter((b) => b.status === 'confirmed').reduce(
+  (sum, b) => sum + b.priceTotal,
+  0
+);
 
-// Notification interfaces
-interface User {
-    id: number;
-    name: string;
-    avatar: string;
-}
+const STATS = [
+  { label: 'Today\'s Bookings', value: String(bookingsToday), icon: 'CalendarDays', color: '#16A34A' },
+  { label: 'Pending Payment', value: String(pendingPayment), icon: 'Clock', color: '#F59E0B' },
+  { label: 'Confirmed Today', value: String(confirmedToday), icon: 'CheckCircle', color: '#0D9488' },
+  { label: 'Revenue (Month)', value: `MVR ${revenueThisMonth}`, icon: 'Banknote', color: '#16A34A' },
+];
 
-interface Notification {
-    id: number;
-    type: 'purchase' | 'message' | 'review' | 'offer' | 'seller' | 'all' | 'booking' | 'payment' | 'inquiry' | 'cancellation';
-    title: string;
-    message: string;
-    time: string;
-    read: boolean;
-    icon: IconName;
-    user?: User;
-}
+export default function AdminDashboardScreen() {
+  const { user } = useAuth();
+  const insets = useSafeAreaInsets();
 
-const DashboardScreen = () => {
-    const rightComponents = [
-        <HeaderIcon key="notifications-icon" hasBadge icon="Bell" href="/screens/notifications" />
-    ];
+  const recentBookings = MOCK_BOOKINGS.slice(0, 5);
 
+  return (
+    <ScrollView
+      className="flex-1 bg-light-primary dark:bg-dark-primary"
+      style={{ paddingTop: insets.top }}
+      contentContainerStyle={{ paddingBottom: 32 }}
+      showsVerticalScrollIndicator={false}
+    >
+      {/* Header */}
+      <View className="px-4 pt-4 pb-4 flex-row items-center justify-between">
+        <View>
+          <ThemedText className="text-2xl font-bold">Dashboard</ThemedText>
+          <ThemedText className="text-sm text-light-subtext dark:text-dark-subtext mt-0.5">
+            CSR Sports Facilities Unit · {user?.fullName}
+          </ThemedText>
+        </View>
+        <TouchableOpacity
+          onPress={() => router.push('/screens/notifications')}
+          className="w-10 h-10 rounded-full bg-light-secondary dark:bg-dark-secondary items-center justify-center"
+        >
+          <Icon name="Bell" size={20} />
+        </TouchableOpacity>
+      </View>
 
-  
-    // Recent notifications
-    const recentNotifications: Notification[] = [
-        {
-            id: 1,
-            type: 'booking',
-            title: 'New Booking Confirmed',
-            message: 'Maria Rodriguez booked your Beachfront Villa for 7 nights',
-            time: '5 min ago',
-            read: false,
-            icon: 'Calendar'
-        },
-        {
-            id: 2,
-            type: 'message',
-            title: 'Guest Message',
-            message: 'John asked about early check-in for tomorrow',
-            time: '1 hour ago',
-            read: true,
-            icon: 'MessageCircle',
-            user: {
-                id: 101,
-                name: 'John Smith',
-                avatar: 'https://randomuser.me/api/portraits/men/32.jpg'
-            }
-        },
-        {
-            id: 3,
-            type: 'review',
-            title: 'New 5-Star Review',
-            message: 'Sarah left a glowing review for your Downtown Loft',
-            time: '3 hours ago',
-            read: false,
-            icon: 'Star',
-            user: {
-                id: 102,
-                name: 'Sarah Miller',
-                avatar: 'https://randomuser.me/api/portraits/women/44.jpg'
-            }
-        },
-        {
-            id: 4,
-            type: 'payment',
-            title: 'Payment Received',
-            message: 'You received $450 for Alex\'s stay at Mountain Cabin',
-            time: '6 hours ago',
-            read: true,
-            icon: 'DollarSign'
-        },
-        {
-            id: 5,
-            type: 'inquiry',
-            title: 'Booking Inquiry',
-            message: 'Emma is interested in your City Apartment for next weekend',
-            time: '1 day ago',
-            read: false,
-            icon: 'HelpCircle',
-            user: {
-                id: 103,
-                name: 'Emma Wilson',
-                avatar: 'https://randomuser.me/api/portraits/women/68.jpg'
-            }
-        },
-        {
-            id: 6,
-            type: 'cancellation',
-            title: 'Booking Cancelled',
-            message: 'Guest cancelled reservation for Ocean View Suite - full refund issued',
-            time: '2 days ago',
-            read: true,
-            icon: 'X'
-        }
-    ];
-
-
-    return (
-        <View className="flex-1 bg-light-primary dark:bg-dark-primary">
-            <Header
-                rightComponents={rightComponents}
-            />
-
-            <ThemeScroller
-                scrollEventThrottle={16}
-                className="px-global"
+      {/* Stats grid */}
+      <View className="px-4 mb-4 flex-row flex-wrap gap-3">
+        {STATS.map(({ label, value, icon, color }) => (
+          <View
+            key={label}
+            className="flex-1 min-w-[44%] bg-light-secondary dark:bg-dark-secondary rounded-2xl p-4"
+          >
+            <View
+              style={{ backgroundColor: color + '20' }}
+              className="w-10 h-10 rounded-full items-center justify-center mb-3"
             >
-                <AnimatedView animation="scaleIn" className='flex-1'>
-                    <ThemedText className='text-4xl font-semibold pr-20 pt-10 pb-16'>Welcome back, John Doe</ThemedText>
-
-
-                    <Section
-                        titleSize='xl'
-                        className='mb-2'
-                        title="Recent reservations"
-                    >
-
-                        <CardScroller className='mt-1'>
-                            <Chip label="Arriving soon (1)" size="lg" />
-                            <Chip label="Upcoming (23)" size="lg" />
-                        </CardScroller>
-
-                        <ReservationCard />
-
-                    </Section>
-
-
-                    <Section
-                        titleSize='xl'
-                        className='mt-10 mb-2'
-                        title="Recent notifications"
-                    />
-                    <View className="overflow-hidden">
-                        {recentNotifications.map(notification => (
-                            <React.Fragment key={notification.id}>
-                                {renderNotification(notification)}
-                            </React.Fragment>
-                        ))}
-                    </View>
-                </AnimatedView>
-            </ThemeScroller>
-        </View>
-    );
-}
-
-const ReservationCard = () => {
-    return (
-        <View style={shadowPresets.large} className="rounded-xl mt-4 border border-neutral-300 dark:border-neutral-700 bg-light-primary dark:bg-dark-primary">
-            <View className="p-4">
-                <ThemedText className='mb-16 text-base font-semibold'>Arriving tomorrow</ThemedText>
-                <View className="flex-row items-center justify-between">
-                    <View>
-                        <ThemedText className='text-xl font-semibold'>John Doe</ThemedText>
-                        <ThemedText className='text-base font-regular'>Jun 23 - 28</ThemedText>
-                    </View>
-                    <Image source={require('@/assets/img/user-4.jpg')} className="w-12 h-12 rounded-full" />
-                </View>
+              <Icon name={icon as any} size={20} color={color} />
             </View>
-            <View className='w-full flex-row border-t border-neutral-300 dark:border-neutral-700'>
-                <Pressable className='w-1/2 py-5 items-center border-r border-neutral-300 dark:border-neutral-700'>
-                    <ThemedText className="font-semibold">Message</ThemedText>
-                </Pressable>
-                <Pressable className='w-1/2 py-5 items-center'>
-                    <ThemedText className='font-semibold'>Call</ThemedText>
-                </Pressable>
-            </View>
-        </View>
-    )
-}
+            <ThemedText className="text-xl font-bold mb-0.5">{value}</ThemedText>
+            <ThemedText className="text-xs text-light-subtext dark:text-dark-subtext">{label}</ThemedText>
+          </View>
+        ))}
+      </View>
 
-export default DashboardScreen;
+      <Divider className="mx-4" />
+
+      {/* Quick actions */}
+      <Section title="Quick Actions" titleSize="base" className="px-4 mt-4 mb-2">
+        <View className="flex-row gap-3">
+          {[
+            { label: 'All Bookings', icon: 'CalendarCheck', route: '/(tabs)/admin-bookings' },
+            { label: 'Facilities', icon: 'Building2', route: '/(tabs)/listings' },
+            { label: 'Reports', icon: 'BarChart2', route: '/(tabs)/reports' },
+          ].map(({ label, icon, route }) => (
+            <TouchableOpacity
+              key={label}
+              onPress={() => router.push(route as any)}
+              className="flex-1 bg-light-secondary dark:bg-dark-secondary rounded-2xl p-3 items-center gap-2"
+            >
+              <Icon name={icon as any} size={22} color="#16A34A" />
+              <ThemedText className="text-xs text-center font-medium">{label}</ThemedText>
+            </TouchableOpacity>
+          ))}
+        </View>
+      </Section>
+
+      <Divider className="mx-4 mt-2" />
+
+      {/* Recent bookings */}
+      <Section title="Recent Bookings" titleSize="base" className="px-4 mt-4 mb-2">
+        {recentBookings.map((b) => (
+          <BookingCard
+            key={b.id}
+            booking={b}
+            onPress={() => router.push(`/screens/trip-detail?id=${b.id}`)}
+          />
+        ))}
+        <Button
+          title="View All Bookings"
+          variant="outline"
+          size="medium"
+          onPress={() => router.push('/(tabs)/admin-bookings')}
+          className="mt-1"
+        />
+      </Section>
+    </ScrollView>
+  );
+}
