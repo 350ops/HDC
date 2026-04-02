@@ -1,24 +1,32 @@
 import React, { forwardRef } from 'react';
-import ActionSheet, { ActionSheetProps, ActionSheetRef } from 'react-native-actions-sheet';
 import useThemeColors from '@/app/contexts/ThemeColors';
+import BottomSheet, { BottomSheetRef } from '@/components/BottomSheet';
 
-interface ActionSheetThemedProps extends ActionSheetProps {}
+export type ActionSheetRef = BottomSheetRef;
 
-const ActionSheetThemed = forwardRef<ActionSheetRef, ActionSheetThemedProps>(({ containerStyle, ...props }, ref) => {
+interface ActionSheetThemedProps {
+  children: React.ReactNode;
+  containerStyle?: Record<string, any>;
+}
+
+const ActionSheetThemed = forwardRef<ActionSheetRef, ActionSheetThemedProps>(
+  ({ children, containerStyle }, ref) => {
     const colors = useThemeColors();
 
     return (
-        <ActionSheet
-            {...props}
-            ref={ref}
-            containerStyle={{
-                backgroundColor: colors.sheet,
-                borderTopLeftRadius: 20,
-                borderTopRightRadius: 20,
-                ...containerStyle
-            }}
-        />
+      <BottomSheet
+        ref={ref}
+        containerStyle={{
+          backgroundColor: colors.sheet,
+          borderTopLeftRadius: 24,
+          borderTopRightRadius: 24,
+          ...(containerStyle ?? {}),
+        }}
+      >
+        {children}
+      </BottomSheet>
     );
-});
+  }
+);
 
 export default ActionSheetThemed;

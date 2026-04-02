@@ -4,7 +4,7 @@ import Icon from './Icon';
 import { Button } from './Button';
 import { useThemeColors } from '@/app/contexts/ThemeColors';
 import ActionSheetThemed from './ActionSheetThemed';
-import { ActionSheetRef } from 'react-native-actions-sheet';
+import { ActionSheetRef } from './ActionSheetThemed';
 import ThemedText from './ThemedText';
 import { router } from 'expo-router';
 

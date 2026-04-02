@@ -5,7 +5,6 @@ import useThemeColors from '@/app/contexts/ThemeColors';
 import Header, { HeaderIcon } from '@/components/Header';
 import ThemedText from '@/components/ThemedText';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import ActionSheet, { ActionSheetRef, useSheetRef, FlatList } from "react-native-actions-sheet";
 import SliderCard from '@/components/SliderCard';
 import CustomCard from '@/components/CustomCard';
 import ShowRating from '@/components/ShowRating';

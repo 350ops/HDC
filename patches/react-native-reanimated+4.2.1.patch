@@ -1,0 +1,10 @@
+diff --git a/node_modules/react-native-reanimated/src/common/types.ts b/node_modules/react-native-reanimated/src/common/types.ts
+new file mode 100644
+index 0000000..b17bf5a
+--- /dev/null
++++ b/node_modules/react-native-reanimated/src/common/types.ts
+@@ -0,0 +1,4 @@
++// Shim for Metro resolution in some environments:
++// Re-export the directory module so both `./types` and `./types.ts` resolve.
++export * from './types';
++

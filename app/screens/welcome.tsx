@@ -1,67 +1,97 @@
-import { View, Text, FlatList, Dimensions, Image, Pressable, SafeAreaView } from 'react-native';
-import { useState, useRef } from 'react';
-import ThemedText from '@/components/ThemedText';
-import { StatusBar } from 'expo-status-bar';
-import ThemeToggle from '@/components/ThemeToggle';
-import { AntDesign } from '@expo/vector-icons';
-import useThemeColors from '../contexts/ThemeColors';
-import { router } from 'expo-router';
 import React from 'react';
+import { View, Pressable, SafeAreaView, ImageBackground } from 'react-native';
+import { router } from 'expo-router';
+import ThemedText from '@/components/ThemedText';
 import Icon from '@/components/Icon';
-const { width } = Dimensions.get('window');
-const windowWidth = Dimensions.get('window').width;
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { LinearGradient } from 'expo-linear-gradient';
+import { StatusBar } from 'expo-status-bar';
 
+export default function WelcomeScreen() {
+  const insets = useSafeAreaInsets();
 
+  return (
+    <>
+      <StatusBar style="light" />
+      <LinearGradient
+        colors={['#15803D', '#0D9488']}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+        style={{ flex: 1, paddingTop: insets.top, paddingBottom: insets.bottom }}
+      >
+        {/* Top decoration */}
+        <View className="absolute top-0 right-0 w-64 h-64 rounded-full opacity-10 bg-white" style={{ transform: [{ translateX: 40 }, { translateY: -40 }] }} />
+        <View className="absolute bottom-32 left-0 w-48 h-48 rounded-full opacity-10 bg-white" style={{ transform: [{ translateX: -24 }] }} />
 
-export default function OnboardingScreen() {
-    const colors = useThemeColors();
-    const insets = useSafeAreaInsets();
-    return (
-        <SafeAreaView style={{ paddingTop: insets.top, paddingBottom: insets.bottom }} className='flex-1 bg-light-primary dark:bg-dark-primary'>
-
-            <View className="flex-1 relative bg-light-primary dark:bg-dark-primary">
-                <View className='w-full flex-row justify-end px-4 pt-2'>
-                    <ThemeToggle />
-                </View>
-
-
-                <View className='flex flex-col items-start w-full justify-center gap-2 flex-1 px-global pb-20'>
-                    <View className='mb-8'>
-                        <ThemedText className='text-4xl font-bold'>Welcome back</ThemedText>
-                        <ThemedText className='text-base text-light-subtext dark:text-dark-subtext'>Sign in to your account to continue</ThemedText>
-                    </View>
-                    <Pressable onPress={() => router.push('/screens/signup')} className='w-full  border border-black dark:border-white rounded-2xl flex flex-row items-center justify-center py-4'>
-                        <View className='absolute left-4 top-4.5'>
-                            <Icon name="Mail" size={20} color={colors.text} />
-                        </View>
-                        <ThemedText className='text-base font-medium pr-2'>Continue with Email</ThemedText>
-                    </Pressable>
-                    <Pressable onPress={() => router.push('/(tabs)/(home)')} className='w-full border border-black dark:border-white rounded-2xl flex flex-row items-center justify-center py-4'>
-                        <View className='absolute left-4 top-4.5'>
-                            <Icon name="Facebook" size={22} color={colors.text} />
-                        </View>
-                        <ThemedText className='text-base font-medium pr-2'>Continue with Facebook</ThemedText>
-
-                    </Pressable>
-                    <Pressable onPress={() => router.push('/(tabs)/(home)')} className='w-full border border-black dark:border-white rounded-2xl flex flex-row items-center justify-center py-4'>
-                        <View className='absolute left-4 top-4.5'>
-                            <AntDesign name="google" size={22} color={colors.text} />
-                        </View>
-                        <ThemedText className='text-base font-medium pr-2'>Continue with Google</ThemedText>
-
-                    </Pressable>
-
-
-                    <Pressable onPress={() => router.push('/(tabs)/(home)')} className='w-full border border-black dark:border-white rounded-2xl flex flex-row items-center justify-center py-4'>
-                        <View className='absolute left-4 top-4.5'>
-                            <AntDesign name="apple1" size={22} color={colors.text} />
-                        </View>
-                        <ThemedText className='text-base font-medium pr-2'>Continue with Apple</ThemedText>
-
-                    </Pressable>
-                </View>
+        <View className="flex-1 px-6 justify-between">
+          {/* Header */}
+          <View className="pt-8">
+            <View className="w-16 h-16 rounded-2xl bg-white/20 items-center justify-center mb-6">
+              <Icon name="Trophy" size={32} color="white" />
             </View>
-        </SafeAreaView>
-    );
+            <ThemedText className="text-white text-3xl font-bold leading-tight mb-2">
+              HDC Sports
+            </ThemedText>
+            <ThemedText className="text-white/80 text-base">
+              CSR Facilities Booking
+            </ThemedText>
+          </View>
+
+          {/* Tagline */}
+          <View className="items-center py-8">
+            <View className="bg-white/10 rounded-3xl px-6 py-8 w-full">
+              <ThemedText className="text-white text-2xl font-bold text-center mb-3">
+                Book Sports Facilities in Hulhumalé
+              </ThemedText>
+              <ThemedText className="text-white/70 text-center text-sm leading-relaxed">
+                HDC-registered sports teams can reserve courts, pay securely via eFaas, and manage bookings — all in one place.
+              </ThemedText>
+
+              <View className="mt-6 gap-3">
+                {[
+                  { icon: 'MapPin', text: '15+ facilities across 4 neighborhoods' },
+                  { icon: 'Shield', text: 'Team-verified bookings only' },
+                  { icon: 'Zap', text: 'Instant eFaas payment confirmation' },
+                ].map(({ icon, text }) => (
+                  <View key={icon} className="flex-row items-center gap-3">
+                    <View className="w-8 h-8 rounded-full bg-white/20 items-center justify-center">
+                      <Icon name={icon as any} size={14} color="white" />
+                    </View>
+                    <ThemedText className="text-white/80 text-sm flex-1">{text}</ThemedText>
+                  </View>
+                ))}
+              </View>
+            </View>
+          </View>
+
+          {/* Actions */}
+          <View className="pb-6 gap-3">
+            <Pressable
+              onPress={() => router.push('/screens/login')}
+              className="w-full bg-white rounded-2xl py-4 items-center"
+            >
+              <ThemedText className="text-hdc-green font-bold text-base">
+                Login with Team ID
+              </ThemedText>
+            </Pressable>
+
+            <Pressable
+              onPress={() => router.push('/screens/signup')}
+              className="w-full border border-white/50 rounded-2xl py-4 items-center"
+            >
+              <ThemedText className="text-white font-semibold text-base">
+                Register Your Team
+              </ThemedText>
+            </Pressable>
+
+            <Pressable onPress={() => router.replace('/(tabs)/(home)')} className="py-2 items-center">
+              <ThemedText className="text-white/60 text-sm underline">
+                Skip for now (demo mode)
+              </ThemedText>
+            </Pressable>
+          </View>
+        </View>
+      </LinearGradient>
+    </>
+  );
 }

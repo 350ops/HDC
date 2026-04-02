@@ -1,130 +1,174 @@
-import Header, { HeaderIcon } from '@/components/Header';
-import ThemeScroller from '@/components/ThemeScroller';
-import React, { useRef, useEffect, useContext } from 'react';
-import { View, Text, Pressable, Image, Animated } from 'react-native';
-import Section from '@/components/layout/Section';
-import { CardScroller } from '@/components/CardScroller';
-import Card from '@/components/Card';
-import AnimatedView from '@/components/AnimatedView';
-import { ScrollContext } from './_layout';
-import ThemedText from '@/components/ThemedText';
-import useShadow, { shadowPresets } from '@/utils/useShadow';
+import React, { useState, useMemo } from 'react';
+import { View, TextInput, FlatList, ScrollView, TouchableOpacity, Pressable } from 'react-native';
 import { router } from 'expo-router';
+import ThemedText from '@/components/ThemedText';
+import FacilityCard from '@/components/FacilityCard';
+import Icon from '@/components/Icon';
+import { Chip } from '@/components/Chip';
+import Section from '@/components/layout/Section';
+import { FACILITIES, NEIGHBORHOODS, SPORT_LABELS } from '@/data/facilities';
+import { Facility, Neighborhood } from '@/types';
+import useThemeColors from '@/app/contexts/ThemeColors';
+import { useAuth } from '@/app/contexts/AuthContext';
 
-const HomeScreen = () => {
-    const scrollY = useContext(ScrollContext);
+const ALL_SPORTS = ['all', ...Array.from(new Set(FACILITIES.map((f) => f.sport)))];
 
-    return (
+export default function FacilitiesScreen() {
+  const colors = useThemeColors();
+  const { user } = useAuth();
 
+  const [search, setSearch] = useState('');
+  const [selectedNeighborhood, setSelectedNeighborhood] = useState<Neighborhood | 'all'>('all');
+  const [selectedSport, setSelectedSport] = useState<string>('all');
 
-        <ThemeScroller
-            onScroll={Animated.event(
-                [{ nativeEvent: { contentOffset: { y: scrollY } } }],
-                { useNativeDriver: false }
+  const filtered = useMemo(() => {
+    return FACILITIES.filter((f) => {
+      if (!f.isActive) return false;
+      const matchesSearch =
+        !search ||
+        f.name.toLowerCase().includes(search.toLowerCase()) ||
+        f.sport.toLowerCase().includes(search.toLowerCase()) ||
+        f.neighborhoodLabel.toLowerCase().includes(search.toLowerCase());
+      const matchesNeighborhood =
+        selectedNeighborhood === 'all' || f.neighborhood === selectedNeighborhood;
+      const matchesSport = selectedSport === 'all' || f.sport === selectedSport;
+      return matchesSearch && matchesNeighborhood && matchesSport;
+    });
+  }, [search, selectedNeighborhood, selectedSport]);
+
+  const grouped = useMemo(() => {
+    if (selectedNeighborhood !== 'all' || selectedSport !== 'all' || search) {
+      return [{ label: 'Results', facilities: filtered }];
+    }
+    return NEIGHBORHOODS.map((n) => ({
+      label: n.label,
+      facilities: FACILITIES.filter((f) => f.neighborhood === n.id && f.isActive),
+    })).filter((g) => g.facilities.length > 0);
+  }, [filtered, selectedNeighborhood, selectedSport, search]);
+
+  const openFacility = (facility: Facility) => {
+    router.push(`/screens/facility-detail?id=${facility.id}`);
+  };
+
+  return (
+    <FlatList
+      data={grouped}
+      keyExtractor={(item) => item.label}
+      showsVerticalScrollIndicator={false}
+      contentContainerStyle={{ paddingBottom: 32 }}
+      ListHeaderComponent={
+        <View>
+          {/* Header greeting */}
+          <View className="px-4 pt-4 pb-2 flex-row items-center justify-between">
+            <View>
+              <ThemedText className="text-2xl font-bold">Sports Facilities</ThemedText>
+              {user?.team && (
+                <ThemedText className="text-sm text-light-subtext dark:text-dark-subtext mt-0.5">
+                  {user.team.name} · {user.team.id}
+                </ThemedText>
+              )}
+            </View>
+            <Pressable
+              onPress={() => router.push('/screens/notifications')}
+              className="w-10 h-10 rounded-full bg-light-secondary dark:bg-dark-secondary items-center justify-center"
+            >
+              <Icon name="Bell" size={20} color={colors.text} />
+            </Pressable>
+          </View>
+
+          {/* Search bar */}
+          <View className="mx-4 mt-2 mb-3 flex-row items-center bg-light-secondary dark:bg-dark-secondary rounded-2xl px-4 py-3 gap-2">
+            <Icon name="Search" size={18} color={colors.placeholder} />
+            <TextInput
+              className="flex-1 text-sm text-black dark:text-white"
+              placeholder="Search facilities, sports..."
+              placeholderTextColor={colors.placeholder}
+              value={search}
+              onChangeText={setSearch}
+              returnKeyType="search"
+            />
+            {search.length > 0 && (
+              <TouchableOpacity onPress={() => setSearch('')}>
+                <Icon name="X" size={16} color={colors.placeholder} />
+              </TouchableOpacity>
             )}
-            scrollEventThrottle={16}
-        >
-            <AnimatedView animation="scaleIn" className='flex-1 mt-4'>
-                <Pressable onPress={() => router.push('/screens/map')} style={{ ...shadowPresets.large }} className='p-5 mb-8 flex flex-row items-center rounded-2xl bg-light-primary dark:bg-dark-secondary'>
-                    <ThemedText className='text-base font-medium flex-1 pr-2'>
-                        Continue searching for experiences in New York
-                    </ThemedText>
-                    <View className='w-20 h-20 relative'>
-                        <View className='w-full h-full rounded-xl relative z-20 overflow-hidden border-2 border-light-primary dark:border-dark-primary'>
-                            <Image className='w-full h-full' source={{ uri: 'https://images.unsplash.com/photo-1526318896980-cf78c088247c?q=80&w=400' }} />
-                        </View>
-                        <View className='w-full h-full absolute top-0 left-1 rotate-12 rounded-xl overflow-hidden border-2 border-light-primary dark:border-dark-primary'>
-                            <Image className='w-full h-full' source={{ uri: 'https://images.pexels.com/photos/69903/pexels-photo-69903.jpeg?auto=compress&cs=tinysrgb&w=1200' }} />
-                        </View>
-                    </View>
-                </Pressable>
-                {[
-                    {
-                        title: "Popular homes in New York",
-                        properties: [
-                            { title: "Apartment in Brooklyn", image: require('@/assets/img/room-1.avif'), price: "$85" },
-                            { title: "Flat in Manhattan", image: require('@/assets/img/room-2.avif'), price: "$90" },
-                            { title: "House in Long Island", image: require('@/assets/img/room-3.avif'), price: "$110" },
-                            { title: "Flat in Manhattan", image: require('@/assets/img/room-4.avif'), price: "$95" }
-                        ]
-                    },
-                    {
-                        title: "Trending in Queens",
-                        properties: [
-                            { title: "Modern Loft in Astoria", image: require('@/assets/img/room-5.avif'), price: "$85" },
-                            { title: "Studio in Long Island", image: require('@/assets/img/room-6.avif'), price: "$90" },
-                            { title: "Condo in Forest Hills", image: require('@/assets/img/room-7.avif'), price: "$110" },
-                            { title: "Apartment in Flushing", image: require('@/assets/img/room-1.avif'), price: "$95" }
-                        ]
-                    },
-                    {
-                        title: "Best rated in The Bronx",
-                        properties: [
-                            { title: "Cozy Home in Riverdale", image: require('@/assets/img/room-2.avif'), price: "$75" },
-                            { title: "Apartment at Riverdale", image: require('@/assets/img/room-3.avif'), price: "$80" },
-                            { title: "Loft in Mott Haven", image: require('@/assets/img/room-4.avif'), price: "$95" },
-                            { title: "Condo in Fordham", image: require('@/assets/img/room-5.avif'), price: "$85" }
-                        ]
-                    },
-                    {
-                        title: "Top picks in Staten Island",
-                        properties: [
-                            { title: "House in St. George", image: require('@/assets/img/room-6.avif'), price: "$120" },
-                            { title: "Apartment in George", image: require('@/assets/img/room-7.avif'), price: "$95" },
-                            { title: "Bungalow in Great Kills", image: require('@/assets/img/room-1.avif'), price: "$110" },
-                            { title: "Condo in Todt Hill", image: require('@/assets/img/room-2.avif'), price: "$135" }
-                        ]
-                    },
-                    {
-                        title: "New listings in Harlem",
-                        properties: [
-                            { title: "Brownstone in Hamilton", image: require('@/assets/img/room-3.avif'), price: "$125" },
-                            { title: "Studio in East Harlem", image: require('@/assets/img/room-4.avif'), price: "$90" },
-                            { title: "Apartment in Sugar Hill", image: require('@/assets/img/room-5.avif'), price: "$105" },
-                            { title: "Loft in Manhattanville", image: require('@/assets/img/room-6.avif'), price: "$115" }
-                        ]
-                    },
-                    {
-                        title: "Featured in Williamsburg",
-                        properties: [
-                            { title: "Industrial Loft", image: require('@/assets/img/room-7.avif'), price: "$140" },
-                            { title: "Rooftop Apartment", image: require('@/assets/img/room-1.avif'), price: "$125" },
-                            { title: "Modern Studio", image: require('@/assets/img/room-2.avif'), price: "$110" },
-                            { title: "Converted Warehouse", image: require('@/assets/img/room-3.avif'), price: "$130" }
-                        ]
-                    }
-                ].map((section, index) => (
-                    <Section
-                        key={`ny-section-${index}`}
-                        title={section.title}
-                        titleSize="lg"
-                        link="/screens/map"
-                        linkText="View all"
-                    >
-                        <CardScroller space={15} className='mt-1.5 pb-4'>
-                            {section.properties.map((property, propIndex) => (
-                                <Card
-                                    key={`property-${index}-${propIndex}`}
-                                    title={property.title}
-                                    rounded="2xl"
-                                    hasFavorite
-                                    rating={4.5}
-                                    href="/screens/product-detail"
-                                    price={property.price}
-                                    width={160}
-                                    imageHeight={160}
-                                    image={property.image}
-                                />
-                            ))}
-                        </CardScroller>
-                    </Section>
-                ))}
+          </View>
 
-            </AnimatedView>
-        </ThemeScroller>
+          {/* Neighborhood filter */}
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={{ paddingHorizontal: 16, gap: 8, paddingBottom: 4 }}
+            className="mb-2"
+          >
+            <Chip
+              label="All Areas"
+              isSelected={selectedNeighborhood === 'all'}
+              onPress={() => setSelectedNeighborhood('all')}
+              size="sm"
+            />
+            {NEIGHBORHOODS.map((n) => (
+              <Chip
+                key={n.id}
+                label={n.shortLabel}
+                isSelected={selectedNeighborhood === n.id}
+                onPress={() => setSelectedNeighborhood(n.id as Neighborhood)}
+                size="sm"
+              />
+            ))}
+          </ScrollView>
 
-    );
+          {/* Sport filter */}
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={{ paddingHorizontal: 16, gap: 8, paddingBottom: 8 }}
+          >
+            {ALL_SPORTS.map((sport) => (
+              <Chip
+                key={sport}
+                label={sport === 'all' ? 'All Sports' : SPORT_LABELS[sport] ?? sport}
+                isSelected={selectedSport === sport}
+                onPress={() => setSelectedSport(sport)}
+                size="sm"
+              />
+            ))}
+          </ScrollView>
+
+          {/* Result count when filtering */}
+          {(search || selectedNeighborhood !== 'all' || selectedSport !== 'all') && (
+            <ThemedText className="px-4 mb-2 text-sm text-light-subtext dark:text-dark-subtext">
+              {filtered.length} {filtered.length === 1 ? 'facility' : 'facilities'} found
+            </ThemedText>
+          )}
+        </View>
+      }
+      renderItem={({ item }) =>
+        item.facilities.length === 0 ? null : (
+          <View className="px-4">
+            <Section title={item.label} titleSize="lg" className="mt-2 mb-1">
+              {item.facilities.map((facility) => (
+                <FacilityCard
+                  key={facility.id}
+                  facility={facility}
+                  onPress={() => openFacility(facility)}
+                />
+              ))}
+            </Section>
+          </View>
+        )
+      }
+      ListEmptyComponent={
+        <View className="px-4 mt-16 items-center">
+          <Icon name="SearchX" size={40} color={colors.placeholder} />
+          <ThemedText className="text-base font-semibold mt-4 text-center">
+            No facilities found
+          </ThemedText>
+          <ThemedText className="text-sm text-light-subtext dark:text-dark-subtext mt-1 text-center">
+            Try adjusting your search or filters
+          </ThemedText>
+        </View>
+      }
+    />
+  );
 }
-
-
-export default HomeScreen;

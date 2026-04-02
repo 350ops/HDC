@@ -40,12 +40,12 @@ export const Chip = ({
 }: ChipProps) => {
   // Size mappings
   const sizeClasses = {
-    xs: 'px-1.5 py-0.5 text-xs',
-    sm: 'px-2 py-0.5 text-xs',
-    md: 'px-3 py-1 text-sm',
-    lg: 'px-4 py-1.5 text-base',
-    xl: 'px-5 py-2 text-lg',
-    xxl: 'px-6 py-2.5 text-xl',
+    xs: 'px-2 py-0.5 text-[11px]',
+    sm: 'px-2.5 py-1 text-xs',
+    md: 'px-3 py-1.5 text-sm',
+    lg: 'px-3.5 py-2 text-sm',
+    xl: 'px-4 py-2.5 text-base',
+    xxl: 'px-5 py-3 text-lg',
   };
 
   // Default icon/image sizes based on chip size

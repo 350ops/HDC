@@ -1,20 +1,24 @@
 {
   "expo": {
     "newArchEnabled": true,
-    "name": "Propia",
-    "slug": "propia",
+    "name": "HDC Sports",
+    "slug": "hdc",
     "version": "1.0.0",
     "runtimeVersion": "1.0.0",
-    "scheme": "propia",
-    "web": {
-      "favicon": "./assets/favicon.png"
-    },
+    "scheme": "hdcsports",
     "experiments": {
       "tsconfigPaths": true
     },
+    "platforms": [
+      "ios",
+      "android"
+    ],
     "plugins": [
       "expo-router",
-      "expo-font"
+      "expo-font",
+      "@react-native-community/datetimepicker",
+      "expo-asset",
+      "expo-sharing"
     ],
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -22,30 +26,39 @@
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#16A34A"
     },
     "assetBundlePatterns": [
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.hdccsr.hdc",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "softwareKeyboardLayoutMode": "pan"
+      "softwareKeyboardLayoutMode": "pan",
+      "predictiveBackGestureEnabled": false,
+      "config": {
+        "enableOnBackInvokedCallback": false
+      },
+      "package": "com.hdccsr.hdc"
     },
     "extra": {
       "router": {
         "origin": false
       },
       "eas": {
-        "projectId": "11853cd2-a6e3-4b02-8a81-29938150b8a1"
+        "projectId": "8d124867-8ec9-4a34-961b-60cc95e233bf"
       }
     },
-    "owner": "thomino",
+    "owner": "hdccsr",
     "updates": {
       "url": "https://u.expo.dev/11853cd2-a6e3-4b02-8a81-29938150b8a1"
     }

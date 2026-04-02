@@ -45,7 +45,7 @@ export const Button: React.FC<ButtonProps> = ({
   const buttonStyles = {
     primary: 'bg-highlight',
     secondary: 'bg-light-secondary dark:bg-dark-secondary',
-    outline: 'border border-black dark:border-white bg-transparent',
+    outline: 'border border-light-subtext/30 dark:border-dark-subtext/30 bg-transparent',
     ghost: 'bg-transparent',
   };
   
@@ -65,7 +65,10 @@ export const Button: React.FC<ButtonProps> = ({
     full: 'rounded-full',
   };
   
-  const textColor = variant === 'outline' || variant === 'secondary' || variant === 'ghost' ? 'text-black dark:text-white' : 'text-white dark:text-black';
+  const textColor =
+    variant === 'outline' || variant === 'secondary' || variant === 'ghost'
+      ? 'text-light-text dark:text-dark-text'
+      : 'text-white';
   const disabledStyle = disabled ? 'opacity-50' : '';
 
   // Default icon sizes based on button size
@@ -92,7 +95,9 @@ export const Button: React.FC<ButtonProps> = ({
   const ButtonContent = (
     <>
       {loading ? (
-        <ActivityIndicator color={variant === 'outline' || variant === 'secondary' || variant === 'ghost' ? '#0EA5E9' : '#fff'} />
+        <ActivityIndicator
+          color={variant === 'outline' || variant === 'secondary' || variant === 'ghost' ? '#3AB24E' : '#FFFFFF'}
+        />
       ) : (
         <View className="flex-row items-center justify-center">
           {iconStart && (

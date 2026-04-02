@@ -7,7 +7,6 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Button } from '@/components/Button';
 import ThemedScroller from '@/components/ThemeScroller';
 import ImageCarousel from '@/components/ImageCarousel';
-import { ActionSheetRef } from 'react-native-actions-sheet';
 import { CardScroller } from '@/components/CardScroller';
 import Section from '@/components/layout/Section';
 import Favorite from '@/components/Favorite';

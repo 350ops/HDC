@@ -1,330 +1,219 @@
 import React from 'react';
-import { View, ScrollView } from 'react-native';
+import { View, ScrollView, Linking, Alert, Share } from 'react-native';
+import { router, useLocalSearchParams } from 'expo-router';
 import Header from '@/components/Header';
-import useThemeColors from '@/app/contexts/ThemeColors';
-import ThemedScroller from '@/components/ThemeScroller';
-import ThemedFooter from '@/components/ThemeFooter';
-import Section from '@/components/layout/Section';
-import ImageCarousel from '@/components/ImageCarousel';
 import ThemedText from '@/components/ThemedText';
-import Avatar from '@/components/Avatar';
-import ShowRating from '@/components/ShowRating';
-import ListLink from '@/components/ListLink';
-import Divider from '@/components/layout/Divider';
-import Icon from '@/components/Icon';
 import { Button } from '@/components/Button';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import AnimatedView from '@/components/AnimatedView';
+import Icon from '@/components/Icon';
+import Section from '@/components/layout/Section';
+import Divider from '@/components/layout/Divider';
+import { MOCK_BOOKINGS } from '@/data/mockData';
+import { BookingStatus } from '@/types';
 
-// Sample trip data
-const tripData = {
-    id: '1',
-    propertyName: 'Luxury Beachfront Villa',
-    location: 'Barcelona, Spain',
-    host: {
-        name: 'Maria Rodriguez',
-        avatar: require('@/assets/img/user-2.jpg'),
-        rating: 4.9,
-        reviewCount: 127
-    },
-    checkIn: 'Jul 15, 2024',
-    checkOut: 'Jul 22, 2024',
-    nights: 7,
-    guests: 4,
-    reservationNumber: '#RES-789456',
-    totalPrice: '$2,450',
-    priceBreakdown: {
-        nightlyRate: '$300',
-        nights: 7,
-        subtotal: '$2,100',
-        cleaningFee: '$75',
-        serviceFee: '$150',
-        taxes: '$125',
-        total: '$2,450'
-    },
-    paymentMethod: {
-        type: 'Visa',
-        lastFour: '1234',
-        amount: '$2,450'
-    },
-    cancellationPolicy: 'Free cancellation until Jul 8. Cancel before check-in on Jul 15 for a partial refund.',
-    coordinates: {
-        latitude: 41.3851,
-        longitude: 2.1734
-    }
+const STATUS_LABELS: Record<BookingStatus, string> = {
+  pending_payment: 'Pending Payment',
+  confirmed: 'Confirmed',
+  expired: 'Expired',
+  cancelled: 'Cancelled',
 };
 
-const TripDetailScreen = () => {
-    const colors = useThemeColors();
-    const insets = useSafeAreaInsets();
+const STATUS_COLOR: Record<BookingStatus, string> = {
+  pending_payment: 'text-hdc-amber',
+  confirmed: 'text-hdc-green',
+  expired: 'text-light-subtext',
+  cancelled: 'text-red-500',
+};
 
+const STATUS_BG: Record<BookingStatus, string> = {
+  pending_payment: 'bg-hdc-amber-light dark:bg-hdc-amber/10',
+  confirmed: 'bg-hdc-green-bg dark:bg-hdc-green/10',
+  expired: 'bg-light-secondary dark:bg-dark-secondary',
+  cancelled: 'bg-red-50 dark:bg-red-900/10',
+};
+
+export default function BookingDetailScreen() {
+  const { id } = useLocalSearchParams<{ id: string }>();
+  const booking = MOCK_BOOKINGS.find((b) => b.id === id);
+
+  if (!booking) {
     return (
-        <>
-            <Header
-                title="Trip Details"
-                showBackButton
-            />
-            <ThemedScroller
-                className="flex-1 px-0"
-                keyboardShouldPersistTaps="handled"
-            >
-                <AnimatedView animation="fadeIn" duration={400} delay={100}>
-                    {/* Property Images */}
-                    <View className='px-global'>
-                        <ImageCarousel
-                            height={300}
-                            rounded='2xl'
-                            images={['https://tinyurl.com/2blrf2sk', 'https://tinyurl.com/2yyfr9rc', 'https://tinyurl.com/2cmu4ns5']}
-                        />
-                    </View>
-
-                    {/* Property Name and Location */}
-                    <View className="px-global pt-6 pb-4">
-                        <ThemedText className="text-2xl font-bold mb-2">{tripData.propertyName}</ThemedText>
-                        <View className="flex-row items-center">
-                            <Icon name="MapPin" size={16} className="mr-2 text-light-subtext dark:text-dark-subtext" />
-                            <ThemedText className="text-light-subtext dark:text-dark-subtext">{tripData.location}</ThemedText>
-                        </View>
-                    </View>
-
-                    <Divider className="h-2 bg-light-secondary dark:bg-dark-darker" />
-
-                    {/* Host Information */}
-                    <Section title="Hosted by" titleSize="lg" className="px-global pt-4">
-                        <View className="flex-row items-center justify-between mt-4 mb-4">
-                            <View className="flex-row items-center flex-1">
-                                <Avatar src={tripData.host.avatar} size="lg" />
-                                <View className="ml-3 flex-1">
-                                    <ThemedText className="text-lg font-semibold">{tripData.host.name}</ThemedText>
-                                    <View className="flex-row items-center mt-1">
-                                        <ShowRating rating={tripData.host.rating} size="sm" />
-                                        <ThemedText className="text-sm text-light-subtext dark:text-dark-subtext ml-2">
-                                            ({tripData.host.reviewCount} reviews)
-                                        </ThemedText>
-                                    </View>
-                                </View>
-                            </View>
-                        </View>
-
-                        <ListLink
-                            icon="MessageCircle"
-                            title="Message host"
-                            description="Get help with your reservation"
-                            href="/screens/chat/user"
-                            showChevron
-                            className="px-4 py-3 bg-light-secondary dark:bg-dark-secondary rounded-xl"
-                        />
-                    </Section>
-
-                    <Divider className="mt-6 h-2 bg-light-secondary dark:bg-dark-darker" />
-
-                    {/* Check-in / Check-out */}
-                    <Section title="Your stay" titleSize="lg" className="px-global pt-4">
-                        <View className="mt-4 space-y-4">
-                            <View className="flex-row items-center justify-between bg-light-secondary dark:bg-dark-secondary rounded-xl p-4">
-                                <View>
-                                    <ThemedText className="text-sm text-light-subtext dark:text-dark-subtext">Check-in</ThemedText>
-                                    <ThemedText className="text-lg font-semibold">{tripData.checkIn}</ThemedText>
-                                    <ThemedText className="text-sm text-light-subtext dark:text-dark-subtext">After 3:00 PM</ThemedText>
-                                </View>
-                                <View className="items-end">
-                                    <ThemedText className="text-sm text-light-subtext dark:text-dark-subtext">Check-out</ThemedText>
-                                    <ThemedText className="text-lg font-semibold">{tripData.checkOut}</ThemedText>
-                                    <ThemedText className="text-sm text-light-subtext dark:text-dark-subtext">Before 11:00 AM</ThemedText>
-                                </View>
-                            </View>
-
-                            <View className="flex-row items-center justify-between pt-2">
-                                <View>
-                                    <ThemedText className="text-sm text-light-subtext dark:text-dark-subtext">Duration</ThemedText>
-                                    <ThemedText className="text-lg font-semibold">{tripData.nights} nights</ThemedText>
-                                </View>
-                                <View className="items-end">
-                                    <ThemedText className="text-sm text-light-subtext dark:text-dark-subtext">Guests</ThemedText>
-                                    <ThemedText className="text-lg font-semibold">{tripData.guests} guests</ThemedText>
-                                </View>
-                            </View>
-                        </View>
-                    </Section>
-
-                    <Divider className="mt-6 h-2 bg-light-secondary dark:bg-dark-darker" />
-
-                    {/* Reservation Details */}
-                    <Section title="Reservation details" titleSize="lg" className="px-global pt-4">
-                        <View className="mt-4 space-y-3">
-                            <View className="flex-row justify-between">
-                                <ThemedText className="text-light-subtext dark:text-dark-subtext">Reservation number</ThemedText>
-                                <ThemedText className="font-medium">{tripData.reservationNumber}</ThemedText>
-                            </View>
-
-                            <View className="flex-row justify-between">
-                                <ThemedText className="text-light-subtext dark:text-dark-subtext">Guests</ThemedText>
-                                <ThemedText className="font-medium">{tripData.guests} guests</ThemedText>
-                            </View>
-
-                            <View className="mt-4">
-                                <ThemedText className="text-sm font-medium mb-2">Cancellation policy</ThemedText>
-                                <ThemedText className="text-sm text-light-subtext dark:text-dark-subtext leading-5">
-                                    {tripData.cancellationPolicy}
-                                </ThemedText>
-                            </View>
-                        </View>
-                    </Section>
-
-                    <Divider className="mt-6 h-2 bg-light-secondary dark:bg-dark-darker" />
-
-                    {/* Price Breakdown */}
-                    <Section title="Price details" titleSize="lg" className="px-global pt-4">
-                        <View className="mt-4 space-y-3">
-                            <View className="flex-row justify-between">
-                                <ThemedText className="text-light-subtext dark:text-dark-subtext">
-                                    {tripData.priceBreakdown.nightlyRate} x {tripData.priceBreakdown.nights} nights
-                                </ThemedText>
-                                <ThemedText>{tripData.priceBreakdown.subtotal}</ThemedText>
-                            </View>
-
-                            <View className="flex-row justify-between">
-                                <ThemedText className="text-light-subtext dark:text-dark-subtext">Cleaning fee</ThemedText>
-                                <ThemedText>{tripData.priceBreakdown.cleaningFee}</ThemedText>
-                            </View>
-
-                            <View className="flex-row justify-between">
-                                <ThemedText className="text-light-subtext dark:text-dark-subtext">Service fee</ThemedText>
-                                <ThemedText>{tripData.priceBreakdown.serviceFee}</ThemedText>
-                            </View>
-
-                            <View className="flex-row justify-between">
-                                <ThemedText className="text-light-subtext dark:text-dark-subtext">Taxes</ThemedText>
-                                <ThemedText>{tripData.priceBreakdown.taxes}</ThemedText>
-                            </View>
-
-                            <Divider className="my-3" />
-
-                            <View className="flex-row justify-between">
-                                <ThemedText className="font-bold text-lg">Total</ThemedText>
-                                <ThemedText className="font-bold text-lg">{tripData.priceBreakdown.total}</ThemedText>
-                            </View>
-                        </View>
-                    </Section>
-
-                    <Divider className="mt-6 h-2 bg-light-secondary dark:bg-dark-darker" />
-
-                    {/* Payment Information */}
-                    <Section title="Payment information" titleSize="lg" className="px-global pt-4">
-                        <View className="flex-row items-center mt-4">
-                            <Icon name="CreditCard" size={20} className="mr-3" />
-                            <View>
-                                <ThemedText className="font-medium">
-                                    {tripData.paymentMethod.type} •••• {tripData.paymentMethod.lastFour}
-                                </ThemedText>
-                                <ThemedText className="text-sm text-light-subtext dark:text-dark-subtext">
-                                    Charged {tripData.paymentMethod.amount}
-                                </ThemedText>
-                            </View>
-                        </View>
-                    </Section>
-
-                    <Divider className="mt-6 h-2 bg-light-secondary dark:bg-dark-darker" />
-
-                    {/* Rules and Instructions */}
-                    <Section title="House rules & instructions" titleSize="lg" className="px-global pt-4">
-                        <View className="mt-4 space-y-4">
-                            <View className="flex-row items-start">
-                                <Icon name="Clock" size={16} className="mr-3 mt-1 text-light-subtext dark:text-dark-subtext" />
-                                <View>
-                                    <ThemedText className="font-medium">Check-in: After 3:00 PM</ThemedText>
-                                    <ThemedText className="text-sm text-light-subtext dark:text-dark-subtext">
-                                        Self check-in with keypad
-                                    </ThemedText>
-                                </View>
-                            </View>
-
-                            <View className="flex-row items-start">
-                                <Icon name="Users" size={16} className="mr-3 mt-1 text-light-subtext dark:text-dark-subtext" />
-                                <View>
-                                    <ThemedText className="font-medium">Maximum 4 guests</ThemedText>
-                                    <ThemedText className="text-sm text-light-subtext dark:text-dark-subtext">
-                                        No additional guests allowed
-                                    </ThemedText>
-                                </View>
-                            </View>
-
-                            <View className="flex-row items-start">
-                                <Icon name="Volume2" size={16} className="mr-3 mt-1 text-light-subtext dark:text-dark-subtext" />
-                                <View>
-                                    <ThemedText className="font-medium">Quiet hours: 10:00 PM - 8:00 AM</ThemedText>
-                                    <ThemedText className="text-sm text-light-subtext dark:text-dark-subtext">
-                                        Please respect the neighbors
-                                    </ThemedText>
-                                </View>
-                            </View>
-
-                            <View className="flex-row items-start">
-                                <Icon name="Ban" size={16} className="mr-3 mt-1 text-light-subtext dark:text-dark-subtext" />
-                                <View>
-                                    <ThemedText className="font-medium">No smoking</ThemedText>
-                                    <ThemedText className="text-sm text-light-subtext dark:text-dark-subtext">
-                                        Smoking is not allowed anywhere on the property
-                                    </ThemedText>
-                                </View>
-                            </View>
-                        </View>
-                    </Section>
-
-                    <Divider className="mt-6 h-2 bg-light-secondary dark:bg-dark-darker" />
-
-                    {/* Location */}
-                    <Section title="Location" titleSize="lg" className="px-global pt-4 pb-6">
-                        <View className="mt-4">
-                            <ThemedText className="text-light-subtext dark:text-dark-subtext mb-4">
-                                {tripData.location}
-                            </ThemedText>
-
-                            {/* Placeholder for map - you can integrate with react-native-maps */}
-                            <View
-                                className="w-full h-48 bg-light-secondary dark:bg-dark-secondary rounded-xl items-center justify-center"
-                            >
-                                <Icon name="Map" size={48} className="text-light-subtext dark:text-dark-subtext mb-2" />
-                                <ThemedText className="text-light-subtext dark:text-dark-subtext">
-                                    Interactive map coming soon
-                                </ThemedText>
-                            </View>
-
-                            <Button
-                                title="Open in Maps"
-                                iconStart="ExternalLink"
-                                variant="outline"
-                                className="mt-4"
-                                onPress={() => {
-                                    // Open in device maps app
-                                    console.log('Open in maps');
-                                }}
-                            />
-                        </View>
-                    </Section>
-                </AnimatedView>
-            </ThemedScroller>
-
-            <ThemedFooter>
-                <View className="flex-row space-x-3">
-                    <Button
-                        title="Review"
-                        variant="outline"
-                        iconStart="Star"
-                        className="flex-1"
-                        href="/screens/review"
-                    />
-                    <Button
-                        title="Cancel trip"
-                        variant="outline"
-                        iconStart="X"
-                        className="flex-1"
-                        onPress={() => console.log('Cancel trip')}
-                    />
-                </View>
-            </ThemedFooter>
-        </>
+      <>
+        <Header showBackButton title="Booking Detail" />
+        <View className="flex-1 items-center justify-center bg-light-primary dark:bg-dark-primary">
+          <ThemedText>Booking not found.</ThemedText>
+        </View>
+      </>
     );
-};
+  }
 
-export default TripDetailScreen;
+  const handlePayNow = async () => {
+    const efaasUrl = `https://efaas.gov.mv/pay?ref=${booking.reference}&amount=${booking.priceTotal}&currency=MVR`;
+    try {
+      await Linking.openURL(efaasUrl);
+    } catch {
+      Alert.alert('Unable to open eFaas', 'Please visit efaas.gov.mv to complete payment.');
+    }
+  };
+
+  const handleShare = async () => {
+    await Share.share({
+      message: `HDC Sports Booking\nRef: ${booking.reference}\nFacility: ${booking.facilityName}\nDate: ${booking.date} · ${booking.startTime}–${booking.endTime}\nTeam: ${booking.teamName}`,
+    });
+  };
+
+  const handleCancel = () => {
+    Alert.alert(
+      'Cancel Booking',
+      'Are you sure you want to cancel this booking? Cancellation fees may apply.',
+      [
+        { text: 'No', style: 'cancel' },
+        {
+          text: 'Yes, Cancel',
+          style: 'destructive',
+          onPress: () => {
+            // TODO: call bookingService.cancelBooking(booking.id)
+            Alert.alert('Booking Cancelled', 'Your booking has been cancelled.');
+            router.back();
+          },
+        },
+      ]
+    );
+  };
+
+  const statusCfg = {
+    label: STATUS_LABELS[booking.status],
+    color: STATUS_COLOR[booking.status],
+    bg: STATUS_BG[booking.status],
+  };
+
+  const durationH =
+    parseInt(booking.endTime.split(':')[0], 10) - parseInt(booking.startTime.split(':')[0], 10);
+
+  return (
+    <>
+      <Header
+        showBackButton
+        title="Booking Detail"
+        rightComponents={[
+          <Icon key="share" name="Share2" size={22} onPress={handleShare} />,
+        ]}
+      />
+      <ScrollView
+        className="flex-1 bg-light-primary dark:bg-dark-primary"
+        contentContainerStyle={{ padding: 16, paddingBottom: 40 }}
+        showsVerticalScrollIndicator={false}
+      >
+        {/* Status banner */}
+        <View className={`rounded-2xl p-4 mb-4 flex-row items-center gap-3 ${statusCfg.bg}`}>
+          <Icon
+            name={
+              booking.status === 'confirmed'
+                ? 'CheckCircle'
+                : booking.status === 'pending_payment'
+                ? 'Clock'
+                : booking.status === 'cancelled'
+                ? 'Ban'
+                : 'XCircle'
+            }
+            size={24}
+            color={
+              booking.status === 'confirmed'
+                ? '#16A34A'
+                : booking.status === 'pending_payment'
+                ? '#F59E0B'
+                : '#94A3B8'
+            }
+          />
+          <View>
+            <ThemedText className={`text-base font-bold ${statusCfg.color}`}>
+              {statusCfg.label}
+            </ThemedText>
+            {booking.status === 'pending_payment' && booking.paymentDeadline && (
+              <ThemedText className="text-xs text-hdc-amber">
+                Pay by {new Date(booking.paymentDeadline).toLocaleString()}
+              </ThemedText>
+            )}
+          </View>
+        </View>
+
+        {/* Reference */}
+        <View className="bg-light-secondary dark:bg-dark-secondary rounded-2xl p-4 items-center mb-4">
+          <ThemedText className="text-xs text-light-subtext dark:text-dark-subtext mb-1">
+            Booking Reference
+          </ThemedText>
+          <ThemedText className="text-lg font-mono font-bold">{booking.reference}</ThemedText>
+        </View>
+
+        {/* Details */}
+        <View className="bg-light-secondary dark:bg-dark-secondary rounded-2xl p-4 gap-4 mb-4">
+          {[
+            { icon: 'MapPin', label: 'Facility', value: booking.facilityName },
+            { icon: 'Users', label: 'Team', value: booking.teamName },
+            { icon: 'CalendarDays', label: 'Date', value: booking.date },
+            { icon: 'Clock', label: 'Time', value: `${booking.startTime} – ${booking.endTime} (${durationH}h)` },
+          ].map(({ icon, label, value }) => (
+            <View key={label} className="flex-row items-center gap-3">
+              <View className="w-8 h-8 rounded-full bg-hdc-green-bg dark:bg-hdc-green/20 items-center justify-center">
+                <Icon name={icon as any} size={15} color="#16A34A" />
+              </View>
+              <View>
+                <ThemedText className="text-xs text-light-subtext dark:text-dark-subtext">{label}</ThemedText>
+                <ThemedText className="text-sm font-semibold">{value}</ThemedText>
+              </View>
+            </View>
+          ))}
+
+          <Divider />
+
+          <View className="flex-row justify-between items-center">
+            <ThemedText className="text-base font-bold">Total</ThemedText>
+            <ThemedText className="text-xl font-bold text-hdc-green">MVR {booking.priceTotal}</ThemedText>
+          </View>
+        </View>
+
+        {/* Guidelines acceptance */}
+        {booking.guidelinesAcceptance && (
+          <View className="bg-hdc-green-bg dark:bg-hdc-green/10 rounded-2xl p-4 flex-row gap-3 mb-4">
+            <Icon name="FileCheck" size={18} color="#16A34A" />
+            <View>
+              <ThemedText className="text-sm font-semibold text-hdc-green">
+                Guidelines Accepted
+              </ThemedText>
+              <ThemedText className="text-xs text-hdc-green/70">
+                Version {booking.guidelinesAcceptance.guidelineVersion} ·{' '}
+                {new Date(booking.guidelinesAcceptance.timestamp).toLocaleString()}
+              </ThemedText>
+            </View>
+          </View>
+        )}
+
+        {/* Actions */}
+        {booking.status === 'pending_payment' && (
+          <Button
+            title="Pay Now via eFaas"
+            onPress={handlePayNow}
+            size="large"
+            className="mb-3"
+          />
+        )}
+
+        {(booking.status === 'pending_payment' || booking.status === 'confirmed') && (
+          <Button
+            title="Cancel Booking"
+            onPress={handleCancel}
+            variant="outline"
+            size="large"
+            className="mb-3"
+          />
+        )}
+
+        <Button
+          title="Back to My Bookings"
+          onPress={() => router.back()}
+          variant="ghost"
+          size="large"
+        />
+      </ScrollView>
+    </>
+  );
+}

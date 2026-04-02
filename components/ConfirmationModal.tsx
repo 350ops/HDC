@@ -1,10 +1,10 @@
 import React from 'react';
 import { View, Text, Pressable, Platform } from 'react-native';
-import ActionSheet, { ActionSheetRef } from 'react-native-actions-sheet';
 import useThemeColors from '@/app/contexts/ThemeColors';
 import ThemedText from '@/components/ThemedText';
 import * as NavigationBar from 'expo-navigation-bar';
 import { useTheme } from '@/app/contexts/ThemeContext';
+import BottomSheet, { BottomSheetRef } from '@/components/BottomSheet';
 
 interface ConfirmationModalProps {
     isVisible: boolean;
@@ -14,7 +14,7 @@ interface ConfirmationModalProps {
     onCancel: () => void;
     confirmText?: string;
     cancelText?: string;
-    actionSheetRef: React.RefObject<ActionSheetRef>;
+    actionSheetRef: React.RefObject<BottomSheetRef>;
 }
 
 const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
@@ -53,15 +53,12 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
     };
 
     return (
-        <ActionSheet
+        <BottomSheet
             ref={actionSheetRef}
-            gestureEnabled={true}
-            drawUnderStatusBar={false}
-            statusBarTranslucent={true}
             containerStyle={{
                 backgroundColor: colors.bg,
-                borderTopLeftRadius: 20,
-                borderTopRightRadius: 20
+                borderTopLeftRadius: 24,
+                borderTopRightRadius: 24
             }}
         >
             <View className="p-8 pb-14">
@@ -83,7 +80,7 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
                     </Pressable>
                 </View>
             </View>
-        </ActionSheet>
+        </BottomSheet>
     );
 };
 

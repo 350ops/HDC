@@ -6,12 +6,10 @@ import { ThemeProvider } from './contexts/ThemeContext';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import useThemedNavigation from './hooks/useThemedNavigation';
 import { Platform } from 'react-native';
-import { BusinessModeProvider } from './contexts/BusinesModeContext';
+import { AuthProvider } from './contexts/AuthContext';
 
 
-NativeWindStyleSheet.setOutput({
-  default: 'native',
-});
+// NativeWind v4 uses CSS Interop runtime (no manual output config needed).
 
 function ThemedLayout() {
   const { ThemedStatusBar, screenOptions } = useThemedNavigation();
@@ -19,11 +17,7 @@ function ThemedLayout() {
   return (
     <>
       <ThemedStatusBar />
-      <Stack screenOptions={screenOptions}>
-      
-
-
-      </Stack>
+      <Stack screenOptions={screenOptions} />
     </>
   );
 }
@@ -31,11 +25,11 @@ function ThemedLayout() {
 export default function RootLayout() {
   return (
     <GestureHandlerRootView className={`bg-light-primary dark:bg-dark-primary ${Platform.OS === 'ios' ? 'pb-0 ' : ''}`} style={{ flex: 1 }}>
-      <BusinessModeProvider>
+      <AuthProvider>
         <ThemeProvider>
           <ThemedLayout />
         </ThemeProvider>
-      </BusinessModeProvider>
+      </AuthProvider>
     </GestureHandlerRootView>
   );
 }
