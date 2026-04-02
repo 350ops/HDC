@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { View, TextInput as RNTextInput, Animated, Pressable, TextInputProps } from 'react-native';
-import { styled } from 'nativewind';
 import Icon from '../Icon';
 
 import ThemedText from '../ThemedText';
@@ -15,8 +14,6 @@ interface CustomTextInputProps extends TextInputProps {
   className?: string;
   containerClassName?: string;
 }
-
-const StyledTextInput = styled(RNTextInput);
 
 const TextInput: React.FC<CustomTextInputProps> = ({
   label,
@@ -105,7 +102,7 @@ const TextInput: React.FC<CustomTextInputProps> = ({
           </Animated.Text>
         </Pressable>
         
-        <StyledTextInput
+        <RNTextInput
           ref={inputRef}
           className={`border rounded-lg py-3 px-3 h-14 ${(isPassword || rightIcon) ? 'pr-10' : ''} 
             text-black dark:text-white bg-transparent
