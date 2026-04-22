@@ -26,3 +26,15 @@ npm install --legacy-peer-deps
 npx expo start -c
 ```
 
+
+## Prebuild command (important)
+
+Use Expo's prebuild command through npm scripts:
+
+```bash
+npm run prebuild
+# or
+npx expo prebuild
+```
+
+> Do **not** run `npx prebuild` in this project. That invokes the separate `prebuild` npm package (node-gyp binary prebuilder), which expects a `binding.gyp` file and fails with `gyp: binding.gyp not found`.
